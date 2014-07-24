@@ -1,0 +1,13 @@
+Useful documents:
+
+https://tools.ietf.org/html/draft-huitema-perpass-dhcp-identifiers
+
+RFC7258: Pervasive monitoring is an attack
+
+http://tools.ietf.org/html/draft-ietf-dhc-v4-threat-analysis-03
+Old (2006) document that analyzed threats in DHCPv4
+
+
+http://tools.ietf.org/html/draft-ietf-dhc-sedhcpv6-03
+Secure DHCPv6 with public keys. Introduces certificates that
+reveal identify of the client.
