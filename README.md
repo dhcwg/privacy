@@ -1,6 +1,6 @@
 
-DHCP Privacy considerations work in DHC working group in IETF
-=============================================================
+DHCP Privacy considerations
+===========================
 
 This is a repository that for storing notes, comments and hopefully a
 draft text of replacement for work initiated in DHC working group in
