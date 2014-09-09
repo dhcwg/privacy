@@ -1,0 +1,392 @@
+
+
+
+
+dhc                                                          S. Krishnan
+Internet-Draft                                                  Ericsson
+Updates: 4861 (if approved)                                 T. Mrugalski
+Intended status: Standards Track                                     ISC
+Expires: March 12, 2015                                September 8, 2014
+
+
+                    Privacy considerations for DHCP
+                     draft-krishnan-dhc-privacy-00
+
+Abstract
+
+   DHCPv6 is a protocol that is used to provide addressing and
+   configuration information to IPv6 hosts.  This document discusses the
+   various identifiers used by DHCPv6 and the potential privacy issues.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on March 12, 2015.
+
+Copyright Notice
+
+   Copyright (c) 2014 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+
+Krishnan & Mrugalski     Expires March 12, 2015                 [Page 1]
+
+Internet-Draft         DHCP Privacy considerations        September 2014
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   2
+   3.  Identifiers in DHCPv6 . . . . . . . . . . . . . . . . . . . .   3
+     3.1.  DUID  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+     3.2.  Client ID Option  . . . . . . . . . . . . . . . . . . . .   3
+     3.3.  IA_NA, IA_TA and the IA Address Options . . . . . . . . .   3
+     3.4.  Interface ID  . . . . . . . . . . . . . . . . . . . . . .   3
+     3.5.  Subscriber ID . . . . . . . . . . . . . . . . . . . . . .   3
+     3.6.  Remote ID . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.7.  FQDN Option . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.8.  Client Link-layer Address Option  . . . . . . . . . . . .   4
+     3.9.  Option Request Option . . . . . . . . . . . . . . . . . .   4
+     3.10. Vendor Class Option . . . . . . . . . . . . . . . . . . .   4
+     3.11. Civic Location Option . . . . . . . . . . . . . . . . . .   4
+   4.  Attacks . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     4.1.  Finding device type . . . . . . . . . . . . . . . . . . .   4
+     4.2.  Finding operating system  . . . . . . . . . . . . . . . .   4
+     4.3.  Finding civic address information . . . . . . . . . . . .   5
+     4.4.  Finding previously visited networks . . . . . . . . . . .   5
+     4.5.  Finding a stable identity . . . . . . . . . . . . . . . .   5
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
+   7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   5
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .   6
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   6
+
+1.  Introduction
+
+   DHCPv6 [RFC3315] is a protocol that is used to provide addressing and
+   configuration information to IPv6 hosts.  The DHCPv6 protocol uses
+   several identifiers that could become a source for gleaming
+   additional information about the IPv6 host.  This information may
+   include device type, operating system information, location(s) that
+   the device may have previously visited etc.
+
+2.  Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
+
+
+
+
+
+
+Krishnan & Mrugalski     Expires March 12, 2015                 [Page 2]
+
+Internet-Draft         DHCP Privacy considerations        September 2014
+
+
+3.  Identifiers in DHCPv6
+
+   There are several identifiers used in DHCPv6.  This section provides
+   a short introduction to the various options that will be used further
+   in the document.
+
+3.1.  DUID
+
+   Each DHCPv6 client and server have a DHCP Unique
+   Identifier(DUID)[RFC3315].  The DUID is designed to be unique across
+   all DHCP clients and servers, and to remain stable after it has been
+   initially generated.  The DUID can be of different forms.  Commonly
+   used forms are based on the link-layer address of one of the device's
+   network interfaces (with or without a timestamp), on the Universally
+   Unique IDentifier (UUID) [RFC6355], etc.
+
+3.2.  Client ID Option
+
+   The Client Identifier Option (OPTION_CLIENTID) is used to carry the
+   DUID of a DHCPv6 client between a client and a server.  There is an
+   analogous Server Identifier Option but it is not of much interest in
+   the privacy context.
+
+3.3.  IA_NA, IA_TA and the IA Address Options
+
+   The Identity Association for Non-temporary Addresses (IA_NA) option
+   [RFC3315] is used to carry the parameters and any non-temporary
+   addresses associated with the given IA_NA.  The IA_TA option is
+   analogous to the IA_NA option but for temporary addresses.  The IA
+   Address option is used to specify IPv6 addresses associated with an
+   IA_NA or an IA_TA and is encapsulated within the Options field of
+   such an IA_NA or IA_TA option.
+
+3.4.  Interface ID
+
+   A DHCPv6 relay includes the Interface ID [RFC3315] option to identify
+   the interface on which it received the client message thatis being
+   relayed.
+
+3.5.  Subscriber ID
+
+   A DHCPv6 relay includes a Subscriber ID option [RFC4580] to associate
+   some provider-specific information with clients' DHCPv6 messages that
+   is independent of the physical network configuration.
+
+
+
+
+
+
+
+Krishnan & Mrugalski     Expires March 12, 2015                 [Page 3]
+
+Internet-Draft         DHCP Privacy considerations        September 2014
+
+
+3.6.  Remote ID
+
+   A DHCPv6 relay includes a Remote ID option [RFC4649] to identify the
+   remote host end of the circuit.
+
+3.7.  FQDN Option
+
+   The Client FQDN option [RFC4704] is used by DHCPv6 clients and
+   servers to exchange information about the client's fully qualified
+   domain name
+
+3.8.  Client Link-layer Address Option
+
+   The Client link-layer address option [RFC6939] is used by first-hop
+   DHCPv6 relays to provide the client's link-layer address towards the
+   server.
+
+3.9.  Option Request Option
+
+   DHCPv6 clients include an Option Request option in DHCPv6 messages to
+   inform the server about options the client wants the server to send
+   to the client.
+
+3.10.  Vendor Class Option
+
+   This option is used by a DHCPv6 client to identify the vendor that
+   manufactured the hardware on which the client is running.
+
+3.11.  Civic Location Option
+
+   DHCPv6 servers use the Civic Location Option [RFC4776] to convey the
+   civic and postal addresses to DHCPv6 clients.
+
+4.  Attacks
+
+4.1.  Finding device type
+
+   The type of device used by the client can be guessed by the attacker
+   using the Vendor Class Option, the Client Link-layer Address Option,
+   and by parsing the Client ID Option.
+
+4.2.  Finding operating system
+
+   The operating system running on a client can be guessed using the
+   Vendor Class Option, or by using fingerprinting techniques on the
+   combination of options requested using the Option Request Option.
+
+
+
+
+
+Krishnan & Mrugalski     Expires March 12, 2015                 [Page 4]
+
+Internet-Draft         DHCP Privacy considerations        September 2014
+
+
+4.3.  Finding civic address information
+
+   The civic address can be obtained by the attacker by many means.  The
+   most direct way to obtain this information is by looking into a
+   server initiated message that contains the Civic Location Option.  It
+   can also be indirectly infered using the Remote ID Option (e.g. using
+   a telephone number), the Interface ID option (e.g. if an access
+   circuit on an Access Node corresponds to a civic location), or the
+   Subscriber ID Option (if the attacker has access to subscriber info).
+
+4.4.  Finding previously visited networks
+
+   When DHCPv6 clients to a network they attempt to request the same
+   address they had before they attached to a network.  They do this by
+   putting the previously assigned address in the IA Address Options
+   inside the IA_NA, IA_TA.  By observing these addresses, an attacker
+   can identify the network the client had previously visited.
+
+4.5.  Finding a stable identity
+
+   An attacker might use a stable identity gleamed from DHCPv6 messages
+   to correlate activities of a given client on unrelated networks.  The
+   Client FQDN option, the Subscriber ID Option and the Client ID
+   options can serve as long lived identifiers of DHCPv6 clients.  The
+   Client FQDN option can also provide an identity that can easily be
+   correlated with web server activity logs.
+
+5.  Security Considerations
+
+   TBD
+
+6.  IANA Considerations
+
+   No IANA actions required.
+
+7.  Acknowledgements
+
+   Ack
+
+8.  References
+
+8.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+
+
+
+
+
+Krishnan & Mrugalski     Expires March 12, 2015                 [Page 5]
+
+Internet-Draft         DHCP Privacy considerations        September 2014
+
+
+   [RFC3315]  Droms, R., Bound, J., Volz, B., Lemon, T., Perkins, C.,
+              and M. Carney, "Dynamic Host Configuration Protocol for
+              IPv6 (DHCPv6)", RFC 3315, July 2003.
+
+   [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
+              Morris, J., Hansen, M., and R. Smith, "Privacy
+              Considerations for Internet Protocols", RFC 6973, July
+              2013.
+
+8.2.  Informative References
+
+   [RFC3633]  Troan, O. and R. Droms, "IPv6 Prefix Options for Dynamic
+              Host Configuration Protocol (DHCP) version 6", RFC 3633,
+              December 2003.
+
+   [RFC4580]  Volz, B., "Dynamic Host Configuration Protocol for IPv6
+              (DHCPv6) Relay Agent Subscriber-ID Option", RFC 4580, June
+              2006.
+
+   [RFC4649]  Volz, B., "Dynamic Host Configuration Protocol for IPv6
+              (DHCPv6) Relay Agent Remote-ID Option", RFC 4649, August
+              2006.
+
+   [RFC4704]  Volz, B., "The Dynamic Host Configuration Protocol for
+              IPv6 (DHCPv6) Client Fully Qualified Domain Name (FQDN)
+              Option", RFC 4704, October 2006.
+
+   [RFC4776]  Schulzrinne, H., "Dynamic Host Configuration Protocol
+              (DHCPv4 and DHCPv6) Option for Civic Addresses
+              Configuration Information", RFC 4776, November 2006.
+
+   [RFC6355]  Narten, T. and J. Johnson, "Definition of the UUID-Based
+              DHCPv6 Unique Identifier (DUID-UUID)", RFC 6355, August
+              2011.
+
+   [RFC6939]  Halwasia, G., Bhandari, S., and W. Dec, "Client Link-Layer
+              Address Option in DHCPv6", RFC 6939, May 2013.
+
+Authors' Addresses
+
+   Suresh Krishnan
+   Ericsson
+   8400 Decarie Blvd.
+   Town of Mount Royal, QC
+   Canada
+
+   Phone: +1 514 345 7900 x42871
+   Email: suresh.krishnan@ericsson.com
+
+
+
+Krishnan & Mrugalski     Expires March 12, 2015                 [Page 6]
+
+Internet-Draft         DHCP Privacy considerations        September 2014
+
+
+   Tomek Mrugalski
+   Internet Systems Consortium, Inc.
+   950 Charter Street
+   Redwood City, CA  94063
+   USA
+
+   Phone: +1 650 423 1345
+   Email: tomasz.mrugalski@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Krishnan & Mrugalski     Expires March 12, 2015                 [Page 7]
