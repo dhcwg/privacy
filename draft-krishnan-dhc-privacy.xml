@@ -7,6 +7,7 @@
 <!ENTITY rfc4649 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4649.xml">
 <!ENTITY rfc4704 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4704.xml">
 <!ENTITY rfc4776 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4776.xml">
+<!ENTITY rfc4941 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4941.xml">
 <!ENTITY rfc6355 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6355.xml">
 <!ENTITY rfc6939 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6939.xml">
 <!ENTITY rfc6973 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6973.xml">
@@ -19,8 +20,7 @@
 <?rfc strict="yes"?>
 <?rfc compact="yes"?>
 <rfc category="std" docName="draft-krishnan-dhc-privacy-00"
-     ipr="trust200902"
-     updates="4861">
+     ipr="trust200902">
   <front>
     <title abbrev="DHCP Privacy considerations">Privacy considerations for DHCP
     </title>
@@ -70,8 +70,12 @@
   <workgroup>dhc</workgroup>
 
   <abstract>
-   <t>DHCPv6 is a protocol that is used to provide addressing and configuration information to IPv6 hosts. This document discusses the various identifiers used by DHCPv6 and the potential privacy issues.
-   </t>
+   <!-- todo: describe DHCPv4 here -->
+
+   <t>DHCPv6 is a protocol that is used to provide addressing and
+   configuration information to IPv6 hosts. This document discusses
+   the various identifiers used by DHCPv6 and the potential privacy
+   issues.</t>
   </abstract>
  </front>
 
@@ -80,7 +84,7 @@
   <t>DHCPv6 <xref target="RFC3315"/> is a protocol that is used to
   provide addressing and configuration information to IPv6 hosts. The
   DHCPv6 protocol uses several identifiers that could become a source
-  for gleaming additional information about the IPv6 host. This
+  for gleaning additional information about the IPv6 host. This
   information may include device type, operating system information,
   location(s) that the device may have previously visited etc.
   </t>
@@ -95,24 +99,44 @@
 
 <section title="Identifiers in DHCPv6">
   <t>There are several identifiers used in DHCPv6. This section
-  provides a short introduction to the various options that will be
+  provides an introduction to the various options that will be
   used further in the document.</t>
 
-  <section title="DUID">
+  <section anchor="duid" title="DUID">
     <t>Each DHCPv6 client and server have a DHCP Unique
-    Identifier(DUID)<xref target="RFC3315"/>. The DUID is designed to
+    Identifier (DUID) <xref target="RFC3315"/>. The DUID is designed to
     be unique across all DHCP clients and servers, and to remain
     stable after it has been initially generated. The DUID can be of
     different forms. Commonly used forms are based on the link-layer
     address of one of the device's network interfaces (with or without
     a timestamp), on the Universally Unique IDentifier (UUID) <xref
-    target="RFC6355"/>, etc. </t></section>
+    target="RFC6355"/>. The default type, recommeded by <xref
+    target="RFC3315"/>, is DUID-LLT that is based on link-layer
+   address, which is commonly impelemented in most popular clients.</t>
+
+   <t>It is important to understand DUID lifecycle. Clients and
+   servers are expected to generate their DUID once (during first
+   operation) and store it in a non-volatile storage or use the same
+   deterministic algorithm to generate the same DUID value again. This
+   means that most implementations will use the available link-layer
+   address during its first boot. Even if the administrator enables
+   privacy extensions (see <xref target="RFC4941"/>) and its
+   equivalent for link-layer address randomization, it is likely that
+   those privacy mechanisms were disabled during the first device
+   boot. Hence the original, unobfuscated link-layer address will
+   likely end up being announced as client DUID, even if the
+   link-layer address has changed (or even if being changed on a
+   periodic basis).</t>
+</section>
 
   <section title="Client ID Option">
     <t>The Client Identifier Option (OPTION_CLIENTID) is used to carry
     the DUID of a DHCPv6 client between a client and a server. There
     is an analogous Server Identifier Option but it is not of much
-    interest in the privacy context. </t></section>
+    interest in the privacy context (unless a host can be convinced to
+    start acting as a server). Client ID is an example of DUID. See
+    <xref target="duid"/> for relevant discussion about
+    DUIDs.</t></section>
 
   <section title="IA_NA, IA_TA and the IA Address Options">
     <t>The Identity Association for Non-temporary Addresses (IA_NA)
@@ -122,18 +146,41 @@
     temporary addresses. The IA Address option is used to specify IPv6
     addresses associated with an IA_NA or an IA_TA and is encapsulated
     within the Options field of such an IA_NA or IA_TA
-    option.</t></section>
+    option.</t>
+   <t>To differentiate between instances of the same type of IA
+   containers, each IA_NA, IA_TA and IA_PD options have an IAID field
+   that is unique for each client/option type pair. It is up to the
+   client to pick unique IAID values. At least one popular
+   implementation uses last four octets of the link-layer address. In
+   most cases, that means that merely two bytes are missing for a full
+   link-layer address reconstruction. However, the first three octets
+   in a typical link-layer address are vendor identifier. That can be
+   determined with high level of certainty using other means, thus
+   allowing full link-layer address discovery.</t>
+  </section>
 
   <section title="Interface ID">
     <t>A DHCPv6 relay includes the Interface ID <xref
     target="RFC3315"/> option to identify the interface on which it
-    received the client message thatis being relayed.</t></section>
+    received the client message thatis being relayed.</t>
+
+    <t>Although in principle Interface ID can be arbitrarily long with
+   completely random values, it is often a text string. It often
+   includes relay agent name followed by interface name. This can be
+   used for fingerprinting the relay or determining client's point of
+   attachement.</t>
+  </section>
 
   <section title="Subscriber ID">
     <t>A DHCPv6 relay includes a Subscriber ID option <xref
     target="RFC4580"/> to associate some provider-specific information
     with clients' DHCPv6 messages that is independent of the physical
-    network configuration.</t></section>
+    network configuration.</t>
+
+    <t>In many deployments, the relay agent that inserts this option,
+    is configured to use client's link-layer address as Subscriber ID.
+    </t>
+</section>
 
   <section title="Remote ID">
     <t>A DHCPv6 relay includes a Remote ID option <xref
@@ -143,7 +190,9 @@
   <section title="FQDN Option">
     <t>The Client FQDN option <xref target="RFC4704"/> is used by
     DHCPv6 clients and servers to exchange information about the
-    client's fully qualified domain name</t></section>
+    client's fully qualified domain name. In most case a client sends
+    its hostname as a hint for the server.</t>
+  </section>
 
   <section title="Client Link-layer Address Option">
     <t>The Client link-layer address option <xref target="RFC6939"/>
@@ -161,43 +210,127 @@
     running.</t></section>
 
   <section title="Civic Location Option">
-    <t>DHCPv6 servers use the Civic Location Option <xref target="RFC4776"/> to convey the civic and postal addresses to DHCPv6 clients.</t></section>
+    <t>DHCPv6 servers use the Civic Location Option <xref
+    target="RFC4776"/> to convey the civic and postal addresses to
+    DHCPv6 clients.</t></section>
 
 </section>
+
+ <section title="Existing Mechanisms That Affect Privacy">
+   <t>This section describes available DHCPv6 mechanisms that one can
+   use to protect or enhance one's privacy.</t>
+
+   <section title="Temporary addresses">
+     <t><xref target="RFC3315"/> defines temporary addresses. The
+     original idea behind temporary addresses was that a client may
+     request a temporary address, use it for whatever purpose, never
+     renew it and let it expire soon. This concept could work in
+     principle. Client that wants to conceal its identity just keeps
+     requesting new, short lived temporary addresses.</t>
+
+     <t>There are number of serious issues, both protocolar and
+     implementational, that make them nearly useless for their
+     original goal. First, <xref target="RFC3315"/> does not include
+     T1 and T2 renewal timers in IA_TA (a container for temporary
+     addresses). However, it mentions that temporary addresses can be
+     renewed. Many client implementations renew those addresses during
+     a renewal procedure initiated by other resources (non-temporary
+     addresses or prefixes), thus forfeiting shortliveness. Second,
+     <xref target="RFC4704"/> allows servers to update DNS for
+     assigned temporary addresses. Publishing client's IPv6 address
+     in DNS that is publicly available is a major privacy breach.</t>
+   </section>
+
+   <section title="DNS Updates">
+     <t>DNS Updates <xref target="RFC4704" /> defines a mechanism that
+     allows both clients and server to insert into DNS domain
+     information about clients. Both forward (AAAA) and reverse (PTR)
+     resource records can be updated. This allows other nodes to
+     conveniently refer to a host, despite the fact that its IPv6
+     address may be changing.</t>
+
+     <t>This mechanism exposes two important pieces of information:
+     current address (which can be mapped to current location) and
+     client's hostname.</t>
+
+   </section>
+
+ </section>
 
  <section title="Attacks">
 
  <section title="Finding device type">
-  <t>The type of device used by the client can be guessed by the attacker using the Vendor Class Option, the Client Link-layer Address Option, and by parsing the Client ID Option.
+  <t>The type of device used by the client can be guessed by the
+  attacker using the Vendor Class Option, the Client Link-layer
+  Address Option, and by parsing the Client ID Option.
   </t>
  </section>
 
  <section title="Finding operating system">
-  <t>The operating system running on a client can be guessed using the Vendor Class Option, or by using fingerprinting techniques on the combination of options requested using the Option Request Option.
+  <t>The operating system running on a client can be guessed using the
+  Vendor Class Option, or by using fingerprinting techniques on the
+  combination of options requested using the Option Request Option.
   </t>
  </section>
 
  <section title="Finding civic address information">
-  <t>The civic address can be obtained by the attacker by many means. The most direct way to obtain this information is by looking into a server initiated message that contains the Civic Location Option. It can also be indirectly infered using the Remote ID Option (e.g. using a telephone number), the Interface ID option (e.g. if an access circuit on an Access Node corresponds to a civic location), or the Subscriber ID Option (if the attacker has access to subscriber info).
+  <t>The civic address can be obtained by the attacker by many
+  means. The most direct way to obtain this information is by looking
+  into a server initiated message that contains the Civic Location
+  Option. It can also be indirectly infered using the Remote ID Option
+  (e.g. using a telephone number), the Interface ID option (e.g. if an
+  access circuit on an Access Node corresponds to a civic location),
+  or the Subscriber ID Option (if the attacker has access to
+  subscriber info).
   </t>
  </section>
 
  <section title="Finding previously visited networks">
-  <t>When DHCPv6 clients to a network they attempt to request the same address they had before they attached to a network. They do this by putting the previously assigned address in the IA Address Options inside the IA_NA, IA_TA. By observing these addresses, an attacker can identify the network the client had previously visited.
+  <t>When DHCPv6 clients to a network they attempt to request the same
+  address they had before they attached to a network. They do this by
+  putting the previously assigned address in the IA Address Options
+  inside the IA_NA, IA_TA. By observing these addresses, an attacker
+  can identify the network the client had previously visited.
   </t>
  </section>
 
  <section title="Finding a stable identity">
-  <t>An attacker might use a stable identity gleamed from DHCPv6 messages to correlate activities of a given client on unrelated networks. The Client FQDN option, the Subscriber ID Option and the Client ID options can serve as long lived identifiers of DHCPv6 clients. The Client FQDN option can also provide an identity that can easily be correlated with web server activity logs.
+  <t>An attacker might use a stable identity gleaned from DHCPv6
+  messages to correlate activities of a given client on unrelated
+  networks. The Client FQDN option, the Subscriber ID Option and the
+  Client ID options can serve as long lived identifiers of DHCPv6
+  clients. The Client FQDN option can also provide an identity that
+  can easily be correlated with web server activity logs.
   </t>
  </section>
 
+ <section title="Pervasive monitoring">
+   <t>This is an enhancement, or a combination of most aforementioned
+   mechanisms. Operator who controls non-trivial number of access
+   points or network sergments, may use obtained information about a
+   single client and observer client's habits.</t>
  </section>
 
+<section title="Finding client's IP address or hostname">
+  <t>Many DHCP deployments use DNS Updates <xref target="RFC4704"/>
+  that put client's information (current IP address, client's
+  hostname). Client ID is also disclosed, ableit in not easily
+  accessbile form (SHA-256 digest of the client-id). Although SHA-256
+  is irreversible, so DHCID can't be converted back to client-id.
+  However, SHA-256 digest can be used as a unique identifier that
+  is accessible by any host.</t>
+</section>
+
+ </section>
 
   <section anchor="security" title="Security Considerations">
    <t>TBD
    </t>
+  </section>
+
+  <section anchor="privacy-consider" title="Privacy Considerations">
+    <t>This document at its entirety discusses privacy considerations
+    in DHCPv6. As such, no separate section about this is needed.</t>
   </section>
 
 <section title="IANA Considerations">
@@ -222,6 +355,7 @@
    &rfc4649;
    &rfc4704;
    &rfc4776;
+   &rfc4941;
    &rfc6355;
    &rfc6939;
   </references>
