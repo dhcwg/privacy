@@ -11,3 +11,13 @@ Old (2006) document that analyzed threats in DHCPv4
 http://tools.ietf.org/html/draft-ietf-dhc-sedhcpv6-03
 Secure DHCPv6 with public keys. Introduces certificates that
 reveal identify of the client.
+
+RFC7217: semantically opaque Interface Identifiers in SLAAC,
+section 1 is particularly useful from DHCP perspective.
+
+draft-gont-dhc-stable-privacy-addresses-01: Proposal for implementing
+RFC7217 for DHCPv6
+
+Privacy Considerations for IPv6 Address Generation Mechanisms
+draft-ietf-6man-ipv6-address-generation-privacy-01
+
