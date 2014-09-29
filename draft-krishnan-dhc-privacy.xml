@@ -11,6 +11,7 @@
 <!ENTITY rfc6355 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6355.xml">
 <!ENTITY rfc6939 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6939.xml">
 <!ENTITY rfc6973 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6973.xml">
+<!ENTITY I-D.ietf-6man-ipv6-address-generation-privacy SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-ipv6-address-generation-privacy.xml">
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes"?>
@@ -91,6 +92,16 @@
  </section>
 
  <section title="Terminology">
+   <t>This section clarifies the terminology used throughout this
+   document.</t>
+
+   <t>Stable identifier - any property disclosed by a DHCP client that
+   does not change over time or changes very infrequently and is
+   unique for said client in a given context. Examples include MAC
+   address, client-id that does not change or a hostname. Stable
+   identifier may or may not be globally unique.
+   </t>
+
   <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in <xref
@@ -252,24 +263,96 @@
      <t>This mechanism exposes two important pieces of information:
      current address (which can be mapped to current location) and
      client's hostname.</t>
+   </section>
 
+   <section title="Allocation strategies">
+     <t>A DHCPv6 server running in typical, stateful mode is given a
+     task of managing one or more pools of IPv6 resources
+     (currently non-temporary addresses, temporary addresses and/or
+     prefixes, but more resource types may be defined in the
+     future). When a client request a resource, server must pick a
+     resource out of configured pool. Depending on the server's
+     implementation, various allocation strategies are
+     possible. Choices in this regard may have privacy
+     implications.</t>
+
+     <t>Iterative allocation - a server may choose to allocate
+     addresses one by one. That strategy has the benefit of being very
+     fast, thus can be favored in deployments that prefer
+     performance. However, it makes the resources very
+     predictable. Also, since the resources allocated tend to be
+     clustered at the beginning of available pool, it makes scanning
+     attacks much easier.</t>
+
+     <t>Identifier-based allocation - a server may choose to allocate
+     an address that is based on one of available identifiers,
+     e.g. IID or MAC address. This has a property of being convenient
+     for converting IP address to/from other identifiers, especially
+     if the identifier is or contains MAC address. It is also
+     convenient, as returning client is very likely to get the same
+     address, even if the server does not store previous client's
+     address. Those properties are convenient for system
+     administrators, so DHCP server implementors are sometimes
+     requested to implement it. There is at least one implementation
+     that supports it. On the other hand, the downside of such
+     allocation is that the client now discloses its identifier in its
+     IPv6 address to all services it connects to. That means that
+     correlation of activities over time, location tracking, address
+     scanning and OS/vendor discovery apply.</t>
+
+     <t>Hash allocation - it's an extension of identifier based
+     allocation. Instead of using the identifier directly, it is being
+     hashed first. If the hash is implemented correctly, it removes
+     the flaw of disclosing the identifier, a property that eliminates
+     susceptibility to address scanning and OS/vendor discovery. If
+     the hash is poorly implemented (e.g. can be reverted), it
+     introduces no improvement over identifier-based allocation.</t>
+
+     <t>Random allocation - a server can pick a resource randomly out
+     of available pool. That strategy works well in scenarios where
+     pool utilization is small, as the likelyhood of collision
+     (resulting in the server needing to repeat randomization) is
+     small. With the pool allocation increasing, the collision is
+     disproportionally large, due to birthday paradox. With high pool
+     utilizaton (e.g. when 90% of available resources being allocated
+     already), the server will use most computational resources to
+     repeatedly pick a random resource, which will degrade its
+     performance. This allocation scheme essentially prevents
+     returning clients from getting the same address or prefix again. On the
+     other hand, it is beneficial from privacy perspective as
+     addresses and prefixes generated that way are not susceptible to correlation
+     attacks, OS/vendor discovery attacks or identity discovery
+     attacks. Note that even though the address or prefix itself may
+     be resilient to a given attack, the client may still be
+     susceptible if additional information is disclosed other way,
+     e.g. client's address can be randomized, but it still can leak
+     its MAC address in client-id option.</t>
+
+     <t>Other allocation strategies may be implemented.</t>
    </section>
 
  </section>
 
  <section title="Attacks">
 
- <section title="Finding device type">
+ <section title="Device type discovery (fingerprinting)">
   <t>The type of device used by the client can be guessed by the
   attacker using the Vendor Class Option, the Client Link-layer
-  Address Option, and by parsing the Client ID Option.
+  Address Option, and by parsing the Client ID Option. All of those
+  options may contain OUI (Organizationally Unique Identifier) that
+  represents the device's vendor. That knowledge can be used for
+  device-specific vulnerability exploitation attacks. See Section
+  3.4 of <xref target="I-D.ietf-6man-ipv6-address-generation-privacy"/>
+  for a discussion about this type of attack.
   </t>
  </section>
 
- <section title="Finding operating system">
+ <section title="Operating system discovery (fingerpriting)">
   <t>The operating system running on a client can be guessed using the
   Vendor Class Option, or by using fingerprinting techniques on the
   combination of options requested using the Option Request Option.
+  See Section 3.4 of <xref target="I-D.ietf-6man-ipv6-address-generation-privacy"/>
+  for a discussion about this type of attack.
   </t>
  </section>
 
@@ -321,6 +404,41 @@
   is accessible by any host.</t>
 </section>
 
+<section title="Correlation of activities over time">
+  <t>As with other identifiers, an IPv6 address can be used to
+  correlate the activities of a host for at least as long as the
+  lifetime of the address. If that address was generated from
+  some other, stable identifier and that generation scheme can
+  be deducted by an attacker, the duration of correlation attack
+  extends to that identifier. In many cases, its lifetime is equal
+  to the lifetime of the device itself. See Section 3.1 of
+  <xref target="I-D.ietf-6man-ipv6-address-generation-privacy"/>
+  for detailed discussion.
+  </t>
+</section>
+
+<section title="Location tracking">
+  <t>If a stable identifier is used for assigning an address and
+  such mapping is discovered by an attacker (e.g. a server that
+  uses IEEE-identifier-based IID to generate IPv6 address), all
+  scenarios discussed in Section 3.2 of 
+  <xref target="I-D.ietf-6man-ipv6-address-generation-privacy"/>
+  apply. In particular both passive (a service that the client
+  connects to can log client's address and draw conclusions regarding
+  its location and movement patterns based on prefix it is connecting
+  from) and active (attacker can send ICMP echo requests or other
+  probe packets to networks of suspected client locations).
+  </t>
+</section>
+
+<!-- describe server allocation schemes, especially iterative ones
+<section>
+  <t>
+
+</section> -->
+
+
+
  </section>
 
   <section anchor="security" title="Security Considerations">
@@ -358,6 +476,7 @@
    &rfc4941;
    &rfc6355;
    &rfc6939;
+   &I-D.ietf-6man-ipv6-address-generation-privacy;
   </references>
  </back>
 </rfc>
