@@ -5,10 +5,10 @@
 dhc                                                          S. Krishnan
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                            T. Mrugalski
-Expires: April 18, 2015                                              ISC
+Expires: April 20, 2015                                              ISC
                                                                 S. Jiang
                                             Huawei Technologies Co., Ltd
-                                                        October 15, 2014
+                                                        October 17, 2014
 
 
                    Privacy considerations for DHCPv6
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 18, 2015.
+   This Internet-Draft will expire on April 20, 2015.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Krishnan, et al.         Expires April 18, 2015                 [Page 1]
+Krishnan, et al.         Expires April 20, 2015                 [Page 1]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -77,14 +77,15 @@ Table of Contents
      3.9.  Option Request Option . . . . . . . . . . . . . . . . . .   6
      3.10. Vendor Class Option . . . . . . . . . . . . . . . . . . .   6
      3.11. Civic Location Option . . . . . . . . . . . . . . . . . .   7
-     3.12. Client System Architecture Type Option  . . . . . . . . .   7
+     3.12. Coordinate-Based Location Option  . . . . . . . . . . . .   7
+     3.13. Client System Architecture Type Option  . . . . . . . . .   7
    4.  Existing Mechanisms That Affect Privacy . . . . . . . . . . .   7
      4.1.  Temporary addresses . . . . . . . . . . . . . . . . . . .   7
      4.2.  DNS Updates . . . . . . . . . . . . . . . . . . . . . . .   8
      4.3.  Allocation strategies . . . . . . . . . . . . . . . . . .   8
    5.  Attacks . . . . . . . . . . . . . . . . . . . . . . . . . . .   9
      5.1.  Device type discovery (fingerprinting)  . . . . . . . . .   9
-     5.2.  Operating system discovery (fingerpriting)  . . . . . . .   9
+     5.2.  Operating system discovery (fingerpriting)  . . . . . . .  10
      5.3.  Finding civic address information . . . . . . . . . . . .  10
      5.4.  Finding previously visited networks . . . . . . . . . . .  10
      5.5.  Finding a stable identity . . . . . . . . . . . . . . . .  10
@@ -93,14 +94,14 @@ Table of Contents
      5.8.  Correlation of activities over time . . . . . . . . . . .  11
      5.9.  Location tracking . . . . . . . . . . . . . . . . . . . .  11
      5.10. Leasequery & bulk leasequery  . . . . . . . . . . . . . .  11
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
    7.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  12
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
    9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
      10.1.  Normative References . . . . . . . . . . . . . . . . . .  12
      10.2.  Informative References . . . . . . . . . . . . . . . . .  12
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
 
 
 
@@ -108,8 +109,7 @@ Table of Contents
 
 
 
-
-Krishnan, et al.         Expires April 18, 2015                 [Page 2]
+Krishnan, et al.         Expires April 20, 2015                 [Page 2]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -165,7 +165,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-Krishnan, et al.         Expires April 18, 2015                 [Page 3]
+Krishnan, et al.         Expires April 20, 2015                 [Page 3]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -221,7 +221,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-Krishnan, et al.         Expires April 18, 2015                 [Page 4]
+Krishnan, et al.         Expires April 20, 2015                 [Page 4]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -277,7 +277,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-Krishnan, et al.         Expires April 18, 2015                 [Page 5]
+Krishnan, et al.         Expires April 20, 2015                 [Page 5]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -333,7 +333,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-Krishnan, et al.         Expires April 18, 2015                 [Page 6]
+Krishnan, et al.         Expires April 20, 2015                 [Page 6]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -350,7 +350,17 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    believed to be closest to the client, or the location of the client,
    identified by the "what" element within the option.
 
-3.12.  Client System Architecture Type Option
+3.12.  Coordinate-Based Location Option
+
+   The GeoLoc options [RFC6225] is used by DHCPv6 server to provide the
+   coordinate- based geographic location information to the DHCPv6
+   clients.  It enable a DHCPv6 client to obtain its location.
+
+   After the relevant DHCPv6 exchanges have taken place, the location
+   information is stored on the end device rather than somewhere else,
+   where retrieving it might be difficult in practice.
+
+3.13.  Client System Architecture Type Option
 
    The Client System Architecture Type option [RFC5970] is used by
    DHCPv6 client to send a list of supported architecture types to the
@@ -376,23 +386,20 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    implementational, that make them nearly useless for their original
    goal.  First, [RFC3315] does not include T1 and T2 renewal timers in
    IA_TA (a container for temporary addresses).  However, it mentions
+
+
+
+Krishnan, et al.         Expires April 20, 2015                 [Page 7]
+
+Internet-Draft        DHCPv6 Privacy considerations         October 2014
+
+
    that temporary addresses can be renewed.  Many client implementations
    renew those addresses during a renewal procedure initiated by other
    resources (non-temporary addresses or prefixes), thus forfeiting
    shortliveness.  Second, [RFC4704] allows servers to update DNS for
    assigned temporary addresses.  Publishing client's IPv6 address in
    DNS that is publicly available is a major privacy breach.
-
-
-
-
-
-
-
-Krishnan, et al.         Expires April 18, 2015                 [Page 7]
-
-Internet-Draft        DHCPv6 Privacy considerations         October 2014
-
 
 4.2.  DNS Updates
 
@@ -435,6 +442,14 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    requested to implement it.  There is at least one implementation that
    supports it.  On the other hand, the downside of such allocation is
    that the client now discloses its identifier in its IPv6 address to
+
+
+
+Krishnan, et al.         Expires April 20, 2015                 [Page 8]
+
+Internet-Draft        DHCPv6 Privacy considerations         October 2014
+
+
    all services it connects to.  That means that correlation of
    activities over time, location tracking, address scanning and OS/
    vendor discovery apply.
@@ -442,14 +457,6 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    Hash allocation - it's an extension of identifier based allocation.
    Instead of using the identifier directly, it is being hashed first.
    If the hash is implemented correctly, it removes the flaw of
-
-
-
-Krishnan, et al.         Expires April 18, 2015                 [Page 8]
-
-Internet-Draft        DHCPv6 Privacy considerations         October 2014
-
-
    disclosing the identifier, a property that eliminates susceptibility
    to address scanning and OS/vendor discovery.  If the hash is poorly
    implemented (e.g. can be reverted), it introduces no improvement over
@@ -489,6 +496,16 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    [I-D.ietf-6man-ipv6-address-generation-privacy] for a discussion
    about this type of attack.
 
+
+
+
+
+
+Krishnan, et al.         Expires April 20, 2015                 [Page 9]
+
+Internet-Draft        DHCPv6 Privacy considerations         October 2014
+
+
 5.2.  Operating system discovery (fingerpriting)
 
    The operating system running on a client can be guessed using the
@@ -496,15 +513,6 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    combination of options requested using the Option Request Option.
    See Section 3.4 of [I-D.ietf-6man-ipv6-address-generation-privacy]
    for a discussion about this type of attack.
-
-
-
-
-
-Krishnan, et al.         Expires April 18, 2015                 [Page 9]
-
-Internet-Draft        DHCPv6 Privacy considerations         October 2014
-
 
 5.3.  Finding civic address information
 
@@ -546,21 +554,17 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    information (current IP address, client's hostname).  Client ID is
    also disclosed, able it in not easily accessible form (SHA-256 digest
    of the client-id).  Although SHA-256 is irreversible, so DHCPv6
-   client ID can't be converted back to client-id.  However, SHA-256
-   digest can be used as a unique identifier that is accessible by any
-   host.
 
 
 
-
-
-
-
-
-Krishnan, et al.         Expires April 18, 2015                [Page 10]
+Krishnan, et al.         Expires April 20, 2015                [Page 10]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
+
+   client ID can't be converted back to client-id.  However, SHA-256
+   digest can be used as a unique identifier that is accessible by any
+   host.
 
 5.8.  Correlation of activities over time
 
@@ -603,20 +607,20 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    mechanism to obtain bulk information about DHCPv6 bindings, even
    without knowing the target bindings.
 
-6.  Security Considerations
-
-   TBD
 
 
 
 
 
 
-
-Krishnan, et al.         Expires April 18, 2015                [Page 11]
+Krishnan, et al.         Expires April 20, 2015                [Page 11]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
+
+6.  Security Considerations
+
+   TBD
 
 7.  Privacy Considerations
 
@@ -661,18 +665,18 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
               draft-ietf-6man-ipv6-address-generation-privacy-02 (work
               in progress), October 2014.
 
-   [RFC3633]  Troan, O. and R. Droms, "IPv6 Prefix Options for Dynamic
-              Host Configuration Protocol (DHCP) version 6", RFC 3633,
-              December 2003.
 
 
 
 
-
-Krishnan, et al.         Expires April 18, 2015                [Page 12]
+Krishnan, et al.         Expires April 20, 2015                [Page 12]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
+
+   [RFC3633]  Troan, O. and R. Droms, "IPv6 Prefix Options for Dynamic
+              Host Configuration Protocol (DHCP) version 6", RFC 3633,
+              December 2003.
 
    [RFC4580]  Volz, B., "Dynamic Host Configuration Protocol for IPv6
               (DHCPv6) Relay Agent Subscriber-ID Option", RFC 4580, June
@@ -703,6 +707,10 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    [RFC5970]  Huth, T., Freimann, J., Zimmer, V., and D. Thaler, "DHCPv6
               Options for Network Boot", RFC 5970, September 2010.
 
+   [RFC6225]  Polk, J., Linsner, M., Thomson, M., and B. Aboba, "Dynamic
+              Host Configuration Protocol Options for Coordinate-Based
+              Location Configuration Information", RFC 6225, July 2011.
+
    [RFC6355]  Narten, T. and J. Johnson, "Definition of the UUID-Based
               DHCPv6 Unique Identifier (DUID-UUID)", RFC 6355, August
               2011.
@@ -714,21 +722,15 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    [RFC6939]  Halwasia, G., Bhandari, S., and W. Dec, "Client Link-Layer
               Address Option in DHCPv6", RFC 6939, May 2013.
 
-Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-Krishnan, et al.         Expires April 18, 2015                [Page 13]
+Krishnan, et al.         Expires April 20, 2015                [Page 13]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
+
+Authors' Addresses
 
    Suresh Krishnan
    Ericsson
@@ -779,6 +781,4 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-
-
-Krishnan, et al.         Expires April 18, 2015                [Page 14]
+Krishnan, et al.         Expires April 20, 2015                [Page 14]
