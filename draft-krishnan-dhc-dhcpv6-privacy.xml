@@ -314,6 +314,17 @@
         element within the option.</t>
       </section>
 
+      <section title="Coordinate-Based Location Option">
+        <t>The GeoLoc options <xref target="RFC6225"></xref> is used by DHCPv6
+        server to provide the coordinate- based geographic location
+        information to the DHCPv6 clients. It enable a DHCPv6 client to obtain
+        its location.</t>
+
+        <t>After the relevant DHCPv6 exchanges have taken place, the location
+        information is stored on the end device rather than somewhere else,
+        where retrieving it might be difficult in practice.</t>
+      </section>
+
       <section title="Client System Architecture Type Option">
         <t>The Client System Architecture Type option <xref
         target="RFC5970"></xref> is used by DHCPv6 client to send a list of
@@ -605,6 +616,8 @@
       <?rfc include='reference.RFC.5970'?>
 
       <?rfc include='reference.RFC.6610'?>
+
+      <?rfc include='reference.RFC.6225'?>
 
       &rfc6355;
 
