@@ -109,7 +109,9 @@
       DHCPv6 protocol uses several identifiers that could become a source for
       gleaning additional information about the IPv6 host. This information
       may include device type, operating system information, location(s) that
-      the device may have previously visited etc.</t>
+      the device may have previously visited, etc. This document discusses the
+      various identifiers used by DHCPv6 and the potential privacy issues
+      <xref target="RFC6973"></xref>.</t>
 
       <t>Future works may propose protocol changes to fix the privacy issues
       that have been analyzed in this document. It is out of scope for this
@@ -305,7 +307,7 @@
       </section>
 
       <section title="Civic Location Option">
-        <t>DHCPv6 servers use the Civic Location Option <xref
+        <t>DHCPv6 servers use the Civic Location option <xref
         target="RFC4776"></xref> to delivery of location information (the
         civic and postal addresses) from the DHCPv6 server to the DHCPv6
         clients. It may refer to three locations: the location of the DHCPv6
@@ -332,8 +334,7 @@
         provide configuration information for a node that must be booted using
         the network rather than from local storage.</t>
 
-        <t><!--Client Network Interface Identifier [RFC5970] seems not in use. 
-        It provides information about the level of UNDI support.--></t>
+        <t><!--Client Network Interface Identifier [RFC5970] seems not in use. It provides information about the level of UNDI support.--></t>
       </section>
 
       <!--<section title="Options for Home Network/Agent Dynamic Discovery">
@@ -427,7 +428,7 @@
 
         <t>Random allocation - a server can pick a resource randomly out of
         available pool. That strategy works well in scenarios where pool
-        utilization is small, as the likelyhood of collision (resulting in the
+        utilization is small, as the likelihood of collision (resulting in the
         server needing to repeat randomization) is small. With the pool
         allocation increasing, the collision is disproportionally large, due
         to birthday paradox. With high pool utilization (e.g. when 90% of
@@ -451,8 +452,8 @@
     <section title="Attacks">
       <section title="Device type discovery (fingerprinting)">
         <t>The type of device used by the client can be guessed by the
-        attacker using the Vendor Class Option, the Client Link-layer Address
-        Option, and by parsing the Client ID Option. All of those options may
+        attacker using the Vendor Class option, the Client Link-layer Address
+        option, and by parsing the Client ID option. All of those options may
         contain OUI (Organizationally Unique Identifier) that represents the
         device's vendor. That knowledge can be used for device-specific
         vulnerability exploitation attacks. See Section 3.4 of <xref
@@ -462,30 +463,31 @@
 
       <section title="Operating system discovery (fingerpriting)">
         <t>The operating system running on a client can be guessed using the
-        Vendor Class Option, or by using fingerprinting techniques on the
-        combination of options requested using the Option Request Option. See
-        Section 3.4 of <xref
+        Vendor Class option, the Client System Architecture Type option, or by
+        using fingerprinting techniques on the combination of options
+        requested using the Option Request option. See Section 3.4 of <xref
         target="I-D.ietf-6man-ipv6-address-generation-privacy"></xref> for a
         discussion about this type of attack.</t>
       </section>
 
-      <section title="Finding civic address information">
-        <t>The civic address can be obtained by the attacker by many means.
-        The most direct way to obtain this information is by looking into a
-        server initiated message that contains the Civic Location Option. It
-        can also be indirectly inferred using the Remote ID Option (e.g. using
-        a telephone number), the Interface ID option (e.g. if an access
-        circuit on an Access Node corresponds to a civic location), or the
-        Subscriber ID Option (if the attacker has access to subscriber
-        info).</t>
+      <section title="Finding location information">
+        <t>The location information can be obtained by the attacker by many
+        means. The most direct way to obtain this information is by looking
+        into a server initiated message that contains the Civic Location or
+        GeoLoc option. It can also be indirectly inferred using the Remote ID
+        Option (e.g. using a telephone number), the Interface ID option (e.g.
+        if an access circuit on an Access Node corresponds to a civic
+        location), or the Subscriber ID Option (if the attacker has access to
+        subscriber info).</t>
       </section>
 
       <section title="Finding previously visited networks">
-        <t>When DHCPv6 clients to a network they attempt to request the same
-        address they had before they attached to a network. They do this by
-        putting the previously assigned address in the IA Address Options
-        inside the IA_NA, IA_TA. By observing these addresses, an attacker can
-        identify the network the client had previously visited.</t>
+        <t>When DHCPv6 clients connect to a network, they attempt to request
+        the same address they had before they attached to a network. They do
+        this by putting the previously assigned address in the IA Address
+        Options inside the IA_NA, IA_TA. By observing these addresses, an
+        attacker can identify the network the client had previously
+        visited.</t>
       </section>
 
       <section title="Finding a stable identity">
@@ -535,7 +537,7 @@
         In particular both passive (a service that the client connects to can
         log client's address and draw conclusions regarding its location and
         movement patterns based on prefix it is connecting from) and active
-        (attacker can send ICMP echo requests or other probe packets to
+        (attacker can send ICMPv6 echo requests or other probe packets to
         networks of suspected client locations).</t>
       </section>
 
@@ -555,12 +557,6 @@
         target="RFC5460"></xref> mechanism to obtain bulk information about
         DHCPv6 bindings, even without knowing the target bindings.</t>
       </section>
-
-      <!-- describe server allocation schemes, especially iterative ones
-<section>
-  <t>
-
-</section> -->
     </section>
 
     <section anchor="security" title="Security Considerations">
