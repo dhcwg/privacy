@@ -3,6 +3,7 @@ Useful documents:
 https://tools.ietf.org/html/draft-huitema-perpass-dhcp-identifiers
 
 RFC7258: Pervasive monitoring is an attack
+RFC6973: Privacy Considerations for Internet Protocols
 
 http://tools.ietf.org/html/draft-ietf-dhc-v4-threat-analysis-03
 Old (2006) document that analyzed threats in DHCPv4
