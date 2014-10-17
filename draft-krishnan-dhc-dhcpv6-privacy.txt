@@ -66,7 +66,7 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
    3.  Identifiers in DHCPv6 . . . . . . . . . . . . . . . . . . . .   3
-     3.1.  DUID  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+     3.1.  DUID  . . . . . . . . . . . . . . . . . . . . . . . . . .   4
      3.2.  Client ID Option  . . . . . . . . . . . . . . . . . . . .   4
      3.3.  IA_NA, IA_TA, IA_PD, IA Address and IA Prefix Options . .   4
      3.4.  Interface ID  . . . . . . . . . . . . . . . . . . . . . .   5
@@ -86,11 +86,11 @@ Table of Contents
    5.  Attacks . . . . . . . . . . . . . . . . . . . . . . . . . . .   9
      5.1.  Device type discovery (fingerprinting)  . . . . . . . . .   9
      5.2.  Operating system discovery (fingerpriting)  . . . . . . .  10
-     5.3.  Finding civic address information . . . . . . . . . . . .  10
+     5.3.  Finding location information  . . . . . . . . . . . . . .  10
      5.4.  Finding previously visited networks . . . . . . . . . . .  10
      5.5.  Finding a stable identity . . . . . . . . . . . . . . . .  10
      5.6.  Pervasive monitoring  . . . . . . . . . . . . . . . . . .  10
-     5.7.  Finding client's IP address or hostname . . . . . . . . .  10
+     5.7.  Finding client's IP address or hostname . . . . . . . . .  11
      5.8.  Correlation of activities over time . . . . . . . . . . .  11
      5.9.  Location tracking . . . . . . . . . . . . . . . . . . . .  11
      5.10. Leasequery & bulk leasequery  . . . . . . . . . . . . . .  11
@@ -121,7 +121,9 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    several identifiers that could become a source for gleaning
    additional information about the IPv6 host.  This information may
    include device type, operating system information, location(s) that
-   the device may have previously visited etc.
+   the device may have previously visited, etc.  This document discusses
+   the various identifiers used by DHCPv6 and the potential privacy
+   issues [RFC6973].
 
    Future works may propose protocol changes to fix the privacy issues
    that have been analyzed in this document.  It is out of scope for
@@ -156,12 +158,10 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    an introduction to the various options that will be used further in
    the document.
 
-3.1.  DUID
 
-   Each DHCPv6 client and server has a DHCPv6 Unique Identifier (DUID)
-   [RFC3315].  The DUID is designed to be unique across all DHCPv6
-   clients and servers, and to remain stable after it has been initially
-   generated.  The DUID can be of different forms.  Commonly used forms
+
+
+
 
 
 
@@ -170,6 +170,12 @@ Krishnan, et al.         Expires April 20, 2015                 [Page 3]
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
+3.1.  DUID
+
+   Each DHCPv6 client and server has a DHCPv6 Unique Identifier (DUID)
+   [RFC3315].  The DUID is designed to be unique across all DHCPv6
+   clients and servers, and to remain stable after it has been initially
+   generated.  The DUID can be of different forms.  Commonly used forms
    are based on the link-layer address of one of the device's network
    interfaces (with or without a timestamp), on the Universally Unique
    IDentifier (UUID) [RFC6355].  The default type, recommended by
@@ -213,12 +219,6 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    [RFC3633] is used to specify IPv6 prefixes associated with an IA_PD
    and is encapsulated within the Options field of such an IA_PD option.
 
-   To differentiate between instances of the same type of IA containers,
-   each IA_NA, IA_TA and IA_PD options have an IAID field that is unique
-   for each client/option type pair.  It is up to the client to pick
-   unique IAID values.  At least one popular implementation uses last
-   four octets of the link-layer address.  In most cases, that means
-
 
 
 Krishnan, et al.         Expires April 20, 2015                 [Page 4]
@@ -226,6 +226,11 @@ Krishnan, et al.         Expires April 20, 2015                 [Page 4]
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
+   To differentiate between instances of the same type of IA containers,
+   each IA_NA, IA_TA and IA_PD options have an IAID field that is unique
+   for each client/option type pair.  It is up to the client to pick
+   unique IAID values.  At least one popular implementation uses last
+   four octets of the link-layer address.  In most cases, that means
    that merely two bytes are missing for a full link-layer address
    reconstruction.  However, the first three octets in a typical link-
    layer address are vendor identifier.  That can be determined with
@@ -270,17 +275,14 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
    o  the remote IP address of a point-to-point link
 
-   o  an interface or port identifier
-
-
-
-
 
 
 Krishnan, et al.         Expires April 20, 2015                 [Page 5]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
+
+   o  an interface or port identifier
 
 3.7.  Client FQDN Option
 
@@ -328,8 +330,6 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
    The information contained in the data area of this option is
    contained in one or more opaque fields that identify details of the
-   hardware configuration, for example, the version of the operating
-
 
 
 
@@ -338,12 +338,13 @@ Krishnan, et al.         Expires April 20, 2015                 [Page 6]
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
+   hardware configuration, for example, the version of the operating
    system the client is running or the amount of memory installed on the
    client.
 
 3.11.  Civic Location Option
 
-   DHCPv6 servers use the Civic Location Option [RFC4776] to delivery of
+   DHCPv6 servers use the Civic Location option [RFC4776] to delivery of
    location information (the civic and postal addresses) from the DHCPv6
    server to the DHCPv6 clients.  It may refer to three locations: the
    location of the DHCPv6 server, the location of the network element
@@ -385,7 +386,6 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    There are number of serious issues, both protocolar and
    implementational, that make them nearly useless for their original
    goal.  First, [RFC3315] does not include T1 and T2 renewal timers in
-   IA_TA (a container for temporary addresses).  However, it mentions
 
 
 
@@ -394,6 +394,7 @@ Krishnan, et al.         Expires April 20, 2015                 [Page 7]
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
+   IA_TA (a container for temporary addresses).  However, it mentions
    that temporary addresses can be renewed.  Many client implementations
    renew those addresses during a renewal procedure initiated by other
    resources (non-temporary addresses or prefixes), thus forfeiting
@@ -441,7 +442,6 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    system administrators, so DHCPv6 server implementors are sometimes
    requested to implement it.  There is at least one implementation that
    supports it.  On the other hand, the downside of such allocation is
-   that the client now discloses its identifier in its IPv6 address to
 
 
 
@@ -450,6 +450,7 @@ Krishnan, et al.         Expires April 20, 2015                 [Page 8]
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
+   that the client now discloses its identifier in its IPv6 address to
    all services it connects to.  That means that correlation of
    activities over time, location tracking, address scanning and OS/
    vendor discovery apply.
@@ -464,7 +465,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
    Random allocation - a server can pick a resource randomly out of
    available pool.  That strategy works well in scenarios where pool
-   utilization is small, as the likelyhood of collision (resulting in
+   utilization is small, as the likelihood of collision (resulting in
    the server needing to repeat randomization) is small.  With the pool
    allocation increasing, the collision is disproportionally large, due
    to birthday paradox.  With high pool utilization (e.g. when 90% of
@@ -488,14 +489,13 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 5.1.  Device type discovery (fingerprinting)
 
    The type of device used by the client can be guessed by the attacker
-   using the Vendor Class Option, the Client Link-layer Address Option,
-   and by parsing the Client ID Option.  All of those options may
+   using the Vendor Class option, the Client Link-layer Address option,
+   and by parsing the Client ID option.  All of those options may
    contain OUI (Organizationally Unique Identifier) that represents the
    device's vendor.  That knowledge can be used for device-specific
    vulnerability exploitation attacks.  See Section 3.4 of
    [I-D.ietf-6man-ipv6-address-generation-privacy] for a discussion
    about this type of attack.
-
 
 
 
@@ -509,28 +509,30 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 5.2.  Operating system discovery (fingerpriting)
 
    The operating system running on a client can be guessed using the
-   Vendor Class Option, or by using fingerprinting techniques on the
-   combination of options requested using the Option Request Option.
-   See Section 3.4 of [I-D.ietf-6man-ipv6-address-generation-privacy]
-   for a discussion about this type of attack.
+   Vendor Class option, the Client System Architecture Type option, or
+   by using fingerprinting techniques on the combination of options
+   requested using the Option Request option.  See Section 3.4 of
+   [I-D.ietf-6man-ipv6-address-generation-privacy] for a discussion
+   about this type of attack.
 
-5.3.  Finding civic address information
+5.3.  Finding location information
 
-   The civic address can be obtained by the attacker by many means.  The
-   most direct way to obtain this information is by looking into a
-   server initiated message that contains the Civic Location Option.  It
-   can also be indirectly inferred using the Remote ID Option (e.g.
-   using a telephone number), the Interface ID option (e.g. if an access
-   circuit on an Access Node corresponds to a civic location), or the
-   Subscriber ID Option (if the attacker has access to subscriber info).
+   The location information can be obtained by the attacker by many
+   means.  The most direct way to obtain this information is by looking
+   into a server initiated message that contains the Civic Location or
+   GeoLoc option.  It can also be indirectly inferred using the Remote
+   ID Option (e.g. using a telephone number), the Interface ID option
+   (e.g.  if an access circuit on an Access Node corresponds to a civic
+   location), or the Subscriber ID Option (if the attacker has access to
+   subscriber info).
 
 5.4.  Finding previously visited networks
 
-   When DHCPv6 clients to a network they attempt to request the same
-   address they had before they attached to a network.  They do this by
-   putting the previously assigned address in the IA Address Options
-   inside the IA_NA, IA_TA.  By observing these addresses, an attacker
-   can identify the network the client had previously visited.
+   When DHCPv6 clients connect to a network, they attempt to request the
+   same address they had before they attached to a network.  They do
+   this by putting the previously assigned address in the IA Address
+   Options inside the IA_NA, IA_TA.  By observing these addresses, an
+   attacker can identify the network the client had previously visited.
 
 5.5.  Finding a stable identity
 
@@ -548,12 +550,10 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    points or network segments, may use obtained information about a
    single client and observer client's habits.
 
-5.7.  Finding client's IP address or hostname
 
-   Many DHCPv6 deployments use DNS Updates [RFC4704] that put client's
-   information (current IP address, client's hostname).  Client ID is
-   also disclosed, able it in not easily accessible form (SHA-256 digest
-   of the client-id).  Although SHA-256 is irreversible, so DHCPv6
+
+
+
 
 
 
@@ -562,6 +562,12 @@ Krishnan, et al.         Expires April 20, 2015                [Page 10]
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
+5.7.  Finding client's IP address or hostname
+
+   Many DHCPv6 deployments use DNS Updates [RFC4704] that put client's
+   information (current IP address, client's hostname).  Client ID is
+   also disclosed, able it in not easily accessible form (SHA-256 digest
+   of the client-id).  Although SHA-256 is irreversible, so DHCPv6
    client ID can't be converted back to client-id.  However, SHA-256
    digest can be used as a unique identifier that is accessible by any
    host.
@@ -588,7 +594,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    both passive (a service that the client connects to can log client's
    address and draw conclusions regarding its location and movement
    patterns based on prefix it is connecting from) and active (attacker
-   can send ICMP echo requests or other probe packets to networks of
+   can send ICMPv6 echo requests or other probe packets to networks of
    suspected client locations).
 
 5.10.  Leasequery & bulk leasequery
@@ -603,12 +609,6 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    circuit that leads to the host, and/or the hardware address of the
    intervening subscriber modem.
 
-   Furthermore, the attackers may use DHCPv6 bulk leasequery [RFC5460]
-   mechanism to obtain bulk information about DHCPv6 bindings, even
-   without knowing the target bindings.
-
-
-
 
 
 
@@ -617,6 +617,10 @@ Krishnan, et al.         Expires April 20, 2015                [Page 11]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
+
+   Furthermore, the attackers may use DHCPv6 bulk leasequery [RFC5460]
+   mechanism to obtain bulk information about DHCPv6 bindings, even
+   without knowing the target bindings.
 
 6.  Security Considerations
 
@@ -659,11 +663,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 10.2.  Informative References
 
-   [I-D.ietf-6man-ipv6-address-generation-privacy]
-              Cooper, A., Gont, F., and D. Thaler, "Privacy
-              Considerations for IPv6 Address Generation Mechanisms",
-              draft-ietf-6man-ipv6-address-generation-privacy-02 (work
-              in progress), October 2014.
+
 
 
 
@@ -673,6 +673,12 @@ Krishnan, et al.         Expires April 20, 2015                [Page 12]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
+
+   [I-D.ietf-6man-ipv6-address-generation-privacy]
+              Cooper, A., Gont, F., and D. Thaler, "Privacy
+              Considerations for IPv6 Address Generation Mechanisms",
+              draft-ietf-6man-ipv6-address-generation-privacy-02 (work
+              in progress), October 2014.
 
    [RFC3633]  Troan, O. and R. Droms, "IPv6 Prefix Options for Dynamic
               Host Configuration Protocol (DHCP) version 6", RFC 3633,
@@ -715,12 +721,6 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
               DHCPv6 Unique Identifier (DUID-UUID)", RFC 6355, August
               2011.
 
-   [RFC6610]  Jang, H., Yegin, A., Chowdhury, K., Choi, J., and T.
-              Lemon, "DHCP Options for Home Information Discovery in
-              Mobile IPv6 (MIPv6)", RFC 6610, May 2012.
-
-   [RFC6939]  Halwasia, G., Bhandari, S., and W. Dec, "Client Link-Layer
-              Address Option in DHCPv6", RFC 6939, May 2013.
 
 
 
@@ -729,6 +729,13 @@ Krishnan, et al.         Expires April 20, 2015                [Page 13]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
+
+   [RFC6610]  Jang, H., Yegin, A., Chowdhury, K., Choi, J., and T.
+              Lemon, "DHCP Options for Home Information Discovery in
+              Mobile IPv6 (MIPv6)", RFC 6610, May 2012.
+
+   [RFC6939]  Halwasia, G., Bhandari, S., and W. Dec, "Client Link-Layer
+              Address Option in DHCPv6", RFC 6939, May 2013.
 
 Authors' Addresses
 
@@ -759,13 +766,6 @@ Authors' Addresses
    P.R. China
 
    Email: jiangsheng@huawei.com
-
-
-
-
-
-
-
 
 
 
