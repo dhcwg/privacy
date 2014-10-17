@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY rfc2119 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY rfc3315 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3315.xml">
+<!ENTITY rfc3633 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3633.xml">
+<!ENTITY rfc4580 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4580.xml">
+<!ENTITY rfc4649 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4649.xml">
+<!ENTITY rfc4704 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4704.xml">
+<!ENTITY rfc4776 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4776.xml">
+<!ENTITY rfc4941 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4941.xml">
+<!ENTITY rfc6355 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6355.xml">
+<!ENTITY rfc6939 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6939.xml">
+<!ENTITY rfc6973 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6973.xml">
+<!ENTITY I-D.ietf-6man-ipv6-address-generation-privacy SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-ipv6-address-generation-privacy.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc iprnotified="no"?>
+<?rfc strict="yes"?>
+<?rfc compact="yes"?>
+<rfc category="std" docName="draft-jiang-dhc-dhcp-privacy-00"
+     ipr="trust200902">
+  <front>
+    <title abbrev="DHCP Privacy considerations">Privacy considerations for
+    DHCP</title>
+
+    <author fullname="Sheng Jiang" initials="S." surname="Jiang">
+      <organization>Huawei Technologies Co., Ltd</organization>
+
+      <address>
+        <postal>
+          <street>Q14, Huawei Campus, No.156 Beiqing Road</street>
+
+          <city>Hai-Dian District, Beijing, 100095</city>
+
+          <country>P.R. China</country>
+        </postal>
+
+        <email>jiangsheng@huawei.com</email>
+      </address>
+    </author>
+
+    <author fullname="Suresh Krishnan" initials="S." surname="Krishnan">
+      <organization>Ericsson</organization>
+
+      <address>
+        <postal>
+          <street>8400 Decarie Blvd.</street>
+
+          <city>Town of Mount Royal</city>
+
+          <region>QC</region>
+
+          <country>Canada</country>
+        </postal>
+
+        <phone>+1 514 345 7900 x42871</phone>
+
+        <email>suresh.krishnan@ericsson.com</email>
+      </address>
+    </author>
+
+    <author fullname="Tomek Mrugalski" initials="T." surname="Mrugalski">
+      <organization abbrev="ISC">Internet Systems Consortium,
+      Inc.</organization>
+
+      <address>
+        <postal>
+          <street>950 Charter Street</street>
+
+          <city>Redwood City</city>
+
+          <region>CA</region>
+
+          <code>94063</code>
+
+          <country>USA</country>
+        </postal>
+
+        <phone>+1 650 423 1345</phone>
+
+        <email>tomasz.mrugalski@gmail.com</email>
+      </address>
+    </author>
+
+    <date />
+
+    <area>Internet</area>
+
+    <workgroup>dhc</workgroup>
+
+    <abstract>
+      <!-- todo: describe DHCPv4 here -->
+
+      <t>DHCP is a protocol that is used to provide addressing and
+      configuration information to IPv4 hosts. This document discusses the
+      various identifiers used by DHCP and the potential privacy issues.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="intro" title="Introduction">
+      <t>Dynamic Host Configuration Protocol (DHCP) <xref
+      target="RFC2131"></xref> is a protocol that is used to provide
+      addressing and configuration information to IPv4 hosts. The DHCP
+      protocol uses several identifiers that could become a source for
+      gleaning additional information about the IPv4 host. This information
+      may include device type, operating system information, location(s) that
+      the device may have previously visited, etc. This document discusses the
+      various identifiers used by DHCP and the potential privacy issues <xref
+      target="RFC6973"></xref>.</t>
+
+      <t>Future works may propose protocol changes to fix the privacy issues
+      that have been analyzed in this document. It is out of scope for this
+      document.</t>
+
+      <t>Editor notes: for now, the document is mainly considering the privacy
+      of DHCP client. The privacy of DHCP server and relay agent are
+      considered less important because they are open for public services.
+      However, this may be a subject to change if further study shows opposite
+      result.</t>
+    </section>
+
+    <section title="Terminology">
+      <t>This section clarifies the terminology used throughout this
+      document.</t>
+
+      <t>Stable identifier - any property disclosed by a DHCP client that does
+      not change over time or changes very infrequently and is unique for said
+      client in a given context. Examples include MAC address, client-id that
+      does not change or a hostname. Stable identifier may or may not be
+      globally unique.</t>
+
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119"></xref>. When these words are not in ALL CAPS (such as
+      "should" or "Should"), they have their usual English meanings, and are
+      not to be interpreted as <xref target="RFC2119"></xref> key words.</t>
+    </section>
+
+    <section title="Identifiers in DHCP">
+      <t>There are several identifiers used in DHCP. This section provides an
+      introduction to the various options that will be used further in the
+      document.</t>
+
+      <section title="Client ID Option">
+        <t>The Client Identifier Option <xref target="RFC2131"></xref> is used
+        to pass an explicit client identifier to a DHCP server. There is an
+        analogous Server Identifier Option but it is not of much interest in
+        the privacy context (unless a host can be convinced to start acting as
+        a server).</t>
+
+        <t>The client identifier is an opaque key, which must be unique to
+        that client within the subnet to which the client is attached. It
+        typically remains stable after it has been initially generated. It may
+        contain a hardware address, identical to the contents of the 'chaddr'
+        field, or another type of identifier, such as a DNS name. It is
+        recommended that client identifiers be generated by using the
+        permanent link-layer address of the network interface that the client
+        is trying to configure. <xref target="RFC4361"></xref> updates the
+        recommendation of Client Identifiers to be "consists of a type field
+        whose value is normally 255, followed by a four-byte IA_ID field,
+        followed by the DUID for the client as defined in RFC 3315, section
+        9". This does not change the lifecycle of the Client Identifiers.
+        Clients are expected to generate their Client Identifiers once (during
+        first operation) and store it in a non-volatile storage or use the
+        same deterministic algorithm to generate the same Client Identifier
+        values again.</t>
+      </section>
+
+      <section title="Address Fields &amp; Options">
+        <t>The 'yiaddr' field <xref target="RFC2131"></xref> in DHCP message
+        is used to allocate address from the server to the client.</t>
+
+        <t>The DHCPv4 specification <xref target="RFC2131"></xref> provides a
+        way to specify the client link-layer address in the DHCPv4 message
+        header. A DHCPv4 message header has 'htype' and 'chaddr' fields to
+        specify the client link-layer address type and the link-layer address,
+        respectively. The 'chaddr' field is used both as a hardware address
+        for transmission of reply messages and as a client identifier.</t>
+
+        <t>The 'requested IP address' option <xref target="RFC2131"></xref> is
+        used by client to suggest that a particular IP address be
+        assigned.</t>
+      </section>
+
+      <section title="Subscriber-ID Option">
+        <t>A DHCP relay includes a Subscriber-ID option <xref
+        target="RFC3993"></xref> to associate some provider-specific
+        information with clients' DHCP messages that is independent of the
+        physical network configuration through which the subscriber is
+        connected.</t>
+
+        <t>The "subscriber-id" assigned by the provider is intended to be
+        stable as customers connect through different paths, and as network
+        changes occur. The Subscriber-ID is an ASCII string, which is assigned
+        and configured by the network provider.</t>
+      </section>
+
+      <section title="Relay Agent Information Option and Sub-options">
+        <t>A DHCP relay agent includes a Relay Agent Information <xref
+        target="RFC3046"></xref> to identify the remote host end of the
+        circuit. It contains a "circuit ID" sub-option for the incoming
+        circuit, which is an agent-local identifier of the circuit from which
+        a DHCP client-to-server packet was received, and a "remote ID"
+        sub-option which provides a trusted identifier for the remote
+        high-speed modem.</t>
+
+        <t>Possible encoding of "circuit ID" sub-option includes: router
+        interface number, switching hub port number, remote access server port
+        number, frame relay DLCI, ATM virtual circuit number, cable data
+        virtual circuit number, etc.</t>
+
+        <t>Possible encoding of the "remote ID" sub-option includes: a "caller
+        ID" telephone number for dial-up connection, a "user name" prompted
+        for by a remote access server, a remote caller ATM address, a "modem
+        ID" of a cable data modem, the remote IP address of a point-to-point
+        link, a remote X.25 address for X.25 connections, etc.</t>
+
+        <t>The link-selection sub-option <xref target="RFC3527"></xref> is
+        used by any DHCP relay agent that desires to specify a subnet/link for
+        a DHCP client request that it is relaying but needs the subnet/link
+        specification to be different from the IP address the DHCP server
+        should use when communicating with the relay agent. It contains an IP
+        address, which can identify the client's subnet/link.</t>
+      </section>
+
+      <section title="Client FQDN Option">
+        <t>The Client Fully Qualified Domain Name (FQDN) option <xref
+        target="RFC4702"></xref> is used by DHCP clients and servers to
+        exchange information about the client's fully qualified domain name
+        and about who has the responsibility for updating the DNS with the
+        associated AAAA and PTR RRs.</t>
+
+        <t>A client can use this option to convey all or part of its domain
+        name to a DHCP server for the IP-address-to-FQDN mapping. In most case
+        a client sends its hostname as a hint for the server. The DHCP server
+        MAY be configured to modify the supplied name or to substitute a
+        different name. The server should send its notion of the complete FQDN
+        for the client in the Domain Name field.</t>
+      </section>
+
+      <section title="Parameter Request List Option">
+        <t>The Parameter Request List option <xref target="RFC2131"></xref> is
+        used to inform the server about options the client wants the server to
+        send to the client. The content of a Parameter Request List option are
+        the option codes for an option requested by the client.</t>
+      </section>
+
+      <section title="Vendor Class and Vendor-Identifying Vendor Class Options">
+        <t>The Vendor Class option <xref target="RFC2131"></xref> and the
+        Vendor-Identifying Vendor Class option <xref target="RFC3925"></xref>
+        is used by a DHCP client to identify the vendor that manufactured the
+        hardware on which the client is running.</t>
+
+        <t>The information contained in the data area of this option is
+        contained in one or more opaque fields that identify the details of
+        the hardware configuration of the host on which the client is running,
+        or of industry consortium compliance, for example, the version of the
+        operating system the client is running or the amount of memory
+        installed on the client.</t>
+      </section>
+
+      <section title="Civic Location Option">
+        <t>DHCP servers use the Civic Location Option <xref
+        target="RFC4776"></xref> to delivery of the location information (the
+        civic and postal addresses) to the DHCP clients. It may refer to three
+        locations: the location of the DHCP server, the location of the
+        network element believed to be closest to the client, or the location
+        of the client, identified by the "what" element within the option.</t>
+      </section>
+
+      <section title="Coordinate-Based Location Option">
+        <t>The GeoConf and GeoLoc options <xref target="RFC6225"></xref> is
+        used by DHCP server to provide the coordinate-based geographic
+        location information to the DHCP clients. It enables a DHCP client to
+        obtain its geographic location.</t>
+
+        <t>After the relevant DHCP exchanges have taken place, the location
+        information is stored on the end device rather than somewhere else,
+        where retrieving it might be difficult in practice.</t>
+      </section>
+
+      <section title="Client System Architecture Type Option">
+        <t>The Client System Architecture Type Option <xref
+        target="RFC4578"></xref> is used by DHCP client to send a list of
+        supported architecture types to the DHCP server. It is used to provide
+        configuration information for a node that must be booted using the
+        network rather than from local storage.</t>
+
+        <t><!--Client Network Interface Identifier Option and Client Machine 
+        Identifier Option seems not in use. Together with the Client System 
+        Architecture Type Option, they are used for the Intel Preboot eXecution 
+        Environment (PXE). Client Network Interface Identifier Option provide 
+        information about the level of UNDI support.--></t>
+      </section>
+    </section>
+
+    <section title="Existing Mechanisms That Affect Privacy">
+      <t>This section describes available DHCP mechanisms that one can use to
+      protect or enhance one's privacy.</t>
+
+      <section title="DNS Updates">
+        <t>DNS Updates <xref target="RFC4704"></xref> defines a mechanism that
+        allows both clients and server to insert into DNS domain information
+        about clients. Both forward (AAAA) and reverse (PTR) resource records
+        can be updated. This allows other nodes to conveniently refer to a
+        host, despite the fact that its IP address may be changing.</t>
+
+        <t>This mechanism exposes two important pieces of information: current
+        address (which can be mapped to current location) and client's
+        hostname.</t>
+      </section>
+
+      <section title="Allocation strategies">
+        <t>A DHCP server running in typical, stateful mode is given a task of
+        managing one or more pools of IP address resources. When a client
+        requests a resource, server must pick a resource out of configured
+        pool. Depending on the server's implementation, various allocation
+        strategies are possible. Choices in this regard may have privacy
+        implications.</t>
+
+        <t>Iterative allocation - a server may choose to allocate addresses
+        one by one. That strategy has the benefit of being very fast, thus can
+        be favored in deployments that prefer performance. However, it makes
+        the resources very predictable. Also, since the resources allocated
+        tend to be clustered at the beginning of available pool, it makes
+        scanning attacks much easier.</t>
+
+        <t>Identifier-based allocation - a server may choose to allocate an
+        address that is based on one of available identifiers, e.g. client
+        identifier or MAC address. It is also convenient, as returning client
+        is very likely to get the same address. Those properties are
+        convenient for system administrators, so DHCP server implementors are
+        often requested to implement it. On the other hand, the downside of
+        such allocation is that the client has a very stable IP address. That
+        means that correlation of activities over time, location tracking,
+        address scanning and OS/vendor discovery apply.</t>
+
+        <t>Hash allocation - it's an extension of identifier based allocation.
+        Instead of using the identifier directly, it is being hashed first. If
+        the hash is implemented correctly, it removes the flaw of disclosing
+        the identifier, a property that eliminates susceptibility to address
+        scanning and OS/vendor discovery. If the hash is poorly implemented
+        (e.g. can be reverted), it introduces no improvement over
+        identifier-based allocation.</t>
+
+        <t>Random allocation - a server can pick a resource randomly out of
+        available pool. That strategy works well in scenarios where pool
+        utilization is small, as the likelihood of collision (resulting in the
+        server needing to repeat randomization) is small. With the pool
+        allocation increasing, the collision is disproportionally large, due
+        to birthday paradox. With high pool utilization (e.g. when 90% of
+        available resources being allocated already), the server will use most
+        computational resources to repeatedly pick a random resource, which
+        will degrade its performance. This allocation scheme essentially
+        prevents returning clients from getting the same address again. On the
+        other hand, it is beneficial from privacy perspective as addresses
+        generated that way are not susceptible to correlation attacks,
+        OS/vendor discovery attacks or identity discovery attacks. Note that
+        even though the address itself may be resilient to a given attack, the
+        client may still be susceptible if additional information is disclosed
+        other way, e.g. client's address can be randomized, but it still can
+        leak its MAC address in client-id option.</t>
+
+        <t>Other allocation strategies may be implemented.</t>
+
+        <t>However, giving the limited resource of IPv4 public address pool,
+        allocation mechanism in IPv4 may not provide much protection, while in
+        IPv6, the network has very large address space to distribute the
+        address allocation.</t>
+      </section>
+    </section>
+
+    <section title="Attacks">
+      <section title="Device type discovery">
+        <t>The type of device used by the client can be guessed by the
+        attacker using the Vendor Class Option, the 'chaddr' field, and by
+        parsing the Client ID Option. All of those options may contain OUI
+        (Organizationally Unique Identifier) that represents the device's
+        vendor. That knowledge can be used for device-specific vulnerability
+        exploitation attacks.</t>
+      </section>
+
+      <section title="Operating system discovery">
+        <t>The operating system running on a client can be guessed using the
+        Vendor Class option, the Client System Architecture Type option, or by
+        using fingerprinting techniques on the combination of options
+        requested using the Parameter Request List option.</t>
+      </section>
+
+      <section title="Finding location information">
+        <t>The location information can be obtained by the attacker by many
+        means. The most direct way to obtain this information is by looking
+        into a server initiated message that contains the Civic Location,
+        GeoConf, or GeoLoc options. It can also be indirectly inferred using
+        the Relay Agent Information option, with the remote ID sub-option
+        (e.g. using a telephone number), the circuit ID option (e.g. if an
+        access circuit on an Access Node corresponds to a civic location), or
+        the Subscriber ID Option (if the attacker has access to subscriber
+        info).</t>
+      </section>
+
+      <section title="Finding previously visited networks">
+        <t>When DHCP clients connect to a network, they attempt to request the
+        same address they had before they attached to a network. They do this
+        by putting the previously assigned address in the requested IP address
+        option. By observing these addresses, an attacker can identify the
+        network the client had previously visited.</t>
+      </section>
+
+      <section title="Finding a stable identity">
+        <t>An attacker might use a stable identity gleaned from DHCP messages
+        to correlate activities of a given client on unrelated networks. The
+        Client FQDN option, the Subscriber ID Option and the Client ID options
+        can serve as long lived identifiers of DHCP clients. The Client FQDN
+        option can also provide an identity that can easily be correlated with
+        web server activity logs.</t>
+      </section>
+
+      <section title="Pervasive monitoring">
+        <t>This is an enhancement, or a combination of most aforementioned
+        mechanisms. Operator who controls non-trivial number of access points
+        or network segments, may use obtained information about a single
+        client and observer client's habits.</t>
+      </section>
+
+      <section title="Finding client's IP address or hostname">
+        <t>Many DHCP deployments use DNS Updates <xref
+        target="RFC4702"></xref> that put client's information (current IP
+        address, client's hostname). Client ID is also disclosed, able it in
+        not easily accessible form (SHA-256 digest of the client-id). Although
+        SHA-256 is irreversible, so DHCID can't be converted back to
+        client-id. However, SHA-256 digest can be used as a unique identifier
+        that is accessible by any host.</t>
+      </section>
+
+      <section title="Correlation of activities over time">
+        <t>As with other identifiers, an IP address can be used to correlate
+        the activities of a host for at least as long as the lifetime of the
+        address. If that address was generated from some other, stable
+        identifier and that generation scheme can be deducted by an attacker,
+        the duration of correlation attack extends to that identifier. In many
+        cases, its lifetime is equal to the lifetime of the device itself.</t>
+      </section>
+
+      <section title="Location tracking">
+        <t>If a stable identifier is used for assigning an address and such
+        mapping is discovered by an attacker. In particular both passive (a
+        service that the client connects to can log client's address and draw
+        conclusions regarding its location and movement patterns based on
+        address it is connecting from) and active (attacker can send ICMP echo
+        requests or other probe packets to networks of suspected client
+        locations).</t>
+      </section>
+
+      <section title="Leasequery &amp; bulk leasequery">
+        <t>Attackers may pretend as an access concentrator, either DHCP relay
+        agent or DHCP client, to obtain location information directly from the
+        DHCP server(s) using the DHCP Leasequery <xref
+        target="RFC4388"></xref> mechanism.</t>
+
+        <t>Location information is information needed by the access
+        concentrator to forward traffic to a broadband-accessible host. This
+        information includes knowledge of the host hardware address, the port
+        or virtual circuit that leads to the host, and/or the hardware address
+        of the intervening subscriber modem.</t>
+
+        <t>Furthermore, the attackers may use DHCP bulk leasequery <xref
+        target="RFC6296"></xref> mechanism to obtain bulk information about
+        DHCP bindings, even without knowing the target bindings.</t>
+      </section>
+    </section>
+
+    <section anchor="security" title="Security Considerations">
+      <t>TBD</t>
+    </section>
+
+    <section anchor="privacy-consider" title="Privacy Considerations">
+      <t>This document at its entirety discusses privacy considerations in
+      DHCP. As such, no separate section about this is needed.</t>
+    </section>
+
+    <section title="IANA Considerations">
+      <t>This draft does not request any IANA action.</t>
+    </section>
+
+    <section anchor="acks" title="Acknowledgements">
+      <t>The authors would like to thanks the valuable comments made by
+      Stephen Farrell, Ted Lemon and other members of DHC WG.</t>
+
+      <t>This document was produced using the xml2rfc tool <xref
+      target="RFC2629"></xref>.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      &rfc2119;
+
+      <?rfc include='reference.RFC.2131'?>
+
+      <?rfc include='reference.RFC.2132'?>
+
+      <?rfc include='reference.RFC.2629'?>
+
+      <?rfc include='reference.RFC.3046'?>
+
+      <?rfc include='reference.RFC.3527'?>
+
+      <?rfc include='reference.RFC.3925'?>
+
+      <?rfc include='reference.RFC.3993'?>
+
+      <?rfc include='reference.RFC.4338'?>
+
+      <?rfc include='reference.RFC.4361'?>
+
+      <?rfc include='reference.RFC.4388'?>
+
+      <?rfc include='reference.RFC.4578'?>
+
+      <?rfc include='reference.RFC.4702'?>
+
+      <?rfc include='reference.RFC.4704'?>
+
+      <?rfc include='reference.RFC.4776'?>
+
+      <?rfc include='reference.RFC.6148'?>
+
+      <?rfc include='reference.RFC.6225'?>
+
+      <?rfc include='reference.RFC.6296'?>
+
+      &rfc6973;
+    </references>
+
+    <!--<references title="Informative References"></references> -->
+  </back>
+</rfc>
