@@ -149,9 +149,9 @@
       <section title="Client ID Option">
         <t>The Client Identifier Option <xref target="RFC2131"></xref> is used
         to pass an explicit client identifier to a DHCP server. There is an
-        analogous Server Identifier Option but it is not of much interest in
-        the privacy context (unless a host can be convinced to start acting as
-        a server).</t>
+        analogous Server Identifier Option but it is not as interesting in the
+        privacy context (unless a host can be convinced to start acting as a
+        server).</t>
 
         <t>The client identifier is an opaque key, which must be unique to
         that client within the subnet to which the client is attached. It
@@ -312,7 +312,9 @@
 
         <t>This mechanism exposes two important pieces of information: current
         address (which can be mapped to current location) and client's
-        hostname.</t>
+        hostname. The stable hostname can then by used to correlate the client
+        across different network attachments even when its IP addresses keep
+        changing.</t>
       </section>
 
       <section title="Allocation strategies">
@@ -405,11 +407,11 @@
       </section>
 
       <section title="Finding previously visited networks">
-        <t>When DHCP clients connect to a network, they attempt to request the
-        same address they had before they attached to a network. They do this
-        by putting the previously assigned address in the requested IP address
-        option. By observing these addresses, an attacker can identify the
-        network the client had previously visited.</t>
+        <t>When DHCP clients connect to a network, they attempt to obtain the
+        same address they had used before they attached to the network. They
+        do this by putting the previously assigned address in the requested IP
+        address option. By observing these addresses, an attacker can identify
+        the network the client had previously visited.</t>
       </section>
 
       <section title="Finding a stable identity">
@@ -461,7 +463,8 @@
         <t>Attackers may pretend as an access concentrator, either DHCP relay
         agent or DHCP client, to obtain location information directly from the
         DHCP server(s) using the DHCP Leasequery <xref
-        target="RFC4388"></xref> mechanism.</t>
+        target="RFC4388"></xref>, <xref target="RFC6148"></xref>
+        mechanism.</t>
 
         <t>Location information is information needed by the access
         concentrator to forward traffic to a broadband-accessible host. This
@@ -470,7 +473,7 @@
         of the intervening subscriber modem.</t>
 
         <t>Furthermore, the attackers may use DHCP bulk leasequery <xref
-        target="RFC6296"></xref> mechanism to obtain bulk information about
+        target="RFC6926"></xref> mechanism to obtain bulk information about
         DHCP bindings, even without knowing the target bindings.</t>
       </section>
     </section>
@@ -490,7 +493,8 @@
 
     <section anchor="acks" title="Acknowledgements">
       <t>The authors would like to thanks the valuable comments made by
-      Stephen Farrell, Ted Lemon and other members of DHC WG.</t>
+      Stephen Farrell, Ted Lemon, Ines Robles, Russ White, Christian Schaefer
+      and other members of DHC WG.</t>
 
       <t>This document was produced using the xml2rfc tool <xref
       target="RFC2629"></xref>.</t>
@@ -503,9 +507,7 @@
 
       <?rfc include='reference.RFC.2131'?>
 
-      <?rfc include='reference.RFC.2132'?>
-
-      <?rfc include='reference.RFC.2629'?>
+      <!--RFC.2132 "DHCP Options and BOOTP Vendor Extensions"-->
 
       <?rfc include='reference.RFC.3046'?>
 
@@ -515,13 +517,9 @@
 
       <?rfc include='reference.RFC.3993'?>
 
-      <?rfc include='reference.RFC.4338'?>
-
       <?rfc include='reference.RFC.4361'?>
 
       <?rfc include='reference.RFC.4388'?>
-
-      <?rfc include='reference.RFC.4578'?>
 
       <?rfc include='reference.RFC.4702'?>
 
@@ -533,11 +531,19 @@
 
       <?rfc include='reference.RFC.6225'?>
 
-      <?rfc include='reference.RFC.6296'?>
+      <?rfc include='reference.RFC.6926'?>
 
-      &rfc6973;
     </references>
 
-    <!--<references title="Informative References"></references> -->
+    <references title="Informative References">
+    
+      <?rfc include='reference.RFC.4578'?>
+
+      <?rfc include='reference.RFC.2629'?>      
+      
+      &rfc6973;
+      
+    </references>
+    
   </back>
 </rfc>
