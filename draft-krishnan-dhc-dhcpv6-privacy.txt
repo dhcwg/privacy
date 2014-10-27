@@ -5,10 +5,10 @@
 dhc                                                          S. Krishnan
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                            T. Mrugalski
-Expires: April 20, 2015                                              ISC
+Expires: April 29, 2015                                              ISC
                                                                 S. Jiang
                                             Huawei Technologies Co., Ltd
-                                                        October 17, 2014
+                                                        October 26, 2014
 
 
                    Privacy considerations for DHCPv6
@@ -35,12 +35,28 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 20, 2015.
+   This Internet-Draft will expire on April 29, 2015.
 
 Copyright Notice
 
    Copyright (c) 2014 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
+
+
+
+
+
+
+
+
+
+
+
+
+Krishnan, et al.         Expires April 29, 2015                 [Page 1]
+
+Internet-Draft        DHCPv6 Privacy considerations         October 2014
+
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
@@ -49,15 +65,6 @@ Copyright Notice
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
    include Simplified BSD License text as described in Section 4.e of
-
-
-
-
-Krishnan, et al.         Expires April 20, 2015                 [Page 1]
-
-Internet-Draft        DHCPv6 Privacy considerations         October 2014
-
-
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
 
@@ -85,12 +92,12 @@ Table of Contents
      4.3.  Allocation strategies . . . . . . . . . . . . . . . . . .   8
    5.  Attacks . . . . . . . . . . . . . . . . . . . . . . . . . . .   9
      5.1.  Device type discovery (fingerprinting)  . . . . . . . . .   9
-     5.2.  Operating system discovery (fingerpriting)  . . . . . . .  10
+     5.2.  Operating system discovery (fingerprinting) . . . . . . .  10
      5.3.  Finding location information  . . . . . . . . . . . . . .  10
      5.4.  Finding previously visited networks . . . . . . . . . . .  10
      5.5.  Finding a stable identity . . . . . . . . . . . . . . . .  10
      5.6.  Pervasive monitoring  . . . . . . . . . . . . . . . . . .  10
-     5.7.  Finding client's IP address or hostname . . . . . . . . .  11
+     5.7.  Finding client's IP address or hostname . . . . . . . . .  10
      5.8.  Correlation of activities over time . . . . . . . . . . .  11
      5.9.  Location tracking . . . . . . . . . . . . . . . . . . . .  11
      5.10. Leasequery & bulk leasequery  . . . . . . . . . . . . . .  11
@@ -99,20 +106,17 @@ Table of Contents
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
    9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  12
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  12
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
 
 
 
-
-
-
-
-Krishnan, et al.         Expires April 20, 2015                 [Page 2]
+Krishnan, et al.         Expires April 29, 2015                 [Page 2]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
+
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  12
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  12
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction
 
@@ -161,11 +165,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-
-
-
-
-Krishnan, et al.         Expires April 20, 2015                 [Page 3]
+Krishnan, et al.         Expires April 29, 2015                 [Page 3]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -199,8 +199,8 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
    The Client Identifier Option (OPTION_CLIENTID) [RFC3315] is used to
    carry the DUID of a DHCPv6 client between a client and a server.
-   There is an analogous Server Identifier Option but it is not of much
-   interest in the privacy context (unless a host can be convinced to
+   There is an analogous Server Identifier Option but it is not as
+   interesting in the privacy context (unless a host can be convinced to
    start acting as a server).  Client ID is an example of DUID.  See
    Section 3.1 for relevant discussion about DUIDs.
 
@@ -221,7 +221,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-Krishnan, et al.         Expires April 20, 2015                 [Page 4]
+Krishnan, et al.         Expires April 29, 2015                 [Page 4]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -244,10 +244,9 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    relayed.
 
    Although in principle Interface ID can be arbitrarily long with
-   completely random values, it is often a text string.  It often
-   includes relay agent name followed by interface name.  This can be
-   used for fingerprinting the relay or determining client's point of
-   attachment.
+   completely random values, it is often a text string that includes the
+   relay agent name followed by interface name.  This can be used for
+   fingerprinting the relay or determining client's point of attachment.
 
 3.5.  Subscriber ID
 
@@ -277,7 +276,8 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-Krishnan, et al.         Expires April 20, 2015                 [Page 5]
+
+Krishnan, et al.         Expires April 29, 2015                 [Page 5]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -333,7 +333,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-Krishnan, et al.         Expires April 20, 2015                 [Page 6]
+Krishnan, et al.         Expires April 29, 2015                 [Page 6]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -376,26 +376,24 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 4.1.  Temporary addresses
 
-   [RFC3315] defines temporary addresses.  The original idea behind
-   temporary addresses was that a client may request a temporary
-   address, use it for whatever purpose, never renew it and let it
-   expire soon.  This concept could work in principle.  Client that
-   wants to conceal its identity just keeps requesting new, short lived
-   temporary addresses.
+   [RFC3315] defines a mechanism for a client to request temporary
+   addresses.  The idea behind temporary addresses is that a client can
+   request a temporary address for a specific purpose, use it, and then
+   never renew it. i.e.  let it expire.
 
    There are number of serious issues, both protocolar and
    implementational, that make them nearly useless for their original
    goal.  First, [RFC3315] does not include T1 and T2 renewal timers in
+   IA_TA (a container for temporary addresses).  However, it mentions
+   that temporary addresses can be renewed.  Many client implementations
 
 
 
-Krishnan, et al.         Expires April 20, 2015                 [Page 7]
+Krishnan, et al.         Expires April 29, 2015                 [Page 7]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
-   IA_TA (a container for temporary addresses).  However, it mentions
-   that temporary addresses can be renewed.  Many client implementations
    renew those addresses during a renewal procedure initiated by other
    resources (non-temporary addresses or prefixes), thus forfeiting
    shortliveness.  Second, [RFC4704] allows servers to update DNS for
@@ -412,7 +410,9 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
    This mechanism exposes two important pieces of information: current
    address (which can be mapped to current location) and client's
-   hostname.
+   hostname.  The stable hostname can then by used to correlate the
+   client across different network attachments even when its IPv6
+   address keeps changing.
 
 4.3.  Allocation strategies
 
@@ -433,7 +433,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    scanning attacks much easier.
 
    Identifier-based allocation - a server may choose to allocate an
-   address that is based on one of available identifiers, e.g.  IID or
+   address that is based on one of available identifiers, e.g. IID or
    MAC address.  This has a property of being convenient for converting
    IP address to/from other identifiers, especially if the identifier is
    or contains MAC address.  It is also convenient, as returning client
@@ -445,7 +445,7 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-Krishnan, et al.         Expires April 20, 2015                 [Page 8]
+Krishnan, et al.         Expires April 29, 2015                 [Page 8]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
@@ -501,12 +501,12 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
 
-Krishnan, et al.         Expires April 20, 2015                 [Page 9]
+Krishnan, et al.         Expires April 29, 2015                 [Page 9]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 
-5.2.  Operating system discovery (fingerpriting)
+5.2.  Operating system discovery (fingerprinting)
 
    The operating system running on a client can be guessed using the
    Vendor Class option, the Client System Architecture Type option, or
@@ -528,11 +528,12 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 5.4.  Finding previously visited networks
 
-   When DHCPv6 clients connect to a network, they attempt to request the
-   same address they had before they attached to a network.  They do
-   this by putting the previously assigned address in the IA Address
-   Options inside the IA_NA, IA_TA.  By observing these addresses, an
-   attacker can identify the network the client had previously visited.
+   When DHCPv6 clients connect to a network, they attempt to obtain the
+   same address they had used before they attached to the network.  They
+   do this by putting the previously assigned address(es) in the IA
+   Address Option(s) inside the IA_NA, IA_TA.  By observing these
+   addresses, an attacker can identify the network the client had
+   previously visited.
 
 5.5.  Finding a stable identity
 
@@ -550,19 +551,16 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    points or network segments, may use obtained information about a
    single client and observer client's habits.
 
+5.7.  Finding client's IP address or hostname
 
 
 
 
 
-
-
-Krishnan, et al.         Expires April 20, 2015                [Page 10]
+Krishnan, et al.         Expires April 29, 2015                [Page 10]
 
 Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
-
-5.7.  Finding client's IP address or hostname
 
    Many DHCPv6 deployments use DNS Updates [RFC4704] that put client's
    information (current IP address, client's hostname).  Client ID is
@@ -609,18 +607,16 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
    circuit that leads to the host, and/or the hardware address of the
    intervening subscriber modem.
 
-
-
-
-
-Krishnan, et al.         Expires April 20, 2015                [Page 11]
-
-Internet-Draft        DHCPv6 Privacy considerations         October 2014
-
-
    Furthermore, the attackers may use DHCPv6 bulk leasequery [RFC5460]
    mechanism to obtain bulk information about DHCPv6 bindings, even
    without knowing the target bindings.
+
+
+
+Krishnan, et al.         Expires April 29, 2015                [Page 11]
+
+Internet-Draft        DHCPv6 Privacy considerations         October 2014
+
 
 6.  Security Considerations
 
@@ -638,7 +634,8 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 9.  Acknowledgements
 
    The authors would like to thanks the valuable comments made by
-   Stephen Farrell, Ted Lemon and other members of DHC WG.
+   Stephen Farrell, Ted Lemon, Ines Robles, Russ White, Christian
+   Schaefer and other members of DHC WG.
 
    This document was produced using the xml2rfc tool [RFC2629].
 
@@ -663,22 +660,19 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
 
 10.2.  Informative References
 
-
-
-
-
-
-
-Krishnan, et al.         Expires April 20, 2015                [Page 12]
-
-Internet-Draft        DHCPv6 Privacy considerations         October 2014
-
-
    [I-D.ietf-6man-ipv6-address-generation-privacy]
               Cooper, A., Gont, F., and D. Thaler, "Privacy
               Considerations for IPv6 Address Generation Mechanisms",
               draft-ietf-6man-ipv6-address-generation-privacy-02 (work
               in progress), October 2014.
+
+
+
+
+Krishnan, et al.         Expires April 29, 2015                [Page 12]
+
+Internet-Draft        DHCPv6 Privacy considerations         October 2014
+
 
    [RFC3633]  Troan, O. and R. Droms, "IPv6 Prefix Options for Dynamic
               Host Configuration Protocol (DHCP) version 6", RFC 3633,
@@ -721,21 +715,20 @@ Internet-Draft        DHCPv6 Privacy considerations         October 2014
               DHCPv6 Unique Identifier (DUID-UUID)", RFC 6355, August
               2011.
 
-
-
-
-
-Krishnan, et al.         Expires April 20, 2015                [Page 13]
-
-Internet-Draft        DHCPv6 Privacy considerations         October 2014
-
-
    [RFC6610]  Jang, H., Yegin, A., Chowdhury, K., Choi, J., and T.
               Lemon, "DHCP Options for Home Information Discovery in
               Mobile IPv6 (MIPv6)", RFC 6610, May 2012.
 
    [RFC6939]  Halwasia, G., Bhandari, S., and W. Dec, "Client Link-Layer
               Address Option in DHCPv6", RFC 6939, May 2013.
+
+
+
+
+Krishnan, et al.         Expires April 29, 2015                [Page 13]
+
+Internet-Draft        DHCPv6 Privacy considerations         October 2014
+
 
 Authors' Addresses
 
@@ -781,4 +774,11 @@ Authors' Addresses
 
 
 
-Krishnan, et al.         Expires April 20, 2015                [Page 14]
+
+
+
+
+
+
+
+Krishnan, et al.         Expires April 29, 2015                [Page 14]
