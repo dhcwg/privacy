@@ -216,11 +216,11 @@
         target="RFC3315"></xref> option to identify the interface on which it
         received the client message that is being relayed.</t>
 
-        <t>Although in principle Interface ID can be arbitrarily long
-        with completely random values, it is often a text string that
-        includes the relay agent name followed by interface name. This
-        can be used for fingerprinting the relay or determining
-        client's point of attachment.</t>
+        <t>Although in principle Interface ID can be arbitrarily long with
+        completely random values, it is often a text string that includes the
+        relay agent name followed by interface name. This can be used for
+        fingerprinting the relay or determining client's point of
+        attachment.</t>
       </section>
 
       <section title="Subscriber ID">
@@ -280,7 +280,6 @@
         may include the link-layer source address of the received DHCPv6
         message in the Client Link-Layer Address option, in relayed DHCPv6
         Relay-Forward messages.</t>
-
       </section>
 
       <section title="Option Request Option">
@@ -355,11 +354,10 @@
       to protect or enhance one's privacy.</t>
 
       <section title="Temporary addresses">
-        <t><xref target="RFC3315"></xref> defines a mechanism for a
-        client to request temporary addresses. The idea behind
-        temporary addresses is that a client can request a temporary
-        address for a specific purpose, use it, and then never renew it. i.e.
-        let it expire.</t>
+        <t><xref target="RFC3315"></xref> defines a mechanism for a client to
+        request temporary addresses. The idea behind temporary addresses is
+        that a client can request a temporary address for a specific purpose,
+        use it, and then never renew it. i.e. let it expire.</t>
 
         <t>There are number of serious issues, both protocolar and
         implementational, that make them nearly useless for their original
@@ -381,11 +379,11 @@
         can be updated. This allows other nodes to conveniently refer to a
         host, despite the fact that its IPv6 address may be changing.</t>
 
-        <t>This mechanism exposes two important pieces of information:
-        current address (which can be mapped to current location) and
-        client's hostname. The stable hostname can then by used to
-        correlate the client across different network attachments even
-        when its IPv6 address keeps changing.</t>
+        <t>This mechanism exposes two important pieces of information: current
+        address (which can be mapped to current location) and client's
+        hostname. The stable hostname can then by used to correlate the client
+        across different network attachments even when its IPv6 address keeps
+        changing.</t>
       </section>
 
       <section title="Allocation strategies">
@@ -484,12 +482,12 @@
       </section>
 
       <section title="Finding previously visited networks">
-        <t>When DHCPv6 clients connect to a network, they attempt to
-        obtain the same address they had used before they attached to
-        the network. They do this by putting the previously assigned
-        address(es) in the IA Address Option(s) inside the IA_NA, IA_TA. By
-        observing these addresses, an attacker can identify the
-        network the client had previously visited.</t>
+        <t>When DHCPv6 clients connect to a network, they attempt to obtain
+        the same address they had used before they attached to the network.
+        They do this by putting the previously assigned address(es) in the IA
+        Address Option(s) inside the IA_NA, IA_TA. By observing these
+        addresses, an attacker can identify the network the client had
+        previously visited.</t>
       </section>
 
       <section title="Finding a stable identity">
@@ -576,7 +574,8 @@
 
     <section anchor="acks" title="Acknowledgements">
       <t>The authors would like to thanks the valuable comments made by
-      Stephen Farrell, Ted Lemon, Ines Robles, Russ White, Christian Schaefer and other members of DHC WG.</t>
+      Stephen Farrell, Ted Lemon, Ines Robles, Russ White, Christian Schaefer
+      and other members of DHC WG.</t>
 
       <t>This document was produced using the xml2rfc tool <xref
       target="RFC2629"></xref>.</t>
@@ -587,15 +586,13 @@
     <references title="Normative References">
       &rfc2119;
 
-      <?rfc include='reference.RFC.2629'?>
-
       &rfc3315;
-
-      &rfc6973;
     </references>
 
     <references title="Informative References">
       &rfc3633;
+
+      <?rfc include='reference.RFC.2629'?>
 
       &rfc4580;
 
@@ -613,13 +610,13 @@
 
       <?rfc include='reference.RFC.5970'?>
 
-      <?rfc include='reference.RFC.6610'?>
-
       <?rfc include='reference.RFC.6225'?>
 
       &rfc6355;
 
       &rfc6939;
+
+      &rfc6973;
 
       &I-D.ietf-6man-ipv6-address-generation-privacy;
     </references>
