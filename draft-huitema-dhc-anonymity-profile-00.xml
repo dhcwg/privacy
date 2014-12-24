@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+
+<!ENTITY rfc2026 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2026.xml'>
+
+<!ENTITY rfc791 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.0791.xml'>
+<!ENTITY rfc2131 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2131.xml'>
+<!ENTITY rfc2132 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2132.xml'>
+<!ENTITY rfc3942 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3942.xml'>
+<!ENTITY rfc3315 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3315.xml'>
+<!ENTITY rfc4361 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4361.xml'>
+
+<!ENTITY rfc4702 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4702.xml'>
+
+<!ENTITY rfc4578 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4578.xml'>
+
+
+
+]>
+
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc compact="yes"?>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+
+<!-- Expand crefs and put them inline -->
+<?rfc comments='yes' ?>
+<?rfc inline='yes' ?>
+
+<rfc category="info" 
+     docName="draft-huitema-dhc-anonymity-profile-00.txt" 
+     ipr="trust200902">
+
+<front>
+    <title abbrev="Unique Identifiers in DHCP">
+      Anonimity profile for DHCP clients
+    </title>
+
+   <author fullname="Christian Huitema" initials="C." surname="Huitema">
+      <organization> </organization>
+      <address>
+        <postal>
+          <street> </street>
+          <city>Clyde Hill</city>
+          <code>98004</code>
+          <region>WA</region>
+          <country>U.S.A.</country>
+        </postal>
+        <email>huitema@huitema.net</email>
+      </address>
+    </author>
+
+    <date year="2014" month="December"/>
+
+    <abstract>
+        <t> 
+Some DHCP options carry unique identifiers. These identifiers can enable device tracking
+even if the device administrator takes care of randomizing other potential 
+identifications like link-layer addresses or IPv6 addresses. The anonymity profile
+is designed for clients that wish to remain anonymous to the visited network.
+The profile provides guidelines on the composition of DHCP or DHCPv6 requests,
+designed to minimize disclosure of identifying information.
+        </t>
+    </abstract>
+</front>
+
+<middle>
+<section title="Introduction">
+<t>
+Reports surfaced recently of systems that would monitor the wireless connections of 
+passengers at Canadian airports <xref target="CNBC" />. We can assume that these are either fragments
+or trial runs of a wider system that would attempt to monitor Internet users as they roam through 
+wireless access points and other temporary network attachments. We can also assume that privacy 
+conscious users will attempt to evade this monitoring, for example by ensuring that low level 
+identifiers like link-layer addresses are "randomized," so that the devices do not broadcast a unique identifier
+in every location that they visit.
+</t>
+<t>
+Of course, link layer "MAC" addresses are not the only way to identify a device. As soon as it connects to a 
+remote network, the device will use DHCP and DHCPv6 to obtain network parameters. The analysis of DHCP and DHCPv6 
+options shows that parameters of these protocols can reveal identifiers of the device, negating the benefits of 
+link-layer address randomization. The natural reaction is to restrict the number and values of such parameters
+in order to minimize disclosure.
+</t>
+<t>
+In the absence of a common standard, different system developers are likely to implement this minimization of 
+disclosure in different way. Monitoring entities could then use the differences to identify the software version running
+on the device. The proposed anonymity profile provides a common standard that minimizes information 
+disclosure, including the disclosure of implementation identifiers.
+</t>
+<section title="Requirements">
+<t>
+The keywords MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD,
+SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL, when they appear in this
+document, are to be interpreted as described in <xref target="RFC2026" />.
+</t>
+</section>
+</section>
+<section title="Anonymity profile for DHCPv4">
+<t>
+Clients using the DHCPv4 anonymity profile limit the disclosure of information by 
+controlling the header parameters and by limiting the number and values of options.
+The number of options depend on the specific DHCP message:
+</t>
+<list style="hanging">
+<t hangText="DISCOVER:"> The anonymized DISCOVER messages MUST contain the Message Type, 
+Client Id, Host name, and Requested option list options. It SHOULD NOT contain any other 
+option.
+</t>
+<t hangText="REQUEST:"> The anonymized REQUEST messages SHOULD contain the Message Type, 
+Client Identifier, Host name, and Requested option list options. If the message is in response
+to OFFER, it SHOULD contain the corresponding Server Identifier option. It SHOULD NOT contain 
+any other option.
+</t>
+<t hangText="DECLINE:"> The anonymized DECLINE messages SHOULD contain the Message Type, Client 
+Identifier and Server Identifier options. 
+</t> 
+<t hangText="RELEASE:"> The anonymized RELEASE messages SHOULD contain the Message Type, Client 
+Identifier and Server Identifier options.
+</t>
+<t hangText="INFORM:"> The anonymized DISCOVER messages MUST contain the Message Type, 
+Client Id, Host name, and Requested option list options. It SHOULD NOT contain any other 
+option.
+</t>
+</list>
+<t>
+Header fields and option values SHOULD be set in accordance with the DHCP specification,
+but some header fileds and option values SHOULD be constructed per the following guidelines.
+</t>
+<section title="Client IP address field">
+<t>
+Four bytes in the header of the DHCP messages carry the "Client IP address" (ciaddr) as defined in <xref target="RFC2131"/>. 
+In DHCP, this field is used by the clients to indicate the address that they used previously, so that as much as
+possible the server can allocate them the same address.  
+</t>
+<t>
+There is very little privacy implication of sending this address in the DHCP messages, except in one case, on a
+new connection to a new network. If the DHCP client somehow repeated the address used in a previous network attachment,
+monitoring services might use the information to tie the two network locations. DHCP clients should ensure that
+the field is cleared when they know that the network attachment has changed, and in particular of the link layer 
+address is reset by the device's administrator.
+</t>
+</section>
+<section title="Client hardware address">
+<t>
+Sixteen bytes in the header of the DHCP messages carry the "Client hardware address" (chaddr) as defined 
+in <xref target="RFC2131"/>. The presence of this address is necessary for the proper operation of the
+DHCP service.
+</t>
+<t>
+Hardware addresses, called "link layer address" in many RFC, can be used to uniquely identify a device, especially
+if they follow the IEEE 802 recommendations. These unique identifiers can be used by monitoring services to
+track the location of the device and its user. The only plausible defense is to somehow reset the hardware
+address to a random value before visiting an untrusted location. If the hardware address is reset to a new value, 
+or randomized, the DHCP client SHOULD use the new randomized value in the DHCP messages.
+</t>
+</section>
+<section title="Client Identifier Option">
+<t>
+The client identifier option is defined in <xref target="RFC2132"/> with option code 61. It is discussed in
+details in <xref target="RFC4361"/>. The purpose of the client identifier option is to identify the client in
+a manner independent of the link layer address. This is particularly useful if the DHCP server is expected to 
+assign the same address to the client after a network attachment is swapped and the link layer address changes.
+It is also useful when the same nodes issues requests through several interfaces, and expect the DHCP server
+to provide consistent configuration data over multiple interfaces. 
+</t>
+<t>
+The considerations for hardware independence and strong client identity have an adverse effect on the privacy 
+of mobile clients, because the hardware independent unique identifier obviously enables very efficient tracking of the
+client's movements.
+</t>
+<t>
+The recommendations in <xref target="RFC4361"/> are very strong, stating for example that "DHCPv4
+clients MUST NOT use client identifiers based solely on layer two addresses that are hard-wired to 
+the layer two device (e.g., the ethernet MAC address). These strong recommendations are in fact a tradeoff 
+between ease of management and privacy, and the tradeoff should depend on the circumstances. 
+</t>
+<t>
+In contradiction to <xref target="RFC4361"/>, when privacy considerations trump management considerations, 
+DHCP clients should use client identifiers based solely on the link layer address that will be used in the 
+underlying connection. This will ensure that the DHCP client identifier does not leak any information that
+is not already available to entities monitoring the network connection. It will also ensure that a 
+strategy of randomizing the link layer address will not be nullified by DHCP options.
+</t>
+</section>
+<section title="Host Name Option">
+<t>
+The Host Name option is defined in <xref target="RFC2132"/> with option code 12. Depending on implementations,
+the option value can carry either a fully qualified domain name such as "node1984.example.com," or a simple
+host name such as "node1984." The host name is commonly used by the DHCP server to identify the host, and
+also to automatically update the address of the host in local name services.   
+</t>
+<t>
+Fully qualified domain names are obviously unique identifiers, but even simple host names can provide a 
+significant amount of information on the identity of the device. They 
+are typically chosen to be unique in the context where the device is most often used. If that context is
+wide enough, in a large company or in a big university, the host name will be a pretty good identifier of
+the device. Monitoring services could use that information in conjunction with traffic analysis and quickly
+derive the identity of the device's owner. 
+</t>
+<t>
+When privacy considerations trump management considerations, DHCP clients should always send a non-qualified 
+host name instead of a fully qualified domain name, and should consider randomizing the
+host name value. A simple solution would be to set the host name value to an hexadecimal representation 
+of the link layer address that will be used in the underlying connection.
+</t>
+</section>
+<section title="Client FQDN Option">
+<t>
+The Client FQDN option is defined in <xref target="RFC4702"/> with option code 81. The option allows the 
+DHCP clients to advertize to the DHCP their fully qualified domain name (FQDN) such as "mobile.example.com." This
+would allow the DHCP server to update in the DNS the PTR record for the IP address allocated to the client. 
+Depending on circumstances, either the DHCP client or the DHCP server could update in the DNS the A record
+for the FQDN of the client.
+</t>
+<t>
+Obviously, this option uniquely identifies the client, exposing it to the DHCP server or to anyone listening to
+DHCP traffic. In fact, if the DNS record are updated, the location of the client becomes visible to anyone with 
+DNS lookup capabilities. 
+</t>
+<t>
+When privacy considerations trump management considerations, DHCP clients should not include the Client FQDN 
+option in their DHCP requests.
+</t> 
+</section>
+<section title="UUID/GUID-based Client Identifier Option">
+<t>
+The UUID/GUID-based Client Machine Identifier option is defined in <xref target="RFC4578"/>, with option code 97. 
+The option is 
+part of a set of options for Intel Preboot eXecution Environment (PXE). The purpose of the PXE system is to 
+perform management functions on a device before its main OS is operational. The Client Machine Identifier carries 
+a 16-octet Globally Unique Identifier (GUID), which uniquely identifies the device.
+</t>
+<t>
+The PXE system is clearly designed for devices operating in a controlled environment, and its functions are 
+not meant to be used by mobile nodes visiting untrusted networks. If only for privacy reasons, nodes visiting
+untrusted networks should disable the PXE functions, and not send the corresponding options.
+</t>
+</section>
+</section>
+<section title="Anonymity profile for DHCPv4">
+<t>
+TO BE WRITTEN.
+</t>
+<section title="Management considerations">
+<t>
+The anonymity profile has the effect of hiding the client identity from the DHCP server. This is not
+always desirable. Some DHCP servers provide facilities like publishing names and addresses in the DNS,
+or ensuring that returning clients get reassigned the same address. Implementers should be
+careful to only use the anonymity profile when privacy trumps management considerations. 
+</t>
+<section title="Security Considerations">
+<t> 
+TO BE DEVELOPPED. 
+</t>
+</section>
+
+<section title="IANA Considerations" anchor="iana">
+<t> 
+This draft does not require any IANA action.
+</t> 
+</section>
+
+<section title="Acknowledgments">
+    <t> 
+The inspiration for this draft came from discussions in the Perpass mailing list. 
+    </t>
+</section>
+</middle>
+
+<back>
+<references title="Normative References">
+    &rfc2026;
+    &rfc2131;
+    &rfc2132;
+    &rfc4361;
+    &rfc4578;
+    &rfc4702;
+</references>
+
+<references title="Informative References">
+
+    <reference anchor="CNBC" target="http://www.cbc.ca/news/politics/csec-used-airport-wi-fi-to-track-canadian-travellers-edward-snowden-documents-1.2517881">
+        <front>
+            <title>CBC News: CSEC used airport Wi-Fi to track Canadian travellers</title>
+            <author initials="G" surname="Weston" fullname="Greg Weston" />
+            <author initials="G" surname="Greenwald" fullname="Glenn Greenwald" />
+            <author initials="R" surname="Gallagher" fullname="Ryan Gallagher" />
+            <date month="Jan" year="2014" />
+            <abstract>
+	    <t>
+            Electronic snooping was part of a trial run for U.S. NSA and other foreign services
+            </t>
+            </abstract>  
+        </front>
+    </reference>
+
+
+</references>  
+
+</back>
+</rfc>
