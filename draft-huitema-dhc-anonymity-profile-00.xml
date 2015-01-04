@@ -43,7 +43,7 @@
      ipr="trust200902">
 
 <front>
-    <title abbrev="Unique Identifiers in DHCP">
+    <title abbrev="DHCP Anonymity Profile">
       Anonimity profile for DHCP clients
     </title>
 
@@ -61,7 +61,7 @@
       </address>
     </author>
 
-    <date year="2014" month="December"/>
+    <date year="2015" month="January"/>
 
     <abstract>
         <t> 
@@ -107,12 +107,61 @@ document, are to be interpreted as described in <xref target="RFC2026" />.
 </t>
 </section>
 </section>
+<section title="Application domain">
+<t>
+Mobile nodes can be tracked using multiple identifiers, the most prominent being the MAC addresses. For example, when
+devices use Wi-Fi connectivity, they place the MAC address in the header of all the packets that they transmit. 
+Standard implementation of Wi-Fi use unique 48 bit MAC addresses, assigned to the devices according to procedures
+defined by IEEE 802. Even when the Wi-Fi packets are encrypted, the portion of the header containing the addresses
+will be sent in clear text. Tracking devices can "listen to the airwaves" to find out what devices are transmitting
+near them. 
+</t>
+<t>
+We can easily imagine that the MAC addresses can be correlated with other data, e.g. clear text
+names and cookies, to build a registry linking MAC addresses to the identity of devices' owners. Once that 
+correlation is done, tracking MAC address is sufficient to track individual people, even when all application data
+sent from the devices is encrypted.
+MAC addresses can also be correlated with IP addresses of devices, negating potential privacy benefits of
+IPv6 "privacy" addresses. Privacy advocates have some reason to be concerned.
+</t>
+<t>
+The obvious solution is to "randomize" the MAC address. Before connecting to a particular network, the device replaces
+the MAC address with a randomly drawn 48 bit value. MAC address randomization was successfully tried at the IETF in Honolulu 
+in November 2014 <xref target="IETFMACRandom" />. However, we have to consider the linkage between MAC addresses, DHCP identifiers
+and IP addresses.
+</t>
+<t>
+From a privacy point of view, it is clear that MAC Addresses, IP addresses and DHCP identifiers shall evolve in synchrony. 
+For example, if the MAC address changes and the DHCP identifier stays constant, then it is really easy to correlate old and 
+new MAC address, either by listening to DHCP traffic or by observing that the IP address remain constant, 
+since it is tied to the DHCP identifier. Conversely, if the DHCP identifier changes but the MAC address remains constant, 
+the old and new identifiers and addresses can be correlated by listening to L2 traffic. The procedures documented in the 
+following sections construct DHCP identifiers from the current MAC address, automatically providing for this
+synchronization.
+</t>
+<t>
+Of course, there are downsides to randomizing MAC addresses and DHCP identifiers. By definition, anonymization will break
+management procedures that rely on tracking MAC addresses. Even if this is not too much of a concern, we have to be worried
+about the frequency of MAC address randomization. Suppose for example that many devices would get new random MAC addresses at 
+short intervals, maybe every few minutes. This will generate new DHCP requests in rapid succession, with a high risk of 
+exhausting DHCPv4 address pools. Even with IPv6, there would still be a risk of increased neighbor discovery traffic, and
+bloating of various address tables. Implementors will have to be cautious when programming devices to use randomized MAC 
+addresses. They will have to carefully chose the frequency with which such addresses will be renewed.
+</t>
+<t>
+This document only provides guidelines for using DHCP when privacy is considered more important than network management. 
+We assume that the request for anonymity is materialized by the assignment of a randomized MAC address to the network
+interface. Once that decision is made, the following guidelines will avoid leakage of identity in DHCP parameters or in
+assigned addresses.
+</t>
+</section>
 <section title="Anonymity profile for DHCPv4">
 <t>
 Clients using the DHCPv4 anonymity profile limit the disclosure of information by 
 controlling the header parameters and by limiting the number and values of options.
 The number of options depend on the specific DHCP message:
 </t>
+<t>
 <list style="hanging">
 <t hangText="DISCOVER:"> The anonymized DISCOVER messages MUST contain the Message Type, 
 Client Id, Host name, and Requested option list options. It SHOULD NOT contain any other 
@@ -134,6 +183,7 @@ Client Id, Host name, and Requested option list options. It SHOULD NOT contain a
 option.
 </t>
 </list>
+</t>
 <t>
 Header fields and option values SHOULD be set in accordance with the DHCP specification,
 but some header fileds and option values SHOULD be constructed per the following guidelines.
@@ -249,10 +299,11 @@ untrusted networks should disable the PXE functions, and not send the correspond
 </t>
 </section>
 </section>
-<section title="Anonymity profile for DHCPv4">
+<section title="Anonymity profile for DHCPv6">
 <t>
 TO BE WRITTEN.
 </t>
+</section>
 <section title="Management considerations">
 <t>
 The anonymity profile has the effect of hiding the client identity from the DHCP server. This is not
@@ -260,6 +311,7 @@ always desirable. Some DHCP servers provide facilities like publishing names and
 or ensuring that returning clients get reassigned the same address. Implementers should be
 careful to only use the anonymity profile when privacy trumps management considerations. 
 </t>
+</section>
 <section title="Security Considerations">
 <t> 
 TO BE DEVELOPPED. 
@@ -301,6 +353,19 @@ The inspiration for this draft came from discussions in the Perpass mailing list
             <abstract>
 	    <t>
             Electronic snooping was part of a trial run for U.S. NSA and other foreign services
+            </t>
+            </abstract>  
+        </front>
+    </reference>
+
+    <reference anchor="IETFMACRandom" target="http://www.ietf.org/blog/2014/11/mac-privacy/">
+        <front>
+            <title>MAC Privacy</title>
+            <author initials="JC" surname="Zuniga" fullname="Juan Carlos Zuniga" />
+            <date month="November" year="2014" />
+            <abstract>
+	    <t>
+            Report on successful experiment carried out at IETF91 to randomize Wi-Fi MAC addresses of users to improve privacy.
             </t>
             </abstract>  
         </front>
