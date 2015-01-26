@@ -113,6 +113,7 @@ Clients using the DHCPv4 anonymity profile limit the disclosure of information b
 controlling the header parameters and by limiting the number and values of options.
 The number of options depend on the specific DHCP message:
 </t>
+<t>
 <list style="hanging">
 <t hangText="DISCOVER:"> The anonymized DISCOVER messages MUST contain the Message Type, 
 Client Id, Host name, and Requested option list options. It SHOULD NOT contain any other 
@@ -133,7 +134,7 @@ Identifier and Server Identifier options.
 Client Id, Host name, and Requested option list options. It SHOULD NOT contain any other 
 option.
 </t>
-</list>
+</list></t>
 <t>
 Header fields and option values SHOULD be set in accordance with the DHCP specification,
 but some header fileds and option values SHOULD be constructed per the following guidelines.
@@ -253,6 +254,7 @@ untrusted networks should disable the PXE functions, and not send the correspond
 <t>
 TO BE WRITTEN.
 </t>
+</section>
 <section title="Management considerations">
 <t>
 The anonymity profile has the effect of hiding the client identity from the DHCP server. This is not
@@ -260,6 +262,7 @@ always desirable. Some DHCP servers provide facilities like publishing names and
 or ensuring that returning clients get reassigned the same address. Implementers should be
 careful to only use the anonymity profile when privacy trumps management considerations. 
 </t>
+</section>
 <section title="Security Considerations">
 <t> 
 TO BE DEVELOPPED. 
