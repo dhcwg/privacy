@@ -43,25 +43,25 @@
      ipr="trust200902">
 
 <front>
-    <title abbrev="Unique Identifiers in DHCP">
-      Anonimity profile for DHCP clients
+    <title abbrev="DHCP Anonymity Profile">
+      Anonymity profile for DHCP clients
     </title>
 
    <author fullname="Christian Huitema" initials="C." surname="Huitema">
-      <organization> </organization>
+      <organization>Microsoft</organization>
       <address>
         <postal>
           <street> </street>
-          <city>Clyde Hill</city>
-          <code>98004</code>
+          <city>Redmond</city>
+          <code>98052</code>
           <region>WA</region>
           <country>U.S.A.</country>
         </postal>
-        <email>huitema@huitema.net</email>
+        <email>huitema@microsoft.com</email>
       </address>
     </author>
 
-    <date year="2014" month="December"/>
+    <date year="2015" month="February"/>
 
     <abstract>
         <t> 
@@ -107,6 +107,54 @@ document, are to be interpreted as described in <xref target="RFC2026" />.
 </t>
 </section>
 </section>
+<section title="Application domain">
+<t>
+Mobile nodes can be tracked using multiple identifiers, the most prominent being the MAC addresses. For example, when
+devices use Wi-Fi connectivity, they place the MAC address in the header of all the packets that they transmit. 
+Standard implementation of Wi-Fi use unique 48 bit MAC addresses, assigned to the devices according to procedures
+defined by IEEE 802. Even when the Wi-Fi packets are encrypted, the portion of the header containing the addresses
+will be sent in clear text. Tracking devices can "listen to the airwaves" to find out what devices are transmitting
+near them. 
+</t>
+<t>
+We can easily imagine that the MAC addresses can be correlated with other data, e.g. clear text
+names and cookies, to build a registry linking MAC addresses to the identity of devices' owners. Once that 
+correlation is done, tracking MAC address is sufficient to track individual people, even when all application data
+sent from the devices is encrypted.
+MAC addresses can also be correlated with IP addresses of devices, negating potential privacy benefits of
+IPv6 "privacy" addresses. Privacy advocates have some reason to be concerned.
+</t>
+<t>
+The obvious solution is to "randomize" the MAC address. Before connecting to a particular network, the device replaces
+the MAC address with a randomly drawn 48 bit value. MAC address randomization was successfully tried at the IETF in Honolulu 
+in November 2014 <xref target="IETFMACRandom" />. However, we have to consider the linkage between MAC addresses, DHCP identifiers
+and IP addresses.
+</t>
+<t>
+From a privacy point of view, it is clear that MAC Addresses, IP addresses and DHCP identifiers shall evolve in synchrony. 
+For example, if the MAC address changes and the DHCP identifier stays constant, then it is really easy to correlate old and 
+new MAC address, either by listening to DHCP traffic or by observing that the IP address remain constant, 
+since it is tied to the DHCP identifier. Conversely, if the DHCP identifier changes but the MAC address remains constant, 
+the old and new identifiers and addresses can be correlated by listening to L2 traffic. The procedures documented in the 
+following sections construct DHCP identifiers from the current MAC address, automatically providing for this
+synchronization.
+</t>
+<t>
+Of course, there are downsides to randomizing MAC addresses and DHCP identifiers. By definition, anonymization will break
+management procedures that rely on tracking MAC addresses. Even if this is not too much of a concern, we have to be worried
+about the frequency of MAC address randomization. Suppose for example that many devices would get new random MAC addresses at 
+short intervals, maybe every few minutes. This will generate new DHCP requests in rapid succession, with a high risk of 
+exhausting DHCPv4 address pools. Even with IPv6, there would still be a risk of increased neighbor discovery traffic, and
+bloating of various address tables. Implementors will have to be cautious when programming devices to use randomized MAC 
+addresses. They will have to carefully chose the frequency with which such addresses will be renewed.
+</t>
+<t>
+This document only provides guidelines for using DHCP when privacy is considered more important than network management. 
+We assume that the request for anonymity is materialized by the assignment of a randomized MAC address to the network
+interface. Once that decision is made, the following guidelines will avoid leakage of identity in DHCP parameters or in
+assigned addresses.
+</t>
+</section>
 <section title="Anonymity profile for DHCPv4">
 <t>
 Clients using the DHCPv4 anonymity profile limit the disclosure of information by 
@@ -134,7 +182,8 @@ Identifier and Server Identifier options.
 Client Id, Host name, and Requested option list options. It SHOULD NOT contain any other 
 option.
 </t>
-</list></t>
+</list>
+</t>
 <t>
 Header fields and option values SHOULD be set in accordance with the DHCP specification,
 but some header fileds and option values SHOULD be constructed per the following guidelines.
@@ -250,10 +299,61 @@ untrusted networks should disable the PXE functions, and not send the correspond
 </t>
 </section>
 </section>
-<section title="Anonymity profile for DHCPv4">
+<section title="Anonymity profile for DHCPv6">
 <t>
-TO BE WRITTEN.
+When using the anonymity profile, DHCPv6 clients carefully use DHCPv6 options when constructing DHCPv6 messages. 
+The following section specify how DHCPv6 clients using te anonymity profile should use the most common DHCPv6 options.  
 </t>
+<section title="Client Identifier DHCPv6 Option">
+<t>
+The client identifier option is defined in <xref target="RFC3315"/> with option code 1. The purpose of the client 
+identifier option is to identify the client to the server. The content of the option is a DHCP User ID (DUID) for which
+three formats are specified: Link-layer address plus time, Vendor-assigned unique ID based on Enterprise Number, 
+Link-layer address.
+</t>
+<t>
+When using the anonymity profile, DHCPv6 clients MUST use the DUID format number 3, Link-layer address. The value of the 
+Link-layer address should be that currently assigned to the interface.
+</t>
+</section>
+<section title="Address assignment options">
+<t>
+When using the anonymity profile, DHCPv6 clients may have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
+through the DHCP server. The clients SHOULD only use the options necessary to perform the requested 
+DHCPv6 transactions, such as 
+Identity Association for Non-temporary Addresses Option (code 3) or
+Identity Association for Temporary Addresses Option (code 4).
+</t>
+<<<<<<< HEAD
+<t>
+The clients MAY use the IA Address Option (code 5) but need to balance the potential advantage of 
+"address continuity" versus the potential risk of "previous address disclosure." A potential solution
+is to remove all stored addresses when a MAC address changes, and to only use the IA Address option
+with addresses that have been explicitly assigned through the current MAC address. 
+</t>
+</section>
+<section title="Option Request Option">
+<t>
+When using the anonymity profile, DHCPv6 clients SHOULD use the Option Request Option (code 6) 
+as specified in <xref target="RFC3315"/>.
+</t>
+</section>
+<section title="Authentication Option">
+<t>
+The purpose of the AUthentication option (code 11) is to
+authenticate the identity and contents of DHCP messages. as such, the option 
+can be used to identify the client, and is incompatible with the stated
+goal of "client anonymity." DHCPv6 clients that use the anonimity profile SHOULD NOT use
+the authentication option. They MAY use it if they recognize that they are 
+operating in a trusted environment, e.g., in a work place network. 
+</t>
+</section>
+<section title="User and Vendor Class DHCPv6 options">
+<t>
+When using the anonymity profile, DHCPv6 clients SHOULD NOT use the User Class option (code 15) or the Vendor Class 
+option (code 16), as these options potentially reveal identifying information.
+</t>
+</section>
 </section>
 <section title="Management considerations">
 <t>
@@ -265,7 +365,7 @@ careful to only use the anonymity profile when privacy trumps management conside
 </section>
 <section title="Security Considerations">
 <t> 
-TO BE DEVELOPPED. 
+The use of the anonymity profile does not change the security considerations of the DHCPv4 or DHCPv6 protocols. 
 </t>
 </section>
 
@@ -287,6 +387,7 @@ The inspiration for this draft came from discussions in the Perpass mailing list
     &rfc2026;
     &rfc2131;
     &rfc2132;
+    &rfc3315;
     &rfc4361;
     &rfc4578;
     &rfc4702;
@@ -304,6 +405,19 @@ The inspiration for this draft came from discussions in the Perpass mailing list
             <abstract>
 	    <t>
             Electronic snooping was part of a trial run for U.S. NSA and other foreign services
+            </t>
+            </abstract>  
+        </front>
+    </reference>
+
+    <reference anchor="IETFMACRandom" target="http://www.ietf.org/blog/2014/11/mac-privacy/">
+        <front>
+            <title>MAC Privacy</title>
+            <author initials="JC" surname="Zuniga" fullname="Juan Carlos Zuniga" />
+            <date month="November" year="2014" />
+            <abstract>
+	    <t>
+            Report on successful experiment carried out at IETF91 to randomize Wi-Fi MAC addresses of users to improve privacy.
             </t>
             </abstract>  
         </front>
