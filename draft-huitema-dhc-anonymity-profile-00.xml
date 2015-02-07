@@ -324,6 +324,7 @@ DHCPv6 transactions, such as
 Identity Association for Non-temporary Addresses Option (code 3) or
 Identity Association for Temporary Addresses Option (code 4).
 </t>
+<<<<<<< HEAD
 <t>
 The clients MAY use the IA Address Option (code 5) but need to balance the potential advantage of 
 "address continuity" versus the potential risk of "previous address disclosure." A potential solution
