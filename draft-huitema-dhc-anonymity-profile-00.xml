@@ -44,24 +44,24 @@
 
 <front>
     <title abbrev="DHCP Anonymity Profile">
-      Anonimity profile for DHCP clients
+      Anonymity profile for DHCP clients
     </title>
 
    <author fullname="Christian Huitema" initials="C." surname="Huitema">
-      <organization> </organization>
+      <organization>Microsoft</organization>
       <address>
         <postal>
           <street> </street>
-          <city>Clyde Hill</city>
-          <code>98004</code>
+          <city>Redmond</city>
+          <code>98052</code>
           <region>WA</region>
           <country>U.S.A.</country>
         </postal>
-        <email>huitema@huitema.net</email>
+        <email>huitema@microsoft.com</email>
       </address>
     </author>
 
-    <date year="2015" month="January"/>
+    <date year="2015" month="February"/>
 
     <abstract>
         <t> 
@@ -301,8 +301,58 @@ untrusted networks should disable the PXE functions, and not send the correspond
 </section>
 <section title="Anonymity profile for DHCPv6">
 <t>
-TO BE WRITTEN.
+When using the anonymity profile, DHCPv6 clients carefully use DHCPv6 options when constructing DHCPv6 messages. 
+The following section specify how DHCPv6 clients using te anonymity profile should use the most common DHCPv6 options.  
 </t>
+<section title="Client Identifier DHCPv6 Option">
+<t>
+The client identifier option is defined in <xref target="RFC3315"/> with option code 1. The purpose of the client 
+identifier option is to identify the client to the server. The content of the option is a DHCP User ID (DUID) for which
+three formats are specified: Link-layer address plus time, Vendor-assigned unique ID based on Enterprise Number, 
+Link-layer address.
+</t>
+<t>
+When using the anonymity profile, DHCPv6 clients MUST use the DUID format number 3, Link-layer address. The value of the 
+Link-layer address should be that currently assigned to the interface.
+</t>
+</section>
+<section title="Address assignment options">
+<t>
+When using the anonymity profile, DHCPv6 clients may have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
+through the DHCP server. The clients SHOULD only use the options necessary to perform the requested 
+DHCPv6 transactions, such as 
+Identity Association for Non-temporary Addresses Option (code 3) or
+Identity Association for Temporary Addresses Option (code 4).
+</t>
+<t>
+The clients MAY use the IA Address Option (code 5) but need to balance the potential advantage of 
+"address continuity" versus the potential risk of "previous address disclosure." A potential solution
+is to remove all stored addresses when a MAC address changes, and to only use the IA Address option
+with addresses that have been explicitly assigned through the current MAC address. 
+</t>
+</section>
+<section title="Option Request Option">
+<t>
+When using the anonymity profile, DHCPv6 clients SHOULD use the Option Request Option (code 6) 
+as specified in <xref target="RFC3315"/>.
+</t>
+</section>
+<section title="Authentication Option">
+<t>
+The purpose of the AUthentication option (code 11) is to
+authenticate the identity and contents of DHCP messages. as such, the option 
+can be used to identify the client, and is incompatible with the stated
+goal of "client anonymity." DHCPv6 clients that use the anonimity profile SHOULD NOT use
+the authentication option. They MAY use it if they recognize that they are 
+operating in a trusted environment, e.g., in a work place network. 
+</t>
+</section>
+<section title="User and Vendor Class DHCPv6 options">
+<t>
+When using the anonymity profile, DHCPv6 clients SHOULD NOT use the User Class option (code 15) or the Vendor Class 
+option (code 16), as these options potentially reveal identifying information.
+</t>
+</section>
 </section>
 <section title="Management considerations">
 <t>
@@ -314,7 +364,7 @@ careful to only use the anonymity profile when privacy trumps management conside
 </section>
 <section title="Security Considerations">
 <t> 
-TO BE DEVELOPPED. 
+The use of the anonymity profile does not change the security considerations of the DHCPv4 or DHCPv6 protocols. 
 </t>
 </section>
 
@@ -336,6 +386,7 @@ The inspiration for this draft came from discussions in the Perpass mailing list
     &rfc2026;
     &rfc2131;
     &rfc2132;
+    &rfc3315;
     &rfc4361;
     &rfc4578;
     &rfc4702;
