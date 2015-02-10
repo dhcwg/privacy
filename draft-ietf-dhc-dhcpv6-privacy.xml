@@ -560,7 +560,11 @@
     </section>
 
     <section anchor="security" title="Security Considerations">
-      <t>TBD</t>
+      <t>In current practice, the client privacy and the client authentication
+      are mutually exclusive.  The client authentication procedure reveals
+      additional client information in their certificates/identifiers.
+      Full privacy for the clients may mean the clients are also anonymous
+      for the server and the network.</t>
     </section>
 
     <section anchor="privacy-consider" title="Privacy Considerations">
