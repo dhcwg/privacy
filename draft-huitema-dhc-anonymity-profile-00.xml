@@ -11,20 +11,29 @@
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2131.xml'>
 <!ENTITY rfc2132 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2132.xml'>
-<!ENTITY rfc3942 PUBLIC ''
-   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3942.xml'>
 <!ENTITY rfc3315 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3315.xml'>
+<!ENTITY rfc3925 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3925.xml'>
+<!ENTITY rfc3942 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3942.xml'>
 <!ENTITY rfc4361 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4361.xml'>
 
 <!ENTITY rfc4702 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4702.xml'>
+<!ENTITY rfc4704 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4704.xml'>
 
 <!ENTITY rfc4578 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4578.xml'>
 
 
+<!ENTITY I-D.ietf-6man-default-iids PUBLIC '' 
+"http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-default-iids.xml">
+
+<!ENTITY I-D.ietf-6man-ipv6-address-generation-privacy PUBLIC '' 
+"http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-ipv6-address-generation-privacy.xml">
 
 ]>
 
@@ -178,7 +187,7 @@ Identifier and Server Identifier options.
 <t hangText="RELEASE:"> The anonymized RELEASE messages SHOULD contain the Message Type, Client 
 Identifier and Server Identifier options.
 </t>
-<t hangText="INFORM:"> The anonymized DISCOVER messages MUST contain the Message Type, 
+<t hangText="INFORM:"> The anonymized INFORM messages MUST contain the Message Type, 
 Client Id, Host name, and Requested option list options. It SHOULD NOT contain any other 
 option.
 </t>
@@ -298,11 +307,37 @@ not meant to be used by mobile nodes visiting untrusted networks. If only for pr
 untrusted networks should disable the PXE functions, and not send the corresponding options.
 </t>
 </section>
+
+<section title="User and Vendor Class DHCP options">
+<t>
+Vendor identifying options are defined in <xref target="RFC2132" /> and <xref target="RFC3925" />.
+When using the anonymity profile, DHCP clients SHOULD NOT use the Vendor Specific Information option (code 43), 
+the Vendor Class option (code 124), or the Vendor Specific Information option (code 125)
+as these options potentially reveal identifying information.
+</t>
+</section>
 </section>
 <section title="Anonymity profile for DHCPv6">
+<t> 
+DHCPv6 is typically used by clients in one of two scenarios, stateful and stateless configuration. In the
+stateful scenario, clients use a combination of SOLICIT, REQUEST, CONFIRM, RENEW, REBIND and
+RELEASE messages to obtain addresses, and manage these addresses. 
+</t>
 <t>
-When using the anonymity profile, DHCPv6 clients carefully use DHCPv6 options when constructing DHCPv6 messages. 
-The following section specify how DHCPv6 clients using te anonymity profile should use the most common DHCPv6 options.  
+In the stateless scenario, clients configure addresses using a combination of client managed identifiers
+and router-advertised prefixes, without involving the DHCPv6 services. 
+Different ways of constructing these prefixes have different
+implications on privacy, which are discussed in <xref target="I-D.ietf-6man-default-iids" />
+and <xref target="I-D.ietf-6man-ipv6-address-generation-privacy" />. In the stateless scenario,
+clients use DHCPv6 to obtain network configuration parameters, through the INFORMATION-REQUEST
+message. 
+</t>
+<t>
+When using the anonymity profile, DHCPv6 clients carefully select DHCPv6 options used in the various
+messages that they sent. The list of options that are mandatory or optional for each message is
+specified in <xref target="RFC3315" />. Some of these options have specific implications 
+on anonymity. The following sections provide guidance on the choice of option values when
+using the anonymity profile.
 </t>
 <section title="Client Identifier DHCPv6 Option">
 <t>
@@ -316,6 +351,14 @@ When using the anonymity profile, DHCPv6 clients MUST use the DUID format number
 Link-layer address should be that currently assigned to the interface.
 </t>
 </section>
+<section title="Server Identifier Option">
+<t>
+When using the anonymity profile, DHCPv6 clients SHOULD use the Server Identifier Option (code 2) 
+as specified in <xref target="RFC3315"/>. Clients should be careful to only include server identifier
+values that were received with the current MAC address, because reuse of
+old values disclosed information than can be used to identify the client.
+</t>
+</section>
 <section title="Address assignment options">
 <t>
 When using the anonymity profile, DHCPv6 clients may have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
@@ -324,7 +367,6 @@ DHCPv6 transactions, such as
 Identity Association for Non-temporary Addresses Option (code 3) or
 Identity Association for Temporary Addresses Option (code 4).
 </t>
-<<<<<<< HEAD
 <t>
 The clients MAY use the IA Address Option (code 5) but need to balance the potential advantage of 
 "address continuity" versus the potential risk of "previous address disclosure." A potential solution
@@ -335,8 +377,20 @@ with addresses that have been explicitly assigned through the current MAC addres
 <section title="Option Request Option">
 <t>
 When using the anonymity profile, DHCPv6 clients SHOULD use the Option Request Option (code 6) 
-as specified in <xref target="RFC3315"/>.
+as specified in <xref target="RFC3315"/>. 
 </t>
+<section title="Previous option values">
+<t>
+According to <xref target="RFC3315"/>, the client that includes an Option Request Option in a 
+Solicit or Request message MAY additionally include instances of those options that are
+identified in the Option Request option, with data values as hints to
+the server about parameter values the client would like to have returned.
+</t>
+<t>
+When using the anonymity profile, clients SHOULD NOT include such instances of options because
+old values might be used to identify the client.
+</t>
+</section>
 </section>
 <section title="Authentication Option">
 <t>
@@ -352,6 +406,14 @@ operating in a trusted environment, e.g., in a work place network.
 <t>
 When using the anonymity profile, DHCPv6 clients SHOULD NOT use the User Class option (code 15) or the Vendor Class 
 option (code 16), as these options potentially reveal identifying information.
+</t>
+</section>
+<section title="Client FQDN Option">
+<t>
+The Client FQDN option is defined in <xref target="RFC4704"/> with option code 29. The option allows the 
+DHCP clients to advertize to the DHCP their fully qualified domain name (FQDN) such as "mobile.example.com." 
+When using the anonymnity profile, DHCPv6 clients should not include the Client FQDN 
+option in their DHCPv6 messages because it identifies the client.
 </t>
 </section>
 </section>
@@ -378,6 +440,8 @@ This draft does not require any IANA action.
 <section title="Acknowledgments">
     <t> 
 The inspiration for this draft came from discussions in the Perpass mailing list. 
+Several people provided feedback on early versions of this draft,
+notably Tushar Gupta, Dave Thaler and Jun Wu.
     </t>
 </section>
 </middle>
@@ -388,12 +452,17 @@ The inspiration for this draft came from discussions in the Perpass mailing list
     &rfc2131;
     &rfc2132;
     &rfc3315;
+    &rfc3925;
     &rfc4361;
     &rfc4578;
     &rfc4702;
+    &rfc4704;
 </references>
 
 <references title="Informative References">
+
+     &I-D.ietf-6man-default-iids;
+     &I-D.ietf-6man-ipv6-address-generation-privacy;
 
     <reference anchor="CNBC" target="http://www.cbc.ca/news/politics/csec-used-airport-wi-fi-to-track-canadian-travellers-edward-snowden-documents-1.2517881">
         <front>
