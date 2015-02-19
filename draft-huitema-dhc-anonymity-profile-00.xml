@@ -197,7 +197,7 @@ option.
 Header fields and option values SHOULD be set in accordance with the DHCP specification,
 but some header fileds and option values SHOULD be constructed per the following guidelines.
 </t>
-<section title="Client IP address field">
+<section title="Client IP address field" >
 <t>
 Four bytes in the header of the DHCP messages carry the "Client IP address" (ciaddr) as defined in <xref target="RFC2131"/>. 
 In DHCP, this field is used by the clients to indicate the address that they used previously, so that as much as
@@ -210,6 +210,21 @@ monitoring services might use the information to tie the two network locations. 
 the field is cleared when they know that the network attachment has changed, and in particular of the link layer 
 address is reset by the device's administrator.
 </t>
+</section>
+
+<section title="Requested IP address option" >
+<t>
+The Requested IP address option (code 50) allows the client to request that a particular IP address be assigned. 
+The option is mandatory in some protocol messages per <xref target="RFC2131" />, for example when a client 
+selects to use an address offered by a server. However, this option is not mandatory in the DHCPDISCOVER message. 
+It is simply a convenience, an attempt to regain the same IP address that was used in a previous connection.
+Doing so entails the risk of disclosing an IP address used by the client at a previous location, or with a 
+different MAC Address.
+</t>
+<t>
+When using the anonymity profile, clients SHOULD NOT use the Requested IP address option in DHCPDISCOVER Messages. 
+</t>
+
 </section>
 <section title="Client hardware address">
 <t>
@@ -441,7 +456,7 @@ This draft does not require any IANA action.
     <t> 
 The inspiration for this draft came from discussions in the Perpass mailing list. 
 Several people provided feedback on early versions of this draft,
-notably Tushar Gupta, Dave Thaler and Jun Wu.
+notably Tushar Gupta, Gabriel Montenegro, Dave Thaler and Jun Wu.
     </t>
 </section>
 </middle>
