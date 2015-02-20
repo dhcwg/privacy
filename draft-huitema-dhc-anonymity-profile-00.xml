@@ -49,7 +49,8 @@
 
 <rfc category="info" 
      docName="draft-huitema-dhc-anonymity-profile-00.txt" 
-     ipr="trust200902">
+     ipr="trust200902"
+     updates="4361" >
 
 <front>
     <title abbrev="DHCP Anonymity Profile">
@@ -92,19 +93,19 @@ passengers at Canadian airports <xref target="CNBC" />. We can assume that these
 or trial runs of a wider system that would attempt to monitor Internet users as they roam through 
 wireless access points and other temporary network attachments. We can also assume that privacy 
 conscious users will attempt to evade this monitoring, for example by ensuring that low level 
-identifiers like link-layer addresses are "randomized," so that the devices do not broadcast a unique identifier
+identifiers such as link-layer addresses are "randomized," so that the devices do not broadcast a unique identifier
 in every location that they visit.
 </t>
 <t>
 Of course, link layer "MAC" addresses are not the only way to identify a device. As soon as it connects to a 
-remote network, the device will use DHCP and DHCPv6 to obtain network parameters. The analysis of DHCP and DHCPv6 
+remote network, the device may use DHCP and DHCPv6 to obtain network parameters. The analysis of DHCP and DHCPv6 
 options shows that parameters of these protocols can reveal identifiers of the device, negating the benefits of 
 link-layer address randomization. The natural reaction is to restrict the number and values of such parameters
 in order to minimize disclosure.
 </t>
 <t>
 In the absence of a common standard, different system developers are likely to implement this minimization of 
-disclosure in different way. Monitoring entities could then use the differences to identify the software version running
+disclosure in different ways. Monitoring entities could then use the differences to identify the software version running
 on the device. The proposed anonymity profile provides a common standard that minimizes information 
 disclosure, including the disclosure of implementation identifiers.
 </t>
@@ -118,7 +119,7 @@ document, are to be interpreted as described in <xref target="RFC2026" />.
 </section>
 <section title="Application domain">
 <t>
-Mobile nodes can be tracked using multiple identifiers, the most prominent being the MAC addresses. For example, when
+Mobile nodes can be tracked using multiple identifiers, the most prominent being MAC addresses. For example, when
 devices use Wi-Fi connectivity, they place the MAC address in the header of all the packets that they transmit. 
 Standard implementation of Wi-Fi use unique 48 bit MAC addresses, assigned to the devices according to procedures
 defined by IEEE 802. Even when the Wi-Fi packets are encrypted, the portion of the header containing the addresses
@@ -126,9 +127,9 @@ will be sent in clear text. Tracking devices can "listen to the airwaves" to fin
 near them. 
 </t>
 <t>
-We can easily imagine that the MAC addresses can be correlated with other data, e.g. clear text
+We can easily imagine that the MAC addresses can be correlated with other data, e.g., clear text
 names and cookies, to build a registry linking MAC addresses to the identity of devices' owners. Once that 
-correlation is done, tracking MAC address is sufficient to track individual people, even when all application data
+correlation is done, tracking the MAC address is sufficient to track individual people, even when all application data
 sent from the devices is encrypted.
 MAC addresses can also be correlated with IP addresses of devices, negating potential privacy benefits of
 IPv6 "privacy" addresses. Privacy advocates have some reason to be concerned.
@@ -142,19 +143,19 @@ and IP addresses.
 <t>
 From a privacy point of view, it is clear that MAC Addresses, IP addresses and DHCP identifiers shall evolve in synchrony. 
 For example, if the MAC address changes and the DHCP identifier stays constant, then it is really easy to correlate old and 
-new MAC address, either by listening to DHCP traffic or by observing that the IP address remain constant, 
+new MAC addresses, either by listening to DHCP traffic or by observing that the IP address remains constant, 
 since it is tied to the DHCP identifier. Conversely, if the DHCP identifier changes but the MAC address remains constant, 
 the old and new identifiers and addresses can be correlated by listening to L2 traffic. The procedures documented in the 
 following sections construct DHCP identifiers from the current MAC address, automatically providing for this
 synchronization.
 </t>
 <t>
-Of course, there are downsides to randomizing MAC addresses and DHCP identifiers. By definition, anonymization will break
+Of course, there are downsides to randomizing MAC addresses and DHCP identifiers. By definition, randomization will break
 management procedures that rely on tracking MAC addresses. Even if this is not too much of a concern, we have to be worried
 about the frequency of MAC address randomization. Suppose for example that many devices would get new random MAC addresses at 
-short intervals, maybe every few minutes. This will generate new DHCP requests in rapid succession, with a high risk of 
+short intervals, maybe every few minutes. This would generate new DHCP requests in rapid succession, with a high risk of 
 exhausting DHCPv4 address pools. Even with IPv6, there would still be a risk of increased neighbor discovery traffic, and
-bloating of various address tables. Implementors will have to be cautious when programming devices to use randomized MAC 
+bloating of various address tables. Implementers will have to be cautious when programming devices to use randomized MAC 
 addresses. They will have to carefully chose the frequency with which such addresses will be renewed.
 </t>
 <t>
@@ -163,7 +164,14 @@ We assume that the request for anonymity is materialized by the assignment of a 
 interface. Once that decision is made, the following guidelines will avoid leakage of identity in DHCP parameters or in
 assigned addresses.
 </t>
+<t>
+There may be rare situations where the clients want anonymity to attackers but not 
+to their DHCP server.  These clients should still use MAC Address randomization to
+hide from observers, and some form of encrypted communication to the DHCP server. 
+This document does not study this scenario.
+</t>
 </section>
+
 <section title="Anonymity profile for DHCPv4">
 <t>
 Clients using the DHCPv4 anonymity profile limit the disclosure of information by 
@@ -173,12 +181,12 @@ The number of options depend on the specific DHCP message:
 <t>
 <list style="hanging">
 <t hangText="DISCOVER:"> The anonymized DISCOVER messages MUST contain the Message Type, 
-Client Id, Host name, and Parameter Request List options. It SHOULD NOT contain any other 
+Client Identifier, Host name, and Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
 <t hangText="REQUEST:"> The anonymized REQUEST messages SHOULD contain the Message Type, 
 Client Identifier, Host name, and Parameter Request List options. If the message is in response
-to OFFER, it SHOULD contain the corresponding Server Identifier option. It SHOULD NOT contain 
+to an OFFER, it SHOULD contain the corresponding Server Identifier option. It SHOULD NOT contain 
 any other option.
 </t>
 <t hangText="DECLINE:"> The anonymized DECLINE messages SHOULD contain the Message Type, Client 
@@ -204,8 +212,10 @@ In DHCP, this field is used by the clients to indicate the address that they use
 possible the server can allocate them the same address.  
 </t>
 <t>
-There is very little privacy implication of sending this address in the DHCP messages, except in one case, on a
-new connection to a new network. If the DHCP client somehow repeated the address used in a previous network attachment,
+There is very little privacy implication of sending this address in the DHCP messages,
+except in one case, when connecting 
+to a different network than the last network connected. 
+If the DHCP client somehow repeated the address used in a previous network attachment,
 monitoring services might use the information to tie the two network locations. DHCP clients should ensure that
 the field is cleared when they know that the network attachment has changed, and in particular of the link layer 
 address is reset by the device's administrator.
@@ -222,7 +232,8 @@ Doing so entails the risk of disclosing an IP address used by the client at a pr
 different MAC Address.
 </t>
 <t>
-When using the anonymity profile, clients SHOULD NOT use the Requested IP address option in DHCPDISCOVER Messages. 
+When using the anonymity profile, clients SHOULD either NOT 
+use the Requested IP address option in DHCPDISCOVER Messages.
 </t>
 
 </section>
@@ -233,11 +244,14 @@ in <xref target="RFC2131"/>. The presence of this address is necessary for the p
 DHCP service.
 </t>
 <t>
-Hardware addresses, called "link layer address" in many RFC, can be used to uniquely identify a device, especially
+Hardware addresses, called "link layer address" in many RFCs, can be used to uniquely identify a device, especially
 if they follow the IEEE 802 recommendations. These unique identifiers can be used by monitoring services to
 track the location of the device and its user. The only plausible defense is to somehow reset the hardware
-address to a random value before visiting an untrusted location. If the hardware address is reset to a new value, 
-or randomized, the DHCP client SHOULD use the new randomized value in the DHCP messages.
+address to a random value when visiting an untrusted location,
+before transmitting anything at that location with the hardware address. 
+If the hardware address is reset to a new value, 
+or randomized, the DHCP client SHOULD use the new randomized value in the 
+DHCP messages.
 </t>
 </section>
 <section title="Client Identifier Option">
@@ -246,23 +260,23 @@ The client identifier option is defined in <xref target="RFC2132"/> with option 
 details in <xref target="RFC4361"/>. The purpose of the client identifier option is to identify the client in
 a manner independent of the link layer address. This is particularly useful if the DHCP server is expected to 
 assign the same address to the client after a network attachment is swapped and the link layer address changes.
-It is also useful when the same nodes issues requests through several interfaces, and expect the DHCP server
+It is also useful when the same node issues requests through several interfaces, and expects the DHCP server
 to provide consistent configuration data over multiple interfaces. 
 </t>
 <t>
 The considerations for hardware independence and strong client identity have an adverse effect on the privacy 
-of mobile clients, because the hardware independent unique identifier obviously enables very efficient tracking of the
+of mobile clients, because the hardware-independent unique identifier obviously enables very efficient tracking of the
 client's movements.
 </t>
 <t>
 The recommendations in <xref target="RFC4361"/> are very strong, stating for example that "DHCPv4
 clients MUST NOT use client identifiers based solely on layer two addresses that are hard-wired to 
-the layer two device (e.g., the ethernet MAC address). These strong recommendations are in fact a tradeoff 
+the layer two device (e.g., the Ethernet MAC address)." These strong recommendations are in fact a tradeoff 
 between ease of management and privacy, and the tradeoff should depend on the circumstances. 
 </t>
 <t>
 In contradiction to <xref target="RFC4361"/>, when privacy considerations trump management considerations, 
-DHCP clients should use client identifiers based solely on the link layer address that will be used in the 
+DHCP clients MUST use client identifiers based solely on the link layer address that will be used in the 
 underlying connection. This will ensure that the DHCP client identifier does not leak any information that
 is not already available to entities monitoring the network connection. It will also ensure that a 
 strategy of randomizing the link layer address will not be nullified by DHCP options.
@@ -284,31 +298,38 @@ the device. Monitoring services could use that information in conjunction with t
 derive the identity of the device's owner. 
 </t>
 <t>
-When privacy considerations trump management considerations, DHCP clients should always send a non-qualified 
-host name instead of a fully qualified domain name, and should consider randomizing the
-host name value. A simple solution would be to set the host name value to an hexadecimal representation 
+When privacy considerations trump management considerations, DHCP clients MUST always send a non-qualified 
+host name instead of a fully qualified domain name, and SHOULD obfuscate the
+host name value, so it could not be linked to anything other than the link
+layer address.
+A simple solution would be to set the host name value to a hexadecimal representation 
 of the link layer address that will be used in the underlying connection.
 </t>
 </section>
-<section title="Client FQDN Option">
+<section title="Client FQDN Option" anchor="fqdnv4" >
 <t>
-The Client FQDN option is defined in <xref target="RFC4702"/> with option code 81. The option allows the 
-DHCP clients to advertize to the DHCP their fully qualified domain name (FQDN) such as "mobile.example.com." This
+The Client FQDN option is defined in <xref target="RFC4702" /> with option code 81. The option allows the 
+DHCP clients to advertise to the DHCP server their fully qualified domain name (FQDN) such as "mobile.example.com." This
 would allow the DHCP server to update in the DNS the PTR record for the IP address allocated to the client. 
 Depending on circumstances, either the DHCP client or the DHCP server could update in the DNS the A record
 for the FQDN of the client.
 </t>
 <t>
 Obviously, this option uniquely identifies the client, exposing it to the DHCP server or to anyone listening to
-DHCP traffic. In fact, if the DNS record are updated, the location of the client becomes visible to anyone with 
+DHCP traffic. In fact, if the DNS record is updated, the location of the client becomes visible to anyone with 
 DNS lookup capabilities. 
 </t>
 <t>
-When privacy considerations trump management considerations, DHCP clients should not include the Client FQDN 
-option in their DHCP requests.
+When privacy considerations trump management considerations, DHCP clients SHOULD NOT 
+include the Client FQDN option in their DHCP requests. Alternatively, they MAY 
+include a special purpose FQDN using the same hostname as in the Host Name Option, 
+with a suffix matching the connection-specific DNS suffix being advertised by 
+that DHCP server.  Having a name in the DNS allows working with legacy systems 
+that require one to be there, e.g., by verifying a forward and reverse lookup 
+succeeds with the same result.
 </t> 
 </section>
-<section title="UUID/GUID-based Client Identifier Option">
+<section title="UUID/GUID-based Client Identifier Option" >
 <t>
 The UUID/GUID-based Client Machine Identifier option is defined in <xref target="RFC4578"/>, with option code 97. 
 The option is 
@@ -319,14 +340,16 @@ a 16-octet Globally Unique Identifier (GUID), which uniquely identifies the devi
 <t>
 The PXE system is clearly designed for devices operating in a controlled environment, and its functions are 
 not meant to be used by mobile nodes visiting untrusted networks. If only for privacy reasons, nodes visiting
-untrusted networks should disable the PXE functions, and not send the corresponding options.
+untrusted networks MUST disable the PXE functions, and MUST NOT send the 
+corresponding options.
 </t>
 </section>
 
 <section title="User and Vendor Class DHCP options">
 <t>
 Vendor identifying options are defined in <xref target="RFC2132" /> and <xref target="RFC3925" />.
-When using the anonymity profile, DHCP clients SHOULD NOT use the Vendor Specific Information option (code 43), 
+When using the anonymity profile, DHCP clients SHOULD NOT use the Vendor Specific Information option (code 43),
+the Vendor Class Identifier Option (60),
 the Vendor Class option (code 124), or the Vendor Specific Information option (code 125)
 as these options potentially reveal identifying information.
 </t>
@@ -334,7 +357,7 @@ as these options potentially reveal identifying information.
 </section>
 <section title="Anonymity profile for DHCPv6">
 <t> 
-DHCPv6 is typically used by clients in one of two scenarios, stateful and stateless configuration. In the
+DHCPv6 is typically used by clients in one of two scenarios: stateful and stateless configuration. In the
 stateful scenario, clients use a combination of SOLICIT, REQUEST, CONFIRM, RENEW, REBIND and
 RELEASE messages to obtain addresses, and manage these addresses. 
 </t>
@@ -369,14 +392,14 @@ Link-layer address should be that currently assigned to the interface.
 <section title="Server Identifier Option">
 <t>
 When using the anonymity profile, DHCPv6 clients SHOULD use the Server Identifier Option (code 2) 
-as specified in <xref target="RFC3315"/>. Clients should be careful to only include server identifier
+as specified in <xref target="RFC3315"/>. Clients MUST only include server identifier
 values that were received with the current MAC address, because reuse of
-old values disclosed information than can be used to identify the client.
+old values discloses information that can be used to identify the client.
 </t>
 </section>
 <section title="Address assignment options">
 <t>
-When using the anonymity profile, DHCPv6 clients may have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
+When using the anonymity profile, DHCPv6 clients might have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
 through the DHCP server. The clients SHOULD only use the options necessary to perform the requested 
 DHCPv6 transactions, such as 
 Identity Association for Non-temporary Addresses Option (code 3) or
@@ -409,10 +432,11 @@ old values might be used to identify the client.
 </section>
 <section title="Authentication Option">
 <t>
-The purpose of the AUthentication option (code 11) is to
-authenticate the identity and contents of DHCP messages. as such, the option 
+The purpose of the Authentication option (code 11) is to
+authenticate the identity of clients and servers and 
+the contents of DHCP messages. As such, the option 
 can be used to identify the client, and is incompatible with the stated
-goal of "client anonymity." DHCPv6 clients that use the anonimity profile SHOULD NOT use
+goal of "client anonymity." DHCPv6 clients that use the anonymity profile SHOULD NOT use
 the authentication option. They MAY use it if they recognize that they are 
 operating in a trusted environment, e.g., in a work place network. 
 </t>
@@ -427,11 +451,14 @@ option (code 16), as these options potentially reveal identifying information.
 <t>
 The Client FQDN option is defined in <xref target="RFC4704"/> with option code 29. The option allows the 
 DHCP clients to advertize to the DHCP their fully qualified domain name (FQDN) such as "mobile.example.com." 
-When using the anonymnity profile, DHCPv6 clients should not include the Client FQDN 
-option in their DHCPv6 messages because it identifies the client.
+When using the anonymity profile, DHCPv6 clients SHOULD NOT include the Client FQDN 
+option in their DHCPv6 messages because it identifies the client. As explained in 
+<xref target="fqdnv4" /> they MAY use a local-only FQDN by combining a host name derived from the
+link layer address and a suffix advertised by the local DHCP server.
 </t>
 </section>
 </section>
+
 <section title="Management considerations">
 <t>
 The anonymity profile has the effect of hiding the client identity from the DHCP server. This is not
@@ -456,7 +483,7 @@ This draft does not require any IANA action.
     <t> 
 The inspiration for this draft came from discussions in the Perpass mailing list. 
 Several people provided feedback on early versions of this draft,
-notably Tushar Gupta, Gabriel Montenegro, Dave Thaler and Jun Wu.
+notably Noel Anderson, Tushar Gupta, Gabriel Montenegro, Dave Thaler and Jun Wu.
     </t>
 </section>
 </middle>
