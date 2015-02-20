@@ -213,8 +213,8 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
    specific DHCP message:
 
    DISCOVER:  The anonymized DISCOVER messages MUST contain the Message
-      Type, Client Id, Host name, and Requested option list options.  It
-      SHOULD NOT contain any other option.
+      Type, Client Id, Host name, and Parameter Request List options.
+      It SHOULD NOT contain any other option.
 
 
 
@@ -226,7 +226,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
    REQUEST:  The anonymized REQUEST messages SHOULD contain the Message
-      Type, Client Identifier, Host name, and Requested option list
+      Type, Client Identifier, Host name, and Parameter Request List
       options.  If the message is in response to OFFER, it SHOULD
       contain the corresponding Server Identifier option.  It SHOULD NOT
       contain any other option.
@@ -238,11 +238,11 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
       Type, Client Identifier and Server Identifier options.
 
    INFORM:  The anonymized INFORM messages MUST contain the Message
-      Type, Client Id, Host name, and Requested option list options.  It
-      SHOULD NOT contain any other option.
+      Type, Client Id, Host name, and Parameter Request List options.
+      It SHOULD NOT contain any other option.
 
    Header fields and option values SHOULD be set in accordance with the
-   DHCP specification, but some header fileds and option values SHOULD
+   DHCP specification, but some header fields and option values SHOULD
    be constructed per the following guidelines.
 
 3.1.  Client IP address field

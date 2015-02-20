@@ -173,11 +173,11 @@ The number of options depend on the specific DHCP message:
 <t>
 <list style="hanging">
 <t hangText="DISCOVER:"> The anonymized DISCOVER messages MUST contain the Message Type, 
-Client Id, Host name, and Requested option list options. It SHOULD NOT contain any other 
+Client Id, Host name, and Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
 <t hangText="REQUEST:"> The anonymized REQUEST messages SHOULD contain the Message Type, 
-Client Identifier, Host name, and Requested option list options. If the message is in response
+Client Identifier, Host name, and Parameter Request List options. If the message is in response
 to OFFER, it SHOULD contain the corresponding Server Identifier option. It SHOULD NOT contain 
 any other option.
 </t>
@@ -188,14 +188,14 @@ Identifier and Server Identifier options.
 Identifier and Server Identifier options.
 </t>
 <t hangText="INFORM:"> The anonymized INFORM messages MUST contain the Message Type, 
-Client Id, Host name, and Requested option list options. It SHOULD NOT contain any other 
+Client Id, Host name, and Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
 </list>
 </t>
 <t>
 Header fields and option values SHOULD be set in accordance with the DHCP specification,
-but some header fileds and option values SHOULD be constructed per the following guidelines.
+but some header fields and option values SHOULD be constructed per the following guidelines.
 </t>
 <section title="Client IP address field" >
 <t>
