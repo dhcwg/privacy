@@ -1,11 +1,12 @@
 
 
 
+
 Network Working Group                                         C. Huitema
 Internet-Draft                                                 Microsoft
-Updates: 4361 (if approved)                            February 19, 2015
+Updates: 4361 (if approved)                            February 20, 2015
 Intended status: Informational
-Expires: August 23, 2015
+Expires: August 24, 2015
 
 
                    Anonymity profile for DHCP clients
@@ -36,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 23, 2015.
+   This Internet-Draft will expire on August 24, 2015.
 
 Copyright Notice
 
@@ -52,7 +53,7 @@ Copyright Notice
 
 
 
-Huitema                  Expires August 23, 2015                [Page 1]
+Huitema                  Expires August 24, 2015                [Page 1]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -108,7 +109,7 @@ Table of Contents
 
 
 
-Huitema                  Expires August 23, 2015                [Page 2]
+Huitema                  Expires August 24, 2015                [Page 2]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -164,7 +165,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015                [Page 3]
+Huitema                  Expires August 24, 2015                [Page 3]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -220,7 +221,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015                [Page 4]
+Huitema                  Expires August 24, 2015                [Page 4]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -276,7 +277,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015                [Page 5]
+Huitema                  Expires August 24, 2015                [Page 5]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -293,7 +294,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
    IP address used by the client at a previous location, or with a
    different MAC Address.
 
-   When using the anonymity profile, clients SHOULD either NOT use the
+   When using the anonymity profile, clients SHOULD NOT use the
    Requested IP address option in DHCPDISCOVER Messages.
 
 3.3.  Client hardware address
@@ -332,7 +333,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015                [Page 6]
+Huitema                  Expires August 24, 2015                [Page 6]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -388,7 +389,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015                [Page 7]
+Huitema                  Expires August 24, 2015                [Page 7]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -444,7 +445,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015                [Page 8]
+Huitema                  Expires August 24, 2015                [Page 8]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -500,7 +501,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015                [Page 9]
+Huitema                  Expires August 24, 2015                [Page 9]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -556,7 +557,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015               [Page 10]
+Huitema                  Expires August 24, 2015               [Page 10]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -612,7 +613,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015               [Page 11]
+Huitema                  Expires August 24, 2015               [Page 11]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -668,7 +669,7 @@ Internet-Draft           DHCP Anonymity Profile            February 2015
 
 
 
-Huitema                  Expires August 23, 2015               [Page 12]
+Huitema                  Expires August 24, 2015               [Page 12]
 
 Internet-Draft           DHCP Anonymity Profile            February 2015
 
@@ -724,5 +725,4 @@ Author's Address
 
 
 
-Huitema                  Expires August 23, 2015               [Page 13]
-
+Huitema                  Expires August 24, 2015               [Page 13]
