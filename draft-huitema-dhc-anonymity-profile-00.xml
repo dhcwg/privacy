@@ -232,7 +232,7 @@ Doing so entails the risk of disclosing an IP address used by the client at a pr
 different MAC Address.
 </t>
 <t>
-When using the anonymity profile, clients SHOULD either NOT 
+When using the anonymity profile, clients SHOULD NOT 
 use the Requested IP address option in DHCPDISCOVER Messages.
 </t>
 
