@@ -35,6 +35,12 @@
 <!ENTITY I-D.ietf-6man-ipv6-address-generation-privacy PUBLIC '' 
 "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-ipv6-address-generation-privacy.xml">
 
+<!ENTITY I-D.ietf-dhc-dhcp-privacy PUBLIC '' 
+"http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-dhc-dhcp-privacy.xml">
+
+<!ENTITY I-D.ietf-dhc-dhcpv6-privacy PUBLIC '' 
+"http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-dhc-dhcpv6-privacy.xml">
+
 ]>
 
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -48,7 +54,7 @@
 <?rfc inline='yes' ?>
 
 <rfc category="info" 
-     docName="draft-huitema-dhc-anonymity-profile-00.txt" 
+     docName="draft-huitema-dhc-anonymity-profile-01.txt" 
      ipr="trust200902"
      updates="4361" >
 
@@ -100,7 +106,8 @@ in every location that they visit.
 Of course, link layer "MAC" addresses are not the only way to identify a device. As soon as it connects to a 
 remote network, the device may use DHCP and DHCPv6 to obtain network parameters. The analysis of DHCP and DHCPv6 
 options shows that parameters of these protocols can reveal identifiers of the device, negating the benefits of 
-link-layer address randomization. The natural reaction is to restrict the number and values of such parameters
+link-layer address randomization. This is documented in detail in <xref target = "I-D.ietf-dhc-dhcp-privacy" />
+and <xref target="I-D.ietf-dhc-dhcpv6-privacy" />. The natural reaction is to restrict the number and values of such parameters
 in order to minimize disclosure.
 </t>
 <t>
@@ -140,6 +147,37 @@ the MAC address with a randomly drawn 48 bit value. MAC address randomization wa
 in November 2014 <xref target="IETFMACRandom" />. However, we have to consider the linkage between MAC addresses, DHCP identifiers
 and IP addresses.
 </t>
+<section title="MAC Address Randomization hypotheses" >
+<t>
+There is not yet an established standard for randomizing MAC addresses. Various prototypes have tried different strategies, such as:
+</t>
+<t>
+<list style="hanging">
+<t hangText="Per connection:">Configure a random MAC address at the time of connecting to a network, e.g. to specific Wi-Fi SSID,
+and keep it for the duration of the connection.
+</t>
+<t hangText="Per network:">Same as "per connection," but always use the same MAC address for the same network -- different of course 
+from the addresses used in other networks. 
+</t>
+<t hangText="Time interval:">Change the MAC address at regular time intervals.
+</t>
+</list>
+</t>
+<t>
+In practice, there are many reasons to keep the MAC address constant for the duration of a link-layer connection, as in the "per connection" 
+or "per network" variants. On Wi-Fi networks, changing the MAC address requires dropping the existing Wi-Fi connection and then 
+re-establishing it, which implies repeating the connection process and associated procedures. The IP addresses will change, which
+means that all required TCP connections will have to be re-established. If the network access is provided through a NAT, changing
+IP address also means that the NAT traversal procedures will have to be restarted. This means a lot of disruption. At the same time,
+an observer on the network will easily notice that a station left, another came in just after that, and that the new one appears to be
+communicating with pretty much the same set of IP addresses as the old one. This provides for easy correlation. 
+</t>
+<t>
+The anonymity profile pretty much assumes that the MAC address randomization follows the "per connection" or "per network" strategies, 
+or a variant of the "time interval" strategy in which the interval has about the same duration as the average connection. 
+</t>
+</section>
+<section title="MAC Address Randomization and DHCP">
 <t>
 From a privacy point of view, it is clear that MAC Addresses, IP addresses and DHCP identifiers shall evolve in synchrony. 
 For example, if the MAC address changes and the DHCP identifier stays constant, then it is really easy to correlate old and 
@@ -149,8 +187,10 @@ the old and new identifiers and addresses can be correlated by listening to L2 t
 following sections construct DHCP identifiers from the current MAC address, automatically providing for this
 synchronization.
 </t>
+</section>
+<section title="Using the anonymity profiles">
 <t>
-Of course, there are downsides to randomizing MAC addresses and DHCP identifiers. By definition, randomization will break
+There are downsides to randomizing MAC addresses and DHCP identifiers. By definition, randomization will break
 management procedures that rely on tracking MAC addresses. Even if this is not too much of a concern, we have to be worried
 about the frequency of MAC address randomization. Suppose for example that many devices would get new random MAC addresses at 
 short intervals, maybe every few minutes. This would generate new DHCP requests in rapid succession, with a high risk of 
@@ -170,6 +210,23 @@ to their DHCP server.  These clients should still use MAC Address randomization 
 hide from observers, and some form of encrypted communication to the DHCP server. 
 This document does not study this scenario.
 </t>
+</section>
+<section title="What about DHCP servers" >
+<t>
+This document only provides recommendations for DHCP clients. The main target are DHCP clients used in mobile devices.
+Such devices are a tempting target for various monitoring systems, and providing them with a simple anonymity
+solution is urgent. We can argue that some mobile devices embed DHCP servers, and that providing solutions for such devices
+is also quite important. Two plausible examples would be a DHCP server for a car network, or a DHCP server for a 
+mobile hot spot. However, mobile servers get a lot of privacy protection through the use of access control and link layer
+encryption. Servers may disclose information to clients through DHCP, but they normally only do that to clients 
+that have passed the link-layer access control and have been authorized to use the network services. This arguably
+makes solving the server problem less urgent than solving the client problem.
+</t>
+<t>
+The server part will be covered by the general mitigation work going on in DHCP working group, following the analyses 
+presented in <xref target = "I-D.ietf-dhc-dhcp-privacy" /> and <xref target="I-D.ietf-dhc-dhcpv6-privacy" />.
+</t>
+</section>
 </section>
 
 <section title="Anonymity profile for DHCPv4">
@@ -219,6 +276,10 @@ If the DHCP client somehow repeated the address used in a previous network attac
 monitoring services might use the information to tie the two network locations. DHCP clients should ensure that
 the field is cleared when they know that the network attachment has changed, and in particular of the link layer 
 address is reset by the device's administrator.
+</t>
+<t>
+The clients using the anonymity profile MUST NOT include in the message a Client IP Address that has been 
+obtained with a different MAC address.
 </t>
 </section>
 
@@ -275,7 +336,7 @@ the layer two device (e.g., the Ethernet MAC address)." These strong recommendat
 between ease of management and privacy, and the tradeoff should depend on the circumstances. 
 </t>
 <t>
-In contradiction to <xref target="RFC4361"/>, when privacy considerations trump management considerations, 
+In contradiction to <xref target="RFC4361"/>, When using the anonymity profile, 
 DHCP clients MUST use client identifiers based solely on the link layer address that will be used in the 
 underlying connection. This will ensure that the DHCP client identifier does not leak any information that
 is not already available to entities monitoring the network connection. It will also ensure that a 
@@ -298,12 +359,24 @@ the device. Monitoring services could use that information in conjunction with t
 derive the identity of the device's owner. 
 </t>
 <t>
-When privacy considerations trump management considerations, DHCP clients MUST always send a non-qualified 
+When using the anonymity profile, DHCP clients MUST always send a non-qualified 
 host name instead of a fully qualified domain name, and SHOULD obfuscate the
 host name value, so it could not be linked to anything other than the link
 layer address.
 A simple solution would be to set the host name value to a hexadecimal representation 
 of the link layer address that will be used in the underlying connection.
+</t>
+<t>
+<list style="hanging">
+<t hangText="DISCUSS:">
+We could possibly use a naming convention here so that DHCP servers will notice that the client is using
+the anonymity profile. One possibility would be to use a name prefix, building names such as 
+"ANONYM-023A5BF2903C." Servers could notice the prefix, and then apply special treatment to
+anonymous requests. On the plus side, this will enable servers to cooperate with anonymization. On the
+down side, this would enable servers to block or otherwise degrade anonymization. (This note will be 
+removed from the final draft.)
+</t>
+</list>
 </t>
 </section>
 <section title="Client FQDN Option" anchor="fqdnv4" >
@@ -320,7 +393,7 @@ DHCP traffic. In fact, if the DNS record is updated, the location of the client 
 DNS lookup capabilities. 
 </t>
 <t>
-When privacy considerations trump management considerations, DHCP clients SHOULD NOT 
+When using the anonymity profile, DHCP clients SHOULD NOT 
 include the Client FQDN option in their DHCP requests. Alternatively, they MAY 
 include a special purpose FQDN using the same hostname as in the Host Name Option, 
 with a suffix matching the connection-specific DNS suffix being advertised by 
@@ -483,7 +556,7 @@ This draft does not require any IANA action.
     <t> 
 The inspiration for this draft came from discussions in the Perpass mailing list. 
 Several people provided feedback on early versions of this draft,
-notably Noel Anderson, Tushar Gupta, Gabriel Montenegro, Dave Thaler and Jun Wu.
+notably Noel Anderson, Stephen Farrel, Tushar Gupta, Gabriel Montenegro, Dave Thaler and Jun Wu.
     </t>
 </section>
 </middle>
@@ -503,6 +576,8 @@ notably Noel Anderson, Tushar Gupta, Gabriel Montenegro, Dave Thaler and Jun Wu.
 
 <references title="Informative References">
 
+     &I-D.ietf-dhc-dhcp-privacy;
+     &I-D.ietf-dhc-dhcpv6-privacy;
      &I-D.ietf-6man-default-iids;
      &I-D.ietf-6man-ipv6-address-generation-privacy;
 
