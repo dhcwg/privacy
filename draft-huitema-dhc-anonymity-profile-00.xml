@@ -25,6 +25,12 @@
 <!ENTITY rfc4704 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4704.xml'>
 
+<!ENTITY rfc4861 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4861.xml'>
+
+<!ENTITY rfc4941 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4941.xml'>
+
 <!ENTITY rfc4578 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4578.xml'>
 
@@ -53,8 +59,8 @@
 <?rfc comments='yes' ?>
 <?rfc inline='yes' ?>
 
-<rfc category="info" 
-     docName="draft-huitema-dhc-anonymity-profile-01.txt" 
+<rfc category="std" 
+     docName="draft-huitema-dhc-anonymity-profile-02.txt" 
      ipr="trust200902"
      updates="4361" >
 
@@ -76,6 +82,39 @@
         <email>huitema@microsoft.com</email>
       </address>
     </author>
+
+    <author fullname="Tomek Mrugalski" initials="T." surname="Mrugalski">
+      <organization abbrev="ISC">Internet Systems Consortium,
+      Inc.</organization>
+
+      <address>
+        <postal>
+          <street>950 Charter Street</street>
+          <city>Redwood City</city>
+          <region>CA</region>
+          <code>94063</code>
+          <country>USA</country>
+        </postal>
+        <email>tomasz.mrugalski@gmail.com</email>
+      </address>
+    </author>
+
+    <author fullname="Suresh Krishnan" initials="S." surname="Krishnan">
+      <organization>Ericsson</organization>
+
+      <address>
+        <postal>
+          <street>8400 Decarie Blvd.</street>
+          <city>Town of Mount Royal</city>
+          <region>QC</region>
+          <country>Canada</country>
+        </postal>
+        <phone>+1 514 345 7900 x42871</phone>
+        <email>suresh.krishnan@ericsson.com</email>
+      </address>
+    </author>
+
+
 
     <date year="2015" month="March"/>
 
@@ -231,20 +270,28 @@ The design of the anonymity profiles attempts to minimize the number of options 
 choice of values, in order to reduce the possibilities of operating system fingerprinting.
 </t>
 </section>
-<section title="No anonymity profile identification" >
+<section title="No anonymity profile identification" anchor="desire" >
 <t>
 Reviewers of the anonymity profiles have sometimes suggested adding an option to explicitly
 identify the profiles as "using the anonymity option." 
 One suggestion is  that if the client wishes to remain anonymous, 
 it would be good if the client told the server about that in case the server is willing to co-operate.
+Another possibility would be to use specific privacy-oriented construct,
+such as for example a new type of DUID of temporary DUID that would be changing over time. 
 </t>
 <t>
-The problem of course is that declaring an anonymous option is a bit like
-walking around with a Guy Fawkes mask. When anonymity is required, it is generally not
-a good idea to stick out of the crowd. 
-That is the reason why anonymity profiles
-do not include an explicit declaration fo anonymity.
-</t>
+This is not workable in a
+	large number of cases as it is possible that the network
+	operator (or other entities that have access to the operator's
+	network) might be actively participating in surveillance and
+	anti-privacy, willingly or not. Simply revealing the desire
+	for privacy, could cause the attacker to react by triggering
+	additional surveillance or monitoring mechanisms. Therefore we
+	feel that it is preferable to not disclose one's desire for
+	privacy. This preference leads to some important
+	implications. In particular, we make an effort to make the
+	mitigation techniques difficult to distinguish from regular
+	client behaviors, if at all possible.</t>
 </section>
 <section title="Using the anonymity profiles">
 <t>
@@ -321,6 +368,7 @@ option.
 Header fields and option values SHOULD be set in accordance with the DHCP specification,
 but some header fields and option values SHOULD be constructed per the following guidelines.
 </t>
+
 <section title="Client IP address field" >
 <t>
 Four bytes in the header of the DHCP messages carry the "Client IP address" (ciaddr) as defined in <xref target="RFC2131"/>. 
@@ -353,7 +401,8 @@ different MAC Address.
 </t>
 <t>
 When using the anonymity profile, clients SHOULD NOT 
-use the Requested IP address option in DHCPDISCOVER Messages.
+use the Requested IP address option in DHCPDISCOVER Messages. They MUST use the option when mandated
+by the DHCP protocol, for example in DHCPREQUEST Messages. 
 </t>
 
 </section>
@@ -402,6 +451,7 @@ is not already available to entities monitoring the network connection. It will 
 strategy of randomizing the link layer address will not be nullified by DHCP options.
 </t>
 </section>
+
 <section title="Host Name Option">
 <t>
 The Host Name option is defined in <xref target="RFC2132"/> with option code 12. Depending on implementations,
@@ -418,12 +468,15 @@ the device. Monitoring services could use that information in conjunction with t
 derive the identity of the device's owner. 
 </t>
 <t>
-When using the anonymity profile, DHCP clients MUST always send a non-qualified 
-host name instead of a fully qualified domain name, and SHOULD obfuscate the
+When using the anonymity profile, DHCP clients MAY avoid sending the host name option.
+If they chose to send the option, DHCP clients MUST always send a non-qualified 
+host name instead of a fully qualified domain name, and MUST obfuscate the
 host name value, so it could not be linked to anything other than the link
 layer address.
-A simple solution would be to set the host name value to a hexadecimal representation 
-of the link layer address that will be used in the underlying connection.
+When obfuscating the host name, DHCP clients SHOULD 
+set the host name value to a hexadecimal representation 
+of the link layer address that will be used in the underlying connection. They MAY choose
+another convention in rare cases, for example in multi-homed scenarios.
 </t>
 </section>
 <section title="Client FQDN Option" anchor="fqdnv4" >
@@ -491,25 +544,90 @@ clients use DHCPv6 to obtain network configuration parameters, through the INFOR
 message. 
 </t>
 <t>
+The choice between the stateful and stateless scenario depends of flag and prefix options published 
+by the "Router Advertisement" messages of local routers, as specified in <xref target="RFC4861"/>. 
+When these options enable stateless address configuration hosts using the anonymity profile 
+SHOULD choose it over stateful address configuration, because stateless configuration requires
+fewer information disclosure than stateful configuration.
+</t>
+<t>
 When using the anonymity profile, DHCPv6 clients carefully select DHCPv6 options used in the various
 messages that they sent. The list of options that are mandatory or optional for each message is
 specified in <xref target="RFC3315" />. Some of these options have specific implications 
 on anonymity. The following sections provide guidance on the choice of option values when
 using the anonymity profile.
 </t>
+
+      <section title="Do not send Confirm messages">
+	<t>The <xref target="RFC3315" /> requires clients to send a
+	Confirm message when they attach to a new link to verify
+	whether the addressing and configuration information they
+	previously received is still valid. When these clients send
+	Confirm messages, they include any IAs assigned to the
+	interface that may have moved to a new link, along with the
+	addresses associated with those IAs. By examining the
+	addresses in the Confirm message an attacker can trivially
+	identify the previous point(s) of attachment.</t>
+
+	<t>Clients interested in protecting their privacy
+	SHOULD NOT send Confirm messages and instead directly try to
+	acquire addresses on the new link.</t>
+      </section>
+
 <section title="Client Identifier DHCPv6 Option">
 <t>
 The client identifier option is defined in <xref target="RFC3315"/> with option code 1. The purpose of the client 
-identifier option is to identify the client to the server. The content of the option is a DHCP User ID (DUID) for which
-three formats are specified: Link-layer address plus time, Vendor-assigned unique ID based on Enterprise Number, 
+identifier option is to identify the client to the server. The content of the option is a DHCP User ID (DUID).
+One of the primary privacy concerns is that a client is
+	disclosing a stable identifier (the DUID) that can be use for
+	tracking and profiling.
+Three DUID formats are specified: Link-layer address plus time, Vendor-assigned unique ID based on Enterprise Number, 
 Link-layer address.
 </t>
 <t>
-When using the anonymity profile, DHCPv6 clients MUST use the DUID format number 3, Link-layer address. The value of the 
+When using the anonymity profile in conjunction with randomized MAC addresses, 
+DHCPv6 clients MUST use the DUID format number 3, Link-layer address. The value of the 
 Link-layer address should be that currently assigned to the interface.
 </t>
+<t>
+When using the anonymity profile without the benefit of randomized MAC addresses,
+clients that want to protect their privacy
+	SHOULD generate a new randomized DUID-LLT every time they
+	attach to a new link or detect a possible link change
+	event. The exact details are left up to implementors, but
+	there are several factors should be taken into
+	consideration. The DUID type SHOULD be set to 1
+	(DUID-LLT). Hardware type SHOULD be set appropriately to the
+	hardware type.  Time MAY be set to current time, but this will
+	reveal the fact that the DUID is newly generated. Implementors
+	interested in hiding this fact MAY use a time stamp from the
+	past. e.g. a random timestamp from the previous year could be
+	a good value. In the most common cases the link-layer address
+	is based on MAC. The first three octets are composed of the
+	OUI (Organizationally Unique Identifier) that is expected to
+	have a value assigned to a real organization. See <xref
+	target="IEEE-OUI" /> for currently assigned values. Using a
+	value that is unassigned may disclose the fact that a DUID is
+	randomized. Using a value that belongs to a third party may
+	have legal implications.</t>
+
+      <section title="Anonymous Information-Request">
+	<t>According to <xref target="RFC3315" />, a DHCPv6 client
+	typically includes its client identifier in most of the
+	messages it sends. There is one exception, however. Client is
+	allowed to omit its client identifier when sending
+	Information-Request.</t>
+
+	<t>When using stateless DHCPv6, clients wanting to
+	protect their privacy SHOULD NOT include client identifiers in
+	their Information-Request messages. This will prevent the
+	server from specifying client-specific options if it is
+	configured to do so, but the need for anonymity precludes such
+	options anyway.</t>
+      </section>
+
 </section>
-<section title="Server Identifier Option">
+<section title="Server Identifier Option" anchor="random-duid">
 <t>
 When using the anonymity profile, DHCPv6 clients SHOULD use the Server Identifier Option (code 2) 
 as specified in <xref target="RFC3315"/>. Clients MUST only include server identifier
@@ -531,12 +649,79 @@ The clients MAY use the IA Address Option (code 5) but need to balance the poten
 is to remove all stored addresses when a MAC address changes, and to only use the IA Address option
 with addresses that have been explicitly assigned through the current MAC address. 
 </t>
+<t>
+The interaction between prefix delegation
+and anonymity require further study. For now, the simple solution is to avoid using
+prefix delegation when striving for anonymity. 
+When using the anonymity profiles, clients SHOULD NOT use IA_PD, 
+the prefix delegation form of address assignment. 
+</t>
+<section title="Obtain temporary addresses">
+	<t><xref target="RFC3315" /> defines a special container
+	(IA_TA) for requesting temporary addresses. This is a good
+	mechanism in principle, but there are a number of issues
+	associated with it. First, this is not widely used feature, so
+	clients depending solely on temporary addresses may lock
+	themselves out of service. Secondly, <xref target="RFC3315" />
+	does not specify any renewal mechanisms for temporary
+	addresses. Therefore support for renewing temporary addresses
+	may vary between server implementations, including not being
+	supported at all. Finally, by requesting temporary addresses a
+	client reveals its desire for privacy and potentially risks
+	countermeasures as described in <xref target="desire"/>.</t>
+
+	<t>Clients interested in their privacy SHOULD not
+	use IA_TA. They should simply send an IA_NA with a randomized
+	IAID. This, along with the mitigation technique discussed in
+	<xref target="random-duid"/>, will ensure that a client will
+	get a new address that can be renewed and can be used as long
+	as needed. To get a new address, it can send Request message
+	with a new randomized IAID before releasing the other
+	one. This will cause the server to assign a new address, as it
+	still has a valid lease for the old IAID value. Once a new
+	address is assigned, the address obtained using the older IAID
+	value can be released safely, using the Release message or it
+	may simply be allowed to time out.</t>
+
+	<t>This solution may not work if the server enforces specific
+	policies, e.g. only one address per client. If client does not
+	succeed in receiving a second address using a new IAID, it may
+	release the first one (using an old IAID) and then retry
+	asking for a new address.</t>
+
+	<t>From the Operating System perspective, addresses obtained
+	using this technique SHOULD be treated as temporary as
+	specified in <xref target="RFC4941" />.</t>
+      </section>
+
 </section>
 <section title="Option Request Option">
-<t>
-When using the anonymity profile, DHCPv6 clients SHOULD use the Option Request Option (code 6) 
-as specified in <xref target="RFC3315"/>. 
-</t>
+	<t>A DHCPv6 client may reveal other types of information,
+	besides unique identifiers. There are many ways a DHCPv6
+	client can perform certain actions and the specifics can be
+	used to fingerprint the client. This may not reveal the
+	identity of a client, but may provide additional information,
+	such as the device type, vendor type or OS type and in some cases
+	specific version.</t>
+
+	<t>One specific method used for fingerprinting utilizes the
+	order in which options are included in the message. Another
+	related technique utilizes the order in which option codes are
+	included in an Option Request Option (ORO).</t>
+
+	<t>The client willing to protect its privacy SHOULD
+	randomize options order before sending any DHCPv6
+	message. Such a client SHOULD also randomly shuffle the
+	option codes order in ORO.</t>
+
+	<!-- tomek: I also briefly thought about paranoid type of
+	a client that could ask in ORO for other random options.
+	That would be sort of fun, but may have adverse effects in the
+	long term. There may be options defined in the future that
+	could affect how DHCPv6 operates (e.g. client supporting
+	feature X should request option Y.). So this has a potential
+	for too much (random) breakage in the future. -->
+
 <section title="Previous option values">
 <t>
 According to <xref target="RFC3315"/>, the client that includes an Option Request Option in a 
@@ -578,20 +763,6 @@ link layer address and a suffix advertised by the local DHCP server.
 </t>
 </section>
 </section>
-
-<section title="Management considerations">
-<t>
-The anonymity profile has the effect of hiding the client identity from the DHCP server. This is not
-always desirable. Some DHCP servers provide facilities like publishing names and addresses in the DNS,
-or ensuring that returning clients get reassigned the same address. Implementers should be
-careful to only use the anonymity profile when privacy trumps management considerations. 
-</t>
-<t>
-Servers dealing with clients using this profile who want to
-honour the client's wishes, ought minimise logging because
-that may assist the client.
-</t>
-</section>
 <section title="Security Considerations">
 <t> 
 The use of the anonymity profile does not change the security considerations of the DHCPv4 or DHCPv6 protocols. 
@@ -607,8 +778,9 @@ This draft does not require any IANA action.
 <section title="Acknowledgments">
     <t> 
 The inspiration for this draft came from discussions in the Perpass mailing list. 
-Several people provided feedback on early versions of this draft,
-notably Noel Anderson, Stephen Farrell, Tushar Gupta, Gabriel Montenegro, Dave Thaler and Jun Wu.
+Several people provided feedback on this draft,
+notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Tushar Gupta, Gabriel Montenegro, 
+ Marcin Siodelski, Dave Thaler and Jun Wu.
     </t>
 </section>
 </middle>
@@ -624,6 +796,8 @@ notably Noel Anderson, Stephen Farrell, Tushar Gupta, Gabriel Montenegro, Dave T
     &rfc4578;
     &rfc4702;
     &rfc4704;
+    &rfc4861;
+    &rfc4941;
 </references>
 
 <references title="Informative References">
@@ -695,6 +869,21 @@ digital modulation scheme
             </abstract>  
         </front>
     </reference>
+
+
+      <reference anchor="IEEE-OUI" target="http://www.ieee.org/netstorage/standards/oui.txt">
+        <front>
+          <title>Organizationally Unique Identifiers
+          http://www.ieee.org/netstorage/standards/oui.txt</title>
+
+          <author>
+            <organization>IEEE</organization>
+          </author>
+
+          <date />
+        </front>
+      </reference>
+
 
 </references>  
 
