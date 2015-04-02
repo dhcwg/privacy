@@ -2,8 +2,8 @@
 
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 
-<!ENTITY rfc2026 PUBLIC ''
-   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2026.xml'>
+<!ENTITY rfc2119 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'>
 
 <!ENTITY rfc791 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.0791.xml'>
@@ -46,6 +46,9 @@
 
 <!ENTITY I-D.ietf-dhc-dhcpv6-privacy PUBLIC '' 
 "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-dhc-dhcpv6-privacy.xml">
+
+<!ENTITY I-D.ietf-dhc-rfc3315bis PUBLIC ''
+"http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-dhc-rfc3315bis.xml">
 
 ]>
 
@@ -116,7 +119,7 @@
 
 
 
-    <date year="2015" month="March"/>
+    <date year="2015" />
 
     <abstract>
         <t> 
@@ -125,7 +128,8 @@ even if the device administrator takes care of randomizing other potential
 identifications like link-layer addresses or IPv6 addresses. The anonymity profile
 is designed for clients that wish to remain anonymous to the visited network.
 The profile provides guidelines on the composition of DHCP or DHCPv6 requests,
-designed to minimize disclosure of identifying information.
+designed to minimize disclosure of identifying information. This draft updates
+RFC4361.
         </t>
     </abstract>
 </front>
@@ -157,9 +161,9 @@ disclosure, including the disclosure of implementation identifiers.
 </t>
 <section title="Requirements">
 <t>
-The keywords MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD,
-SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL, when they appear in this
-document, are to be interpreted as described in <xref target="RFC2026" />.
+  The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+  "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+  document are to be interpreted as described in <xref target="RFC2119" />.
 </t>
 </section>
 </section>
@@ -449,6 +453,9 @@ DHCP clients MUST use client identifiers based solely on the link layer address 
 underlying connection. This will ensure that the DHCP client identifier does not leak any information that
 is not already available to entities monitoring the network connection. It will also ensure that a 
 strategy of randomizing the link layer address will not be nullified by DHCP options.
+
+<!-- tomek: todo: probably will need more detailed explanation what is exactly updated in
+    RFC4361: Update section X.Y with the following: ... -->
 </t>
 </section>
 
@@ -562,7 +569,9 @@ using the anonymity profile.
 	<t>The <xref target="RFC3315" /> requires clients to send a
 	Confirm message when they attach to a new link to verify
 	whether the addressing and configuration information they
-	previously received is still valid. When these clients send
+	previously received is still valid. This requirement was
+        relaxed in <xref target="I-D.ietf-dhc-rfc3315bis" />.
+        When these clients send
 	Confirm messages, they include any IAs assigned to the
 	interface that may have moved to a new link, along with the
 	addresses associated with those IAs. By examining the
@@ -670,7 +679,7 @@ the prefix delegation form of address assignment.
 	client reveals its desire for privacy and potentially risks
 	countermeasures as described in <xref target="desire"/>.</t>
 
-	<t>Clients interested in their privacy SHOULD not
+	<t>Clients interested in their privacy SHOULD NOT
 	use IA_TA. They should simply send an IA_NA with a randomized
 	IAID. This, along with the mitigation technique discussed in
 	<xref target="random-duid"/>, will ensure that a client will
@@ -763,6 +772,19 @@ link layer address and a suffix advertised by the local DHCP server.
 </t>
 </section>
 </section>
+
+<section title="Operational Considerations">
+  <t>The anonymity profile has the effect of hiding the client identity from the
+  DHCP server. This is not always desirable. Some DHCP servers provide
+  facilities like publishing names and addresses in the DNS, or ensuring that
+  returning clients get reassigned the same address. Implementers should be
+  careful to only use the anonymity profile when privacy trumps management
+  considerations.</t>
+  <t>Clients using the anonymity profile in general consume more resources.  For
+  example when they change MAC address and request for a new IP, the old one is
+  still marked as leased by the server.</t>
+</section>
+
 <section title="Security Considerations">
 <t> 
 The use of the anonymity profile does not change the security considerations of the DHCPv4 or DHCPv6 protocols. 
@@ -787,25 +809,25 @@ notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Tushar Gupta, Gabriel M
 
 <back>
 <references title="Normative References">
-    &rfc2026;
+    &rfc2119;
     &rfc2131;
     &rfc2132;
     &rfc3315;
     &rfc3925;
     &rfc4361;
-    &rfc4578;
     &rfc4702;
     &rfc4704;
     &rfc4861;
     &rfc4941;
+    &I-D.ietf-dhc-rfc3315bis;
 </references>
 
 <references title="Informative References">
-
-     &I-D.ietf-dhc-dhcp-privacy;
-     &I-D.ietf-dhc-dhcpv6-privacy;
-     &I-D.ietf-6man-default-iids;
-     &I-D.ietf-6man-ipv6-address-generation-privacy;
+    &rfc4578;
+    &I-D.ietf-dhc-dhcp-privacy;
+    &I-D.ietf-dhc-dhcpv6-privacy;
+    &I-D.ietf-6man-default-iids;
+    &I-D.ietf-6man-ipv6-address-generation-privacy;
 
     <reference anchor="CNBC" target="http://www.cbc.ca/news/politics/csec-used-airport-wi-fi-to-track-canadian-travellers-edward-snowden-documents-1.2517881">
         <front>
