@@ -288,11 +288,18 @@ This is not workable in a
 	large number of cases as it is possible that the network
 	operator (or other entities that have access to the operator's
 	network) might be actively participating in surveillance and
-	anti-privacy, willingly or not. Simply revealing the desire
+	anti-privacy, willingly or not. 
+Declaring a preference for anonymity is a bit
+   like walking around with a Guy Fawkes mask.  When anonymity is
+   required, it is generally not a good idea to stick out of the crowd.
+Simply revealing the desire
 	for privacy, could cause the attacker to react by triggering
 	additional surveillance or monitoring mechanisms. Therefore we
 	feel that it is preferable to not disclose one's desire for
-	privacy. This preference leads to some important
+	privacy. 
+</t>
+<t>
+This preference leads to some important
 	implications. In particular, we make an effort to make the
 	mitigation techniques difficult to distinguish from regular
 	client behaviors, if at all possible.</t>
