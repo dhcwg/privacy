@@ -50,6 +50,9 @@
 <!ENTITY I-D.ietf-dhc-rfc3315bis PUBLIC ''
 "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-dhc-rfc3315bis.xml">
 
+<!ENTITY I-D.ietf-dhc-dynamic-shared-v4allocation PUBLIC ''
+"http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-dhc-dynamic-shared-v4allocation.xml">
+
 ]>
 
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -63,7 +66,7 @@
 <?rfc inline='yes' ?>
 
 <rfc category="std" 
-     docName="draft-ietf-dhc-anonymity-profile-00.txt" 
+     docName="draft-ietf-dhc-anonymity-profile-01.txt" 
      ipr="trust200902"
      updates="4361" >
 
@@ -464,6 +467,23 @@ strategy of randomizing the link layer address will not be nullified by DHCP opt
 <!-- tomek: todo: probably will need more detailed explanation what is exactly updated in
     RFC4361: Update section X.Y with the following: ... -->
 </t>
+<t>
+There are usages of DHCP where the underlying connection is a point to point link, in which case there is no
+link layer address available to construct a non-revealing identifier. 
+If anonymity is desired in such networks, the client SHOULD pick a random identifier that is unique
+to the current link, using for example a combination of a local secret and an identifier of the
+connection. 
+</t>
+<t>
+A stable client identifier guarantees that the client will receive consistent parameters over time. 
+An example is given in 
+<xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" />, where the client identifier is used to 
+guarantee that the same client will always get the same combination of IP address and port range. 
+Static clients benefit most from stable parameters, and can often be already identified by physical 
+connection layer parameters. These static clients SHOULD NOT use the anonymity profile. Mobile clients,
+in contrast, MAY use the anonymity profile in conjunction with <xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" /> 
+if they are more concerned with privacy protection than with stable parameters.
+</t>
 </section>
 
 <section title="Host Name Option">
@@ -482,16 +502,19 @@ the device. Monitoring services could use that information in conjunction with t
 derive the identity of the device's owner. 
 </t>
 <t>
-When using the anonymity profile, DHCP clients MAY avoid sending the host name option.
+When using the anonymity profile, DHCP clients SHOULD avoid sending the host name option.
 If they chose to send the option, DHCP clients MUST always send a non-qualified 
 host name instead of a fully qualified domain name, and MUST obfuscate the
-host name value, so it could not be linked to anything other than the link
-layer address.
-When obfuscating the host name, DHCP clients SHOULD 
-set the host name value to a hexadecimal representation 
-of the link layer address that will be used in the underlying connection. They MAY choose
-another convention in rare cases, for example in multi-homed scenarios.
+host name value.
 </t>
+<t>
+When obfuscating the host name, DHCP clients SHOULD construct a randomized host name by
+computing a secure hash of a local secret and of the link layer address that will be used 
+in the underlying connection, and then use as the name the hexadecimal representation of the 
+first 6 bytes of the hash. This procedure is use to guarantee that the random name does not
+reveal the underlying link layer address.
+</t>
+
 </section>
 <section title="Client FQDN Option" anchor="fqdnv4" >
 <t>
@@ -835,6 +858,7 @@ notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Tushar Gupta, Gabriel M
     &I-D.ietf-dhc-dhcpv6-privacy;
     &I-D.ietf-6man-default-iids;
     &I-D.ietf-6man-ipv6-address-generation-privacy;
+    &I-D.ietf-dhc-dynamic-shared-v4allocation;
 
     <reference anchor="CNBC" target="http://www.cbc.ca/news/politics/csec-used-airport-wi-fi-to-track-canadian-travellers-edward-snowden-documents-1.2517881">
         <front>
