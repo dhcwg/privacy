@@ -5,9 +5,9 @@ Network Working Group                                         C. Huitema
 Internet-Draft                                                 Microsoft
 Updates: 4361 (if approved)                                 T. Mrugalski
 Intended status: Standards Track                                     ISC
-Expires: December 14, 2015                                   S. Krishnan
+Expires: December 19, 2015                                   S. Krishnan
                                                                 Ericsson
-                                                           June 12, 2015
+                                                           June 17, 2015
 
 
                    Anonymity profile for DHCP clients
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 14, 2015.
+   This Internet-Draft will expire on December 19, 2015.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Huitema, et al.         Expires December 14, 2015               [Page 1]
+Huitema, et al.         Expires December 19, 2015               [Page 1]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
@@ -75,43 +75,45 @@ Table of Contents
      2.4.  Operating system fingerprinting . . . . . . . . . . . . .   6
      2.5.  No anonymity profile identification . . . . . . . . . . .   6
      2.6.  Using the anonymity profiles  . . . . . . . . . . . . . .   7
-     2.7.  What about privacy for DHCP servers . . . . . . . . . . .   7
+     2.7.  What about privacy for DHCP servers . . . . . . . . . . .   8
    3.  Anonymity profile for DHCPv4  . . . . . . . . . . . . . . . .   8
-     3.1.  Client IP address field . . . . . . . . . . . . . . . . .   8
+     3.1.  Client IP address field . . . . . . . . . . . . . . . . .   9
      3.2.  Requested IP address option . . . . . . . . . . . . . . .   9
      3.3.  Client hardware address . . . . . . . . . . . . . . . . .   9
-     3.4.  Client Identifier Option  . . . . . . . . . . . . . . . .   9
+     3.4.  Client Identifier Option  . . . . . . . . . . . . . . . .  10
      3.5.  Host Name Option  . . . . . . . . . . . . . . . . . . . .  11
      3.6.  Client FQDN Option  . . . . . . . . . . . . . . . . . . .  11
      3.7.  UUID/GUID-based Client Identifier Option  . . . . . . . .  12
      3.8.  User and Vendor Class DHCP options  . . . . . . . . . . .  12
    4.  Anonymity profile for DHCPv6  . . . . . . . . . . . . . . . .  12
-     4.1.  Do not send Confirm messages  . . . . . . . . . . . . . .  13
+     4.1.  Do not send Confirm messages, unless really sure where  .  13
      4.2.  Client Identifier DHCPv6 Option . . . . . . . . . . . . .  13
        4.2.1.  Anonymous Information-Request . . . . . . . . . . . .  14
      4.3.  Server Identifier Option  . . . . . . . . . . . . . . . .  14
-     4.4.  Address assignment options  . . . . . . . . . . . . . . .  14
+     4.4.  Address assignment options  . . . . . . . . . . . . . . .  15
        4.4.1.  Obtain temporary addresses  . . . . . . . . . . . . .  15
      4.5.  Option Request Option . . . . . . . . . . . . . . . . . .  16
        4.5.1.  Previous option values  . . . . . . . . . . . . . . .  16
      4.6.  Authentication Option . . . . . . . . . . . . . . . . . .  16
-     4.7.  User and Vendor Class DHCPv6 options  . . . . . . . . . .  16
+     4.7.  User and Vendor Class DHCPv6 options  . . . . . . . . . .  17
      4.8.  Client FQDN Option  . . . . . . . . . . . . . . . . . . .  17
    5.  Operational Considerations  . . . . . . . . . . . . . . . . .  17
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
    8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  17
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  17
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  17
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  18
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20
+   9.  Changes from previous versions  . . . . . . . . . . . . . . .  18
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  18
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  19
 
 
 
-Huitema, et al.         Expires December 14, 2015               [Page 2]
+Huitema, et al.         Expires December 19, 2015               [Page 2]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
+
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20
 
 1.  Introduction
 
@@ -162,9 +164,7 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
 
 
 
-
-
-Huitema, et al.         Expires December 14, 2015               [Page 3]
+Huitema, et al.         Expires December 19, 2015               [Page 3]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
@@ -220,7 +220,7 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
 
 
 
-Huitema, et al.         Expires December 14, 2015               [Page 4]
+Huitema, et al.         Expires December 19, 2015               [Page 4]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
@@ -276,7 +276,7 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
 
 
 
-Huitema, et al.         Expires December 14, 2015               [Page 5]
+Huitema, et al.         Expires December 19, 2015               [Page 5]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
@@ -332,7 +332,7 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
 
 
 
-Huitema, et al.         Expires December 14, 2015               [Page 6]
+Huitema, et al.         Expires December 19, 2015               [Page 6]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
@@ -366,6 +366,33 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    of encrypted communication to the DHCP server.  This scenario is not
    yet supported in this document.
 
+   To preserve anonymity, the clients need to not use stable values for
+   the client identifiers.  This is clearly a tradeoff, because a stable
+   client identifier guarantees that the client will receive consistent
+   parameters over time.  An example is given in
+   [I-D.ietf-dhc-dynamic-shared-v4allocation], where the client
+   identifier is used to guarantee that the same client will always get
+   the same combination of IP address and port range.  Static clients
+   benefit most from stable parameters, and can often be already
+   identified by physical connection layer parameters.  These static
+   clients will normally not use the anonymity profile.  Mobile clients,
+   in contrast, have the option of using the anonymity profile in
+   conjunction with [I-D.ietf-dhc-dynamic-shared-v4allocation] if they
+   are more concerned with privacy protection than with stable
+   parameters.
+
+
+
+
+
+
+
+
+Huitema, et al.         Expires December 19, 2015               [Page 7]
+
+Internet-Draft           DHCP Anonymity Profile                June 2015
+
+
 2.7.  What about privacy for DHCP servers
 
    This document only provides recommendations for DHCP clients.  The
@@ -382,16 +409,6 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    link-layer access control and have been authorized to use the network
    services.  This arguably makes solving the server problem less urgent
    than solving the client problem.
-
-
-
-
-
-
-Huitema, et al.         Expires December 14, 2015               [Page 7]
-
-Internet-Draft           DHCP Anonymity Profile                June 2015
-
 
    The server part will be covered by the general mitigation work going
    on in DHCP working group, following the analyses presented in
@@ -424,6 +441,14 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
       Type, Client Id, Host name, and Parameter Request List options.
       It SHOULD NOT contain any other option.
 
+
+
+
+Huitema, et al.         Expires December 19, 2015               [Page 8]
+
+Internet-Draft           DHCP Anonymity Profile                June 2015
+
+
    Header fields and option values SHOULD be set in accordance with the
    DHCP specification, but some header fields and option values SHOULD
    be constructed per the following guidelines.
@@ -441,14 +466,6 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    network than the last network connected.  If the DHCP client somehow
    repeated the address used in a previous network attachment,
    monitoring services might use the information to tie the two network
-
-
-
-Huitema, et al.         Expires December 14, 2015               [Page 8]
-
-Internet-Draft           DHCP Anonymity Profile                June 2015
-
-
    locations.  DHCP clients should ensure that the field is cleared when
    they know that the network attachment has changed, and in particular
    of the link layer address is reset by the device's administrator.
@@ -481,6 +498,13 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    this address is necessary for the proper operation of the DHCP
    service.
 
+
+
+Huitema, et al.         Expires December 19, 2015               [Page 9]
+
+Internet-Draft           DHCP Anonymity Profile                June 2015
+
+
    Hardware addresses, called "link layer address" in many RFCs, can be
    used to uniquely identify a device, especially if they follow the
    IEEE 802 recommendations.  These unique identifiers can be used by
@@ -497,14 +521,6 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    61.  It is discussed in details in [RFC4361].  The purpose of the
    client identifier option is to identify the client in a manner
    independent of the link layer address.  This is particularly useful
-
-
-
-Huitema, et al.         Expires December 14, 2015               [Page 9]
-
-Internet-Draft           DHCP Anonymity Profile                June 2015
-
-
    if the DHCP server is expected to assign the same address to the
    client after a network attachment is swapped and the link layer
    address changes.  It is also useful when the same node issues
@@ -538,25 +554,9 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    unique to the current link, using for example a combination of a
    local secret and an identifier of the connection.
 
-   A stable client identifier guarantees that the client will receive
-   consistent parameters over time.  An example is given in
-   [I-D.ietf-dhc-dynamic-shared-v4allocation], where the client
-   identifier is used to guarantee that the same client will always get
-   the same combination of IP address and port range.  Static clients
-   benefit most from stable parameters, and can often be already
-   identified by physical connection layer parameters.  These static
-   clients SHOULD NOT use the anonymity profile.  Mobile clients, in
-   contrast, MAY use the anonymity profile in conjunction with
-   [I-D.ietf-dhc-dynamic-shared-v4allocation] if they are more concerned
-   with privacy protection than with stable parameters.
 
 
-
-
-
-
-
-Huitema, et al.         Expires December 14, 2015              [Page 10]
+Huitema, et al.         Expires December 19, 2015              [Page 10]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
@@ -589,9 +589,8 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    randomized host name by computing a secure hash of a local secret and
    of the link layer address that will be used in the underlying
    connection, and then use as the name the hexadecimal representation
-   of the first 6 bytes of the hash.  This procedure is use to guarantee
-   that the random name does not reveal the underlying link layer
-   address.
+   of the first 6 bytes of the hash.  This procedure ensures that the
+   random name will not reveal the underlying link layer address.
 
 3.6.  Client FQDN Option
 
@@ -608,17 +607,16 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    the DNS record is updated, the location of the client becomes visible
    to anyone with DNS lookup capabilities.
 
+   When using the anonymity profile, DHCP clients SHOULD NOT include the
+   Client FQDN option in their DHCP requests.  Alternatively, they MAY
 
 
 
-
-Huitema, et al.         Expires December 14, 2015              [Page 11]
+Huitema, et al.         Expires December 19, 2015              [Page 11]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
 
-   When using the anonymity profile, DHCP clients SHOULD NOT include the
-   Client FQDN option in their DHCP requests.  Alternatively, they MAY
    include a special purpose FQDN using the same hostname as in the Host
    Name Option, with a suffix matching the connection-specific DNS
    suffix being advertised by that DHCP server.  Having a name in the
@@ -664,17 +662,16 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    constructing these prefixes have different implications on privacy,
    which are discussed in [I-D.ietf-6man-default-iids] and
    [I-D.ietf-6man-ipv6-address-generation-privacy].  In the stateless
+   scenario, clients use DHCPv6 to obtain network configuration
+   parameters, through the INFORMATION-REQUEST message.
 
 
 
 
-Huitema, et al.         Expires December 14, 2015              [Page 12]
+Huitema, et al.         Expires December 19, 2015              [Page 12]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
-
-   scenario, clients use DHCPv6 to obtain network configuration
-   parameters, through the INFORMATION-REQUEST message.
 
    The choice between the stateful and stateless scenario depends of
    flag and prefix options published by the "Router Advertisement"
@@ -691,7 +688,7 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    implications on anonymity.  The following sections provide guidance
    on the choice of option values when using the anonymity profile.
 
-4.1.  Do not send Confirm messages
+4.1.  Do not send Confirm messages, unless really sure where
 
    The [RFC3315] requires clients to send a Confirm message when they
    attach to a new link to verify whether the addressing and
@@ -705,7 +702,12 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
 
    Clients interested in protecting their privacy SHOULD NOT send
    Confirm messages and instead directly try to acquire addresses on the
-   new link.
+   new link.  However, not sending confirm messages can result in
+   connectivity hiatus in some scenarios, e.g. roaming between two
+   access points in the same wireless network.  DHCPv6 clients that can
+   verify that the previous link and the current link are part of the
+   same network MAY send Confirm messages while still protecting their
+   privacy.
 
 4.2.  Client Identifier DHCPv6 Option
 
@@ -718,17 +720,17 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    address plus time, Vendor-assigned unique ID based on Enterprise
    Number, Link-layer address.
 
-   When using the anonymity profile in conjunction with randomized MAC
-   addresses, DHCPv6 clients MUST use the DUID format number 3, Link-
 
 
 
 
-Huitema, et al.         Expires December 14, 2015              [Page 13]
+Huitema, et al.         Expires December 19, 2015              [Page 13]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
 
+   When using the anonymity profile in conjunction with randomized MAC
+   addresses, DHCPv6 clients MUST use the DUID format number 3, Link-
    layer address.  The value of the Link-layer address should be that
    currently assigned to the interface.
 
@@ -771,20 +773,24 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    the current MAC address, because reuse of old values discloses
    information that can be used to identify the client.
 
+
+
+
+
+
+
+
+Huitema, et al.         Expires December 19, 2015              [Page 14]
+
+Internet-Draft           DHCP Anonymity Profile                June 2015
+
+
 4.4.  Address assignment options
 
    When using the anonymity profile, DHCPv6 clients might have to use
    SOLICIT or REQUEST messages to obtain IPv6 addresses through the DHCP
    server.  The clients SHOULD only use the options necessary to perform
    the requested DHCPv6 transactions, such as Identity Association for
-
-
-
-Huitema, et al.         Expires December 14, 2015              [Page 14]
-
-Internet-Draft           DHCP Anonymity Profile                June 2015
-
-
    Non-temporary Addresses Option (code 3) or Identity Association for
    Temporary Addresses Option (code 4).
 
@@ -826,6 +832,15 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    address obtained using the older IAID value can be released safely,
    using the Release message or it may simply be allowed to time out.
 
+
+
+
+
+Huitema, et al.         Expires December 19, 2015              [Page 15]
+
+Internet-Draft           DHCP Anonymity Profile                June 2015
+
+
    This solution may not work if the server enforces specific policies,
    e.g. only one address per client.  If client does not succeed in
    receiving a second address using a new IAID, it may release the first
@@ -833,13 +848,6 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
 
    From the Operating System perspective, addresses obtained using this
    technique SHOULD be treated as temporary as specified in [RFC4941].
-
-
-
-Huitema, et al.         Expires December 14, 2015              [Page 15]
-
-Internet-Draft           DHCP Anonymity Profile                June 2015
-
 
 4.5.  Option Request Option
 
@@ -882,20 +890,18 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    are operating in a trusted environment, e.g., in a work place
    network.
 
+
+
+Huitema, et al.         Expires December 19, 2015              [Page 16]
+
+Internet-Draft           DHCP Anonymity Profile                June 2015
+
+
 4.7.  User and Vendor Class DHCPv6 options
 
    When using the anonymity profile, DHCPv6 clients SHOULD NOT use the
    User Class option (code 15) or the Vendor Class option (code 16), as
    these options potentially reveal identifying information.
-
-
-
-
-
-Huitema, et al.         Expires December 14, 2015              [Page 16]
-
-Internet-Draft           DHCP Anonymity Profile                June 2015
-
 
 4.8.  Client FQDN Option
 
@@ -934,24 +940,40 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
 
    The inspiration for this draft came from discussions in the Perpass
    mailing list.  Several people provided feedback on this draft,
-   notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Tushar
-   Gupta, Gabriel Montenegro, Marcin Siodelski, Dave Thaler and Jun Wu.
-
-9.  References
-
-9.1.  Normative References
+   notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Nick Grifka,
+   Tushar Gupta, Gabriel Montenegro, Marcin Siodelski, Dave Thaler and
+   Jun Wu.
 
 
 
 
 
-
-
-
-Huitema, et al.         Expires December 14, 2015              [Page 17]
+Huitema, et al.         Expires December 19, 2015              [Page 17]
 
 Internet-Draft           DHCP Anonymity Profile                June 2015
 
+
+9.  Changes from previous versions
+
+   Changes from draft-00 to draft-01:
+
+   1.  In Section 2.6, added guidance when using
+       [I-D.ietf-dhc-dynamic-shared-v4allocation].
+
+   2.  In Section 3.4, added guidance for case when no link layer
+       address is available.
+
+   3.  In Section 3.5, changed the recommended mechanism for obfuscating
+       host names, in order to avoid reveal the underlying link layer
+       address.
+
+   4.  In Section 4.1, added an exception to the "should not send
+       confirm" recommendation, to account for the "good" use of Confirm
+       when roaming between access points on the same network.
+
+10.  References
+
+10.1.  Normative References
 
    [I-D.ietf-dhc-rfc3315bis]
               Mrugalski, T., Siodelski, M., Volz, B., Yourtchenko, A.,
@@ -980,6 +1002,13 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
               Identifiers for Dynamic Host Configuration Protocol
               Version Four (DHCPv4)", RFC 4361, February 2006.
 
+
+
+Huitema, et al.         Expires December 19, 2015              [Page 18]
+
+Internet-Draft           DHCP Anonymity Profile                June 2015
+
+
    [RFC4702]  Stapp, M., Volz, B., and Y. Rekhter, "The Dynamic Host
               Configuration Protocol (DHCP) Client Fully Qualified
               Domain Name (FQDN) Option", RFC 4702, October 2006.
@@ -996,18 +1025,7 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
               Extensions for Stateless Address Autoconfiguration in
               IPv6", RFC 4941, September 2007.
 
-9.2.  Informative References
-
-
-
-
-
-
-
-Huitema, et al.         Expires December 14, 2015              [Page 18]
-
-Internet-Draft           DHCP Anonymity Profile                June 2015
-
+10.2.  Informative References
 
    [CNBC]     Weston, G., Greenwald, G., and R. Gallagher, "CBC News:
               CSEC used airport Wi-Fi to track Canadian travellers", Jan
@@ -1037,6 +1055,16 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
               considerations for DHCPv6", draft-ietf-dhc-
               dhcpv6-privacy-00 (work in progress), February 2015.
 
+
+
+
+
+
+Huitema, et al.         Expires December 19, 2015              [Page 19]
+
+Internet-Draft           DHCP Anonymity Profile                June 2015
+
+
    [I-D.ietf-dhc-dynamic-shared-v4allocation]
               Cui, Y., Qiong, Q., Farrer, I., Lee, Y., Sun, Q., and M.
               Boucadair, "Dynamic Allocation of Shared IPv4 Addresses",
@@ -1055,15 +1083,6 @@ Internet-Draft           DHCP Anonymity Profile                June 2015
    [RFC4578]  Johnston, M. and S. Venaas, "Dynamic Host Configuration
               Protocol (DHCP) Options for the Intel Preboot eXecution
               Environment (PXE)", RFC 4578, November 2006.
-
-
-
-
-
-Huitema, et al.         Expires December 14, 2015              [Page 19]
-
-Internet-Draft           DHCP Anonymity Profile                June 2015
-
 
    [WiFiRadioFingerprinting]
               Brik, V., Banerjee, S., Gruteser, M., and S. Oh, "Wireless
@@ -1091,6 +1110,17 @@ Authors' Addresses
    Email: tomasz.mrugalski@gmail.com
 
 
+
+
+
+
+
+
+Huitema, et al.         Expires December 19, 2015              [Page 20]
+
+Internet-Draft           DHCP Anonymity Profile                June 2015
+
+
    Suresh Krishnan
    Ericsson
    8400 Decarie Blvd.
@@ -1116,5 +1146,31 @@ Authors' Addresses
 
 
 
-Huitema, et al.         Expires December 14, 2015              [Page 20]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Huitema, et al.         Expires December 19, 2015              [Page 21]
 

@@ -307,7 +307,7 @@ This preference leads to some important
 	mitigation techniques difficult to distinguish from regular
 	client behaviors, if at all possible.</t>
 </section>
-<section title="Using the anonymity profiles">
+<section title="Using the anonymity profiles" anchor="profileUse">
 <t>
 There are downsides to randomizing MAC addresses and DHCP identifiers. By definition, randomization will break
 management procedures that rely on tracking MAC addresses. Even if this is not too much of a concern, we have to be worried
@@ -330,6 +330,19 @@ to their DHCP server.  These clients should still use MAC Address randomization 
 hide from observers, and some form of encrypted communication to the DHCP server. 
 This scenario is not yet supported in this document.
 </t>
+<t>
+To preserve anonymity, the clients need to not use stable values for the client identifiers.
+This is clearly a tradeoff, because a stable client identifier guarantees that the client will receive consistent parameters over time. 
+An example is given in 
+<xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" />, where the client identifier is used to 
+guarantee that the same client will always get the same combination of IP address and port range. 
+Static clients benefit most from stable parameters, and can often be already identified by physical 
+connection layer parameters. These static clients will normally not use the anonymity profile. Mobile clients,
+in contrast, have the option of using the anonymity profile in conjunction 
+with <xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" /> 
+if they are more concerned with privacy protection than with stable parameters.
+</t>
+
 </section>
 <section title="What about privacy for DHCP servers" >
 <t>
@@ -437,7 +450,7 @@ or randomized, the DHCP client SHOULD use the new randomized value in the
 DHCP messages.
 </t>
 </section>
-<section title="Client Identifier Option">
+<section title="Client Identifier Option" anchor="dhcpv4ClientId">
 <t>
 The client identifier option is defined in <xref target="RFC2132"/> with option code 61. It is discussed in
 details in <xref target="RFC4361"/>. The purpose of the client identifier option is to identify the client in
@@ -474,19 +487,9 @@ If anonymity is desired in such networks, the client SHOULD pick a random identi
 to the current link, using for example a combination of a local secret and an identifier of the
 connection. 
 </t>
-<t>
-A stable client identifier guarantees that the client will receive consistent parameters over time. 
-An example is given in 
-<xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" />, where the client identifier is used to 
-guarantee that the same client will always get the same combination of IP address and port range. 
-Static clients benefit most from stable parameters, and can often be already identified by physical 
-connection layer parameters. These static clients SHOULD NOT use the anonymity profile. Mobile clients,
-in contrast, MAY use the anonymity profile in conjunction with <xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" /> 
-if they are more concerned with privacy protection than with stable parameters.
-</t>
 </section>
 
-<section title="Host Name Option">
+<section title="Host Name Option" anchor="hostNameOption">
 <t>
 The Host Name option is defined in <xref target="RFC2132"/> with option code 12. Depending on implementations,
 the option value can carry either a fully qualified domain name such as "node1984.example.com," or a simple
@@ -511,7 +514,7 @@ host name value.
 When obfuscating the host name, DHCP clients SHOULD construct a randomized host name by
 computing a secure hash of a local secret and of the link layer address that will be used 
 in the underlying connection, and then use as the name the hexadecimal representation of the 
-first 6 bytes of the hash. This procedure is use to guarantee that the random name does not
+first 6 bytes of the hash. This procedure ensures that the random name will not
 reveal the underlying link layer address.
 </t>
 
@@ -595,7 +598,7 @@ on anonymity. The following sections provide guidance on the choice of option va
 using the anonymity profile.
 </t>
 
-      <section title="Do not send Confirm messages">
+      <section title="Do not send Confirm messages, unless really sure where" anchor="dhcpv6Confirm">
 	<t>The <xref target="RFC3315" /> requires clients to send a
 	Confirm message when they attach to a new link to verify
 	whether the addressing and configuration information they
@@ -610,7 +613,16 @@ using the anonymity profile.
 
 	<t>Clients interested in protecting their privacy
 	SHOULD NOT send Confirm messages and instead directly try to
-	acquire addresses on the new link.</t>
+	acquire addresses on the new link.
+However, not sending confirm messages can result in connectivity hiatus 
+in some scenarios, e.g. roaming between two access points in the 
+same wireless network. DHCPv6 clients that can verify that the
+previous link and the current link are part of the same 
+network MAY send Confirm messages while still protecting 
+their privacy.
+</t>
+
+
       </section>
 
 <section title="Client Identifier DHCPv6 Option">
@@ -831,9 +843,32 @@ This draft does not require any IANA action.
     <t> 
 The inspiration for this draft came from discussions in the Perpass mailing list. 
 Several people provided feedback on this draft,
-notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Tushar Gupta, Gabriel Montenegro, 
+notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Nick Grifka, Tushar Gupta, Gabriel Montenegro, 
  Marcin Siodelski, Dave Thaler and Jun Wu.
     </t>
+</section>
+<section title="Changes from previous versions">
+<t>
+Changes from draft-00 to draft-01:
+</t>
+<t>
+<list style="numbers" >
+<t>
+In <xref target="profileUse" />, added guidance when using <xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" />.
+</t>
+<t>
+In <xref target="dhcpv4ClientId" />, added guidance for case when no link layer address is available.
+</t>
+<t>
+In <xref target="hostNameOption" />, changed the recommended mechanism for obfuscating host names, in
+order to avoid reveal the underlying link layer address.
+</t>
+<t>
+In <xref target="dhcpv6Confirm" />, added an exception to the "should not send confirm" recommendation,
+to account for the "good" use of Confirm when roaming between access points on the same network.
+</t>
+</list>
+</t>
 </section>
 </middle>
 
