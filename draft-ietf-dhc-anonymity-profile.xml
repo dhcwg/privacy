@@ -66,7 +66,7 @@
 <?rfc inline='yes' ?>
 
 <rfc category="std" 
-     docName="draft-ietf-dhc-anonymity-profile-01.txt" 
+     docName="draft-ietf-dhc-anonymity-profile-02.txt" 
      ipr="trust200902"
      updates="4361" >
 
@@ -371,11 +371,12 @@ The number of options depend on the specific DHCP message:
 <t>
 <list style="hanging">
 <t hangText="DISCOVER:"> The anonymized DISCOVER messages MUST contain the Message Type, 
-Client Identifier, Host name, and Parameter Request List options. It SHOULD NOT contain any other 
+Client Identifier, and Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
 <t hangText="REQUEST:"> The anonymized REQUEST messages SHOULD contain the Message Type, 
-Client Identifier, Host name, and Parameter Request List options. If the message is in response
+Client Identifier, Requested IP address and Parameter Request List options. 
+If the message is in response
 to an OFFER, it SHOULD contain the corresponding Server Identifier option. It SHOULD NOT contain 
 any other option.
 </t>
@@ -386,7 +387,7 @@ Identifier and Server Identifier options.
 Identifier and Server Identifier options.
 </t>
 <t hangText="INFORM:"> The anonymized INFORM messages MUST contain the Message Type, 
-Client Id, Host name, and Parameter Request List options. It SHOULD NOT contain any other 
+Client Id, and Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
 </list>
@@ -394,6 +395,9 @@ option.
 <t>
 Header fields and option values SHOULD be set in accordance with the DHCP specification,
 but some header fields and option values SHOULD be constructed per the following guidelines.
+</t>
+<t>
+The inclusion of HostName and FQDN options in DISCOVER, REQUEST or INFORM messages is discussed in <xref target="hostNameOption" /> and <xref target="fqdnv4" />.
 </t>
 
 <section title="Client IP address field" >
@@ -429,7 +433,10 @@ different MAC Address.
 <t>
 When using the anonymity profile, clients SHOULD NOT 
 use the Requested IP address option in DHCPDISCOVER Messages. They MUST use the option when mandated
-by the DHCP protocol, for example in DHCPREQUEST Messages. 
+by the DHCP protocol, for example in DHCPREQUEST Messages.
+</t>
+<t>
+There are scenarios in which a client connects to a network when a lease is still valid. In that state, the client that is concerned with privacy SHOULD perform a complete four way handshake starting with DHCPDISCOVER to obtain a new address lease. If the client can ascertain that this is exactly the same network to which it was previously connected, and if the link layer address did not change, the client MAY issue a DHCPREQUEST to try reclaim the current address.
 </t>
 
 </section>
@@ -505,19 +512,23 @@ the device. Monitoring services could use that information in conjunction with t
 derive the identity of the device's owner. 
 </t>
 <t>
-When using the anonymity profile, DHCP clients SHOULD avoid sending the host name option.
+When using the anonymity profile, DHCP clients SHOULD NOT send the host name option.
 If they chose to send the option, DHCP clients MUST always send a non-qualified 
 host name instead of a fully qualified domain name, and MUST obfuscate the
 host name value.
 </t>
 <t>
-When obfuscating the host name, DHCP clients SHOULD construct a randomized host name by
-computing a secure hash of a local secret and of the link layer address that will be used 
-in the underlying connection, and then use as the name the hexadecimal representation of the 
-first 6 bytes of the hash. This procedure ensures that the random name will not
-reveal the underlying link layer address.
+There are many ways to obfuscate a host name. The construction rules SOULD guarantee that a different host name is generated each time the link-layer address changes and
+that the obfuscated host name will not reveal the underlying link layer address. The construction
+SHOULD generate names that are unique enough to minimize collisions in the local link. Clients MAY use the following algorithm: compute a secure hash of a local secret and of the link layer address that will be 
+used in the underlying connection, and then use the hexadecimal representation of the 
+first 6 bytes of the hash as the obfuscated host name.
 </t>
-
+<t>
+There is a potential downside to having a specific name pattern for hosts that require
+anonymity, as explained in <xref target="desire" />. For this reason, the above
+algorithm is just a suggestion. 
+</t>
 </section>
 <section title="Client FQDN Option" anchor="fqdnv4" >
 <t>
@@ -819,12 +830,14 @@ link layer address and a suffix advertised by the local DHCP server.
   <t>The anonymity profile has the effect of hiding the client identity from the
   DHCP server. This is not always desirable. Some DHCP servers provide
   facilities like publishing names and addresses in the DNS, or ensuring that
-  returning clients get reassigned the same address. Implementers should be
-  careful to only use the anonymity profile when privacy trumps management
-  considerations.</t>
-  <t>Clients using the anonymity profile in general consume more resources.  For
+  returning clients get reassigned the same address.</t>
+  <t>Clients using the anonymity profile may be consuming more resources. For
   example when they change MAC address and request for a new IP, the old one is
   still marked as leased by the server.</t>
+  <t>Implementers SHOULD provide a way for clients to control when the anonymity
+  profile is used, and when standard behavior is preferred. Implementers MAY
+  implement this control by tying use of the anonymity profile to that of
+  link-layer address randomization.</t>
 </section>
 
 <section title="Security Considerations">
