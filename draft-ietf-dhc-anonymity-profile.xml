@@ -478,11 +478,15 @@ the layer two device (e.g., the Ethernet MAC address)." These strong recommendat
 between ease of management and privacy, and the tradeoff should depend on the circumstances. 
 </t>
 <t>
-In contradiction to <xref target="RFC4361"/>, When using the anonymity profile, 
-DHCP clients MUST use client identifiers based solely on the link layer address that will be used in the 
-underlying connection. This will ensure that the DHCP client identifier does not leak any information that
-is not already available to entities monitoring the network connection. It will also ensure that a 
-strategy of randomizing the link layer address will not be nullified by DHCP options.
+
+In contradiction to <xref target="RFC4361"/>, When using the anonymity
+profile, DHCP clients MUST use client identifiers based solely on the
+link layer address that will be used in the underlying
+connection. This will ensure that the DHCP client identifier does not
+leak any information that is not already available to entities
+monitoring the network connection. It will also ensure that a strategy
+of randomizing the link layer address will not be nullified by DHCP
+options.
 
 <!-- tomek: todo: probably will need more detailed explanation what is exactly updated in
     RFC4361: Update section X.Y with the following: ... -->
@@ -722,38 +726,39 @@ the prefix delegation form of address assignment.
 	<t><xref target="RFC3315" /> defines a special container
 	(IA_TA) for requesting temporary addresses. This is a good
 	mechanism in principle, but there are a number of issues
-	associated with it. First, this is not widely used feature, so
-	clients depending solely on temporary addresses may lock
-	themselves out of service. Secondly, <xref target="RFC3315" />
-	does not specify any renewal mechanisms for temporary
-	addresses. Therefore support for renewing temporary addresses
-	may vary between server implementations, including not being
-	supported at all. Finally, by requesting temporary addresses a
-	client reveals its desire for privacy and potentially risks
-	countermeasures as described in <xref target="desire"/>.</t>
+	associated with it. First of all, this is not widely used
+	feature. Thus clients cannot count on it to be always
+	available. Secondly, <xref target="RFC3315" /> does not
+	specify any renewal mechanisms for temporary
+	addresses. Therefore the support for renewing temporary
+	addresses in server implementations usually varies between
+	poor and non-existent. Finally, a client reveals its desire
+	for privacy just by requesting temporary addresses, and
+	potentially risks countermeasures as described in <xref
+	target="desire"/>.</t>
 
-	<t>Clients interested in their privacy SHOULD NOT
-	use IA_TA. They should simply send an IA_NA with a randomized
+	<t>Clients interested in their privacy SHOULD NOT use the
+	IA_TA. They should simply send an IA_NA with a randomized
 	IAID. This, along with the mitigation technique discussed in
 	<xref target="random-duid"/>, will ensure that a client will
 	get a new address that can be renewed and can be used as long
 	as needed. To get a new address, it can send Request message
-	with a new randomized IAID before releasing the other
+	with a new randomized IAID before releasing the older
 	one. This will cause the server to assign a new address, as it
 	still has a valid lease for the old IAID value. Once a new
 	address is assigned, the address obtained using the older IAID
-	value can be released safely, using the Release message or it
-	may simply be allowed to time out.</t>
-
-	<t>This solution may not work if the server enforces specific
-	policies, e.g. only one address per client. If client does not
-	succeed in receiving a second address using a new IAID, it may
-	release the first one (using an old IAID) and then retry
-	asking for a new address.</t>
+	value can be released safely or be allowed to time out.</t>
 
 	<t>From the Operating System perspective, addresses obtained
-	using this technique SHOULD be treated as temporary as
-	specified in <xref target="RFC4941" />.</t>
+	using this technique SHOULD be treated as temporary addresses
+	as specified in <xref target="RFC4941" />.</t>
+
+	<t>Note that this solution may not work if the server enforces
+	specific policies such as providing only one address per
+	client. If client does not succeed in obtaining a second
+	address using a new IAID, it needs to release the first one
+	(using an old IAID) and then retry asking for a new
+	address.</t>
       </section>
 
 </section>
