@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!ENTITY rfc2119 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY rfc3315 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3315.xml">
-<!ENTITY rfc3633 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3633.xml">
-<!ENTITY rfc4580 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4580.xml">
-<!ENTITY rfc4649 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4649.xml">
-<!ENTITY rfc4704 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4704.xml">
-<!ENTITY rfc4776 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4776.xml">
-<!ENTITY rfc4941 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4941.xml">
-<!ENTITY rfc6355 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6355.xml">
-<!ENTITY rfc6939 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6939.xml">
-<!ENTITY rfc6973 PUBLIC "" "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6973.xml">
-<!ENTITY I-D.ietf-6man-ipv6-address-generation-privacy SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-ipv6-address-generation-privacy.xml">
-]>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
@@ -20,7 +7,7 @@
 <?rfc iprnotified="no"?>
 <?rfc strict="yes"?>
 <?rfc compact="yes"?>
-<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-00"
+<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-01"
      ipr="trust200902">
   <front>
     <title abbrev="DHCPv6 Privacy considerations">Privacy considerations for
@@ -63,8 +50,6 @@
           <country>USA</country>
         </postal>
 
-        <phone>+1 650 423 1345</phone>
-
         <email>tomasz.mrugalski@gmail.com</email>
       </address>
     </author>
@@ -97,8 +82,10 @@
 
     <abstract>
       <t>DHCPv6 is a protocol that is used to provide addressing and
-      configuration information to IPv6 hosts. This document discusses the
-      various identifiers used by DHCPv6 and the potential privacy issues.</t>
+      configuration information to IPv6 hosts. This document described
+      the privacy issues associated with the use of DHCPv6 by the
+      Internet users. It is intended to be an analysis of the present
+      situation and doe not propose any solutions.</t>
     </abstract>
   </front>
 
@@ -107,39 +94,49 @@
       <t>DHCPv6 <xref target="RFC3315"></xref> is a protocol that is used to
       provide addressing and configuration information to IPv6 hosts. The
       DHCPv6 protocol uses several identifiers that could become a source for
-      gleaning additional information about the IPv6 host. This information
+      gleaning information about the IPv6 host. This information
       may include device type, operating system information, location(s) that
       the device may have previously visited, etc. This document discusses the
       various identifiers used by DHCPv6 and the potential privacy issues
-      <xref target="RFC6973"></xref>.</t>
+      <xref target="RFC6973"></xref>. In particular, it also takes into
+      consideration the problem of pervasive monitoring <xref target="RFC7258"/>.</t>
 
       <t>Future works may propose protocol changes to fix the privacy issues
-      that have been analyzed in this document. It is out of scope for this
-      document.</t>
+      that have been analyzed in this document. Protocol changes are out of
+      scope for this document.</t>
 
-      <t>Editor notes: for now, the document is mainly considering the privacy
-      of DHCPv6 client. The privacy of DHCPv6 server and relay agent are
-      considered less important because they are open for public services.
-      However, this may be a subject to change if further study shows opposite
-      result.</t>
+      <t>The primary focus of this document is around privacy considerations for
+      clients to support client mobility and connection to random networks. The
+      privacy or DHCP servers and relay agents are considered less important as
+      they are typically open for public services. And, it is generally assumed
+      that relay agent to server communication is protected from casual
+      snooping, as that communication occurs in the provider's backbone.
+      Nevertheless, the topics involving relay agents and servers are explored
+      to some degree. However, future work may want to further explore privacy
+      of DHCP servers and relay agents.</t>
     </section>
 
     <section title="Terminology">
-      <t>This section clarifies the terminology used throughout this
-      document.</t>
-
-      <t>Stable identifier - any property disclosed by a DHCPv6 client that
-      does not change over time or changes very infrequently and is unique for
-      said client in a given context. Examples include MAC address, client-id
-      that does not change or a hostname. Stable identifier may or may not be
-      globally unique.</t>
-
       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
       document are to be interpreted as described in <xref
       target="RFC2119"></xref>. When these words are not in ALL CAPS (such as
       "should" or "Should"), they have their usual English meanings, and are
       not to be interpreted as <xref target="RFC2119"></xref> key words.</t>
+
+      <t>Naming convention from <xref target="RFC3315"/> and related is used
+      throughout this document. In addition the following terminology is used:
+      <list hangIndent="8" style="hanging">
+          <t hangText="Stable identifier"> - Any property disclosed by a DHCP
+          client that does not change over time or changes very infrequently and
+          is unique for said client in a given context.  Examples may include
+          MAC address, client-id or a hostname. Some identifiers may be
+          considered stable only under certain conditions, for example one
+          client implementation may keep its client-id stored in stable storage
+          while other may generate it on the fly and use a different one after
+          each boot. Stable identifier may or may not be globally unique.</t>
+      </list></t>
+
     </section>
 
     <section title="Identifiers in DHCPv6">
@@ -155,8 +152,8 @@
         Commonly used forms are based on the link-layer address of one of the
         device's network interfaces (with or without a timestamp), on the
         Universally Unique IDentifier (UUID) <xref target="RFC6355"></xref>.
-        The default type, recommended by <xref target="RFC3315"></xref>, is
-        DUID-LLT that is based on link-layer address, which is commonly
+        The default type, defined in Section 9.2 of <xref target="RFC3315"></xref>
+        is DUID-LLT that is based on link-layer address. It is commonly
         implemented in most popular clients.</t>
 
         <t>It is important to understand DUID lifecycle. Clients and servers
@@ -209,51 +206,6 @@
         link-layer address are vendor identifier. That can be determined with
         high level of certainty using other means, thus allowing full
         link-layer address discovery.</t>
-      </section>
-
-      <section title="Interface ID">
-        <t>A DHCPv6 relay includes the Interface ID <xref
-        target="RFC3315"></xref> option to identify the interface on which it
-        received the client message that is being relayed.</t>
-
-        <t>Although in principle Interface ID can be arbitrarily long with
-        completely random values, it is often a text string that includes the
-        relay agent name followed by interface name. This can be used for
-        fingerprinting the relay or determining client's point of
-        attachment.</t>
-      </section>
-
-      <section title="Subscriber ID">
-        <t>A DHCPv6 relay includes a Subscriber ID option <xref
-        target="RFC4580"></xref> to associate some provider-specific
-        information with clients' DHCPv6 messages that is independent of the
-        physical network configuration.</t>
-
-        <t>In many deployments, the relay agent that inserts this option is
-        configured to use client's link-layer address as Subscriber ID.</t>
-      </section>
-
-      <section title="Remote ID">
-        <t>A DHCPv6 relay includes a Remote ID option <xref
-        target="RFC4649"></xref> to identify the remote host end of the
-        circuit.</t>
-
-        <t>The remote-id is vendor specific, for which the vendor is indicated
-        in the enterprise-number field. The remote-id field may encode the
-        information that identified the DHCPv6 clients:</t>
-
-        <t><list style="symbols">
-            <t>a "caller ID" telephone number for dial-up connection</t>
-
-            <t>a "user name" prompted for by a Remote Access Server</t>
-
-            <t>a remote caller ATM address o a "modem ID" of a cable data
-            modem</t>
-
-            <t>the remote IP address of a point-to-point link</t>
-
-            <t>an interface or port identifier</t>
-          </list></t>
       </section>
 
       <section title="Client FQDN Option">
@@ -346,7 +298,80 @@
         Home Agent Address option, MIPv6 Home Agent FQDN option. They contains
         the information of target home networks for which the client is
         requesting configuration information.</t>
-      </section>-->
+        </section>-->
+
+      <section title="Relay Agent Options">
+        <t>A DHCPv6 relay agent may include a number of options. Those option
+        contain information that can be used to identify the client.  Those
+        options are almost exclusively exchanged between the relay agent and the
+        server, thus never leaving the operators network.  In particular,
+        they're almost never present in the last wireless hop in case of WiFi
+        networks. The only exception to that rule is somewhat infrequently used
+        Relay Supplied Options option <xref target="RFC6422"/>. This fact
+        implies that the threat model related relay options is slightly
+        different. Traffic sniffing at the last hop and related class of attacks
+        typically do not apply. On the other hand, all attacks that involve
+        operator's intfrastructure (either willing or coerced cooperation or
+        infrastructure being compromised) usually apply.</t>
+
+        <t>The following subsections describe various options inserted by the
+        relay agents.</t>
+
+        <section title="Subscriber ID">
+          <t>A DHCPv6 relay may include a Subscriber ID option <xref
+          target="RFC4580"></xref> to associate some provider-specific
+          information with clients' DHCPv6 messages that is independent of the
+          physical network configuration.</t>
+
+          <t>In many deployments, the relay agent that inserts this option is
+          configured to use client's link-layer address as Subscriber ID.</t>
+        </section>
+
+        <section title="Interface ID">
+          <t>A DHCPv6 relay includes the Interface ID <xref
+          target="RFC3315"></xref> option to identify the interface on which it
+          received the client message that is being relayed.</t>
+
+          <t>Although in principle Interface ID can be arbitrarily long with
+          completely random values, it is often a text string that includes the
+          relay agent name followed by interface name. This can be used for
+          fingerprinting the relay or determining client's point of
+          attachment.</t>
+        </section>
+
+        <section title="Remote ID">
+          <t>A DHCPv6 relay includes a Remote ID option <xref
+          target="RFC4649"></xref> to identify the remote host end of the
+          circuit.</t>
+
+          <t>The remote-id is vendor specific, for which the vendor is indicated
+          in the enterprise-number field. The remote-id field may encode the
+          information that identified the DHCPv6 clients:</t>
+
+          <t><list style="symbols">
+            <t>a "caller ID" telephone number for dial-up connection</t>
+
+            <t>a "user name" prompted for by a Remote Access Server</t>
+
+            <t>a remote caller ATM address o a "modem ID" of a cable data
+            modem</t>
+
+            <t>the remote IP address of a point-to-point link</t>
+
+            <t>an interface or port identifier</t>
+          </list></t>
+        </section>
+
+        <section title="Relay-ID Option">
+          <t>Relay agent may include Relay-ID <xref target="RFC5460"/>, which
+          contains a unique relay agent identifier. While its intended use is
+          to provide additional information for the server, so it would be able
+          to respond to leasequeries later, this information can be also used
+          to identify client's location within the network.</t>
+        </section>
+
+      </section>
+
     </section>
 
     <section title="Existing Mechanisms That Affect Privacy">
@@ -472,13 +497,12 @@
 
       <section title="Finding location information">
         <t>The location information can be obtained by the attacker by many
-        means. The most direct way to obtain this information is by looking
-        into a server initiated message that contains the Civic Location or
-        GeoLoc option. It can also be indirectly inferred using the Remote ID
-        Option (e.g. using a telephone number), the Interface ID option (e.g.
-        if an access circuit on an Access Node corresponds to a civic
-        location), or the Subscriber ID Option (if the attacker has access to
-        subscriber info).</t>
+        means. The most direct way to obtain this information is by looking into
+        a message originating from the server server that contains the Civic
+        Location or GeoLoc option. It can also be indirectly inferred using the
+        Remote ID Option, the Interface ID option (e.g. if an access circuit on
+        an Access Node corresponds to a civic location), or the Subscriber ID
+        Option (if the attacker has access to subscriber info).</t>
       </section>
 
       <section title="Finding previously visited networks">
@@ -501,19 +525,20 @@
 
       <section title="Pervasive monitoring">
         <t>This is an enhancement, or a combination of most aforementioned
-        mechanisms. Operator, who controls non-trivial number of access points
-        or network segments, may use obtained information about a single
-        client and observer client's habits.</t>
+        mechanisms. Operator (or anyone who has access to its data), who
+        controls non-trivial number of access points or network segments, may
+        use obtained information about a single client and observer client's
+        habits.</t>
       </section>
 
       <section title="Finding client's IP address or hostname">
         <t>Many DHCPv6 deployments use DNS Updates <xref
         target="RFC4704"></xref> that put client's information (current IP
-        address, client's hostname). Client ID is also disclosed, able it in
-        not easily accessible form (SHA-256 digest of the client-id). Although
-        SHA-256 is irreversible, so DHCPv6 client ID can't be converted back
-        to client-id. However, SHA-256 digest can be used as a unique
-        identifier that is accessible by any host.</t>
+        address, client's hostname). Client ID is also disclosed, albeit in
+        not easily accessible form (SHA-256 digest of the client-id). As
+        SHA-256 is considered irreversible, DHCID can't be converted back to
+        client-id. However, SHA-256 digest can be used as an unique identifier
+        that is accessible by any host.</t>
       </section>
 
       <section title="Correlation of activities over time">
@@ -556,6 +581,14 @@
         <t>Furthermore, the attackers may use DHCPv6 bulk leasequery <xref
         target="RFC5460"></xref> mechanism to obtain bulk information about
         DHCPv6 bindings, even without knowing the target bindings.</t>
+
+        <t>Additionally, active leasequery <xref
+        target="I-D.ietf-dhc-dhcpv6-active-leasequery" /> is a mechanism for
+        subscribing to DHCPv6 lease update changes in near real-time. The
+        intent of this mechanism is to update operator's database, but if
+        misused, an attacker could defeat server's authentication mechanisms and
+        subscribe to all updates. He then could continue receiving updates,
+        without any need for local presence.</t>
       </section>
     </section>
 
@@ -569,7 +602,7 @@
 
     <section anchor="privacy-consider" title="Privacy Considerations">
       <t>This document at its entirety discusses privacy considerations in
-      DHCPv6. As such, no separate section about this is needed.</t>
+      DHCPv6. As such, no dedicated section about this is needed.</t>
     </section>
 
     <section title="IANA Considerations">
@@ -588,25 +621,31 @@
 
   <back>
     <references title="Normative References">
-      &rfc2119;
+      <?rfc include='reference.RFC.2119'?>
 
-      &rfc3315;
+      <?rfc include='reference.RFC.3315'?>
+
+      <?rfc include='reference.RFC.6973'?>
+
+      <?rfc include='reference.RFC.7258'?>
     </references>
 
     <references title="Informative References">
-      &rfc3633;
+      <?rfc include='reference.RFC.3633'?>
 
       <?rfc include='reference.RFC.2629'?>
 
-      &rfc4580;
+      <?rfc include='reference.RFC.4580'?>
 
-      &rfc4649;
+      <?rfc include='reference.RFC.4622'?>
 
-      &rfc4704;
+      <?rfc include='reference.RFC.4649'?>
 
-      &rfc4776;
+      <?rfc include='reference.RFC.4704'?>
 
-      &rfc4941;
+      <?rfc include='reference.RFC.4776'?>
+
+      <?rfc include='reference.RFC.4941'?>
 
       <?rfc include='reference.RFC.5007'?>
 
@@ -616,13 +655,15 @@
 
       <?rfc include='reference.RFC.6225'?>
 
-      &rfc6355;
+      <?rfc include='reference.RFC.6355'?>
 
-      &rfc6939;
+      <?rfc include='reference.RFC.6422'?>
 
-      &rfc6973;
+      <?rfc include='reference.RFC.6939'?>
 
-      &I-D.ietf-6man-ipv6-address-generation-privacy;
+      <?rfc include='reference.I-D.ietf-6man-ipv6-address-generation-privacy'?>
+
+      <?rfc include='reference.I-D.ietf-dhc-dhcpv6-active-leasequery'?>
     </references>
   </back>
 </rfc>
