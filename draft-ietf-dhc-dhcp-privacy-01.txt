@@ -95,7 +95,7 @@ Table of Contents
    9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  11
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
      10.1.  Normative References . . . . . . . . . . . . . . . . . .  11
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  11
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  12
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
 
 1.  Introduction
@@ -115,8 +115,8 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
 
    document discusses the various identifiers used by DHCP and the
-   potential privacy issues [RFC6973].  In particular, it takes into
-   consideration the problem of pervasive monitoring [RFC7258].
+   potential privacy issues [RFC6973].  In particular, it also takes
+   into consideration the problem of pervasive monitoring [RFC7258].
 
    Future works may propose protocol changes to fix the privacy issues
    that have been analyzed in this document.  It is out of scope for
@@ -605,11 +605,11 @@ Internet-Draft         DHCP Privacy considerations           August 2015
               RFC 2131, DOI 10.17487/RFC2131, March 1997,
               <http://www.rfc-editor.org/info/rfc2131>.
 
-10.2.  Informative References
-
-
-
-
+   [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
+              Morris, J., Hansen, M., and R. Smith, "Privacy
+              Considerations for Internet Protocols", RFC 6973,
+              DOI 10.17487/RFC6973, July 2013,
+              <http://www.rfc-editor.org/info/rfc6973>.
 
 
 
@@ -617,6 +617,12 @@ Jiang, et al.           Expires February 27, 2016              [Page 11]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
+
+   [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
+              Attack", BCP 188, RFC 7258, DOI 10.17487/RFC7258, May
+              2014, <http://www.rfc-editor.org/info/rfc7258>.
+
+10.2.  Informative References
 
    [I-D.ietf-dhc-dhcpv4-active-leasequery]
               Kinnear, K., Stapp, M., Volz, B., and N. Russell, "Active
@@ -657,12 +663,6 @@ Internet-Draft         DHCP Privacy considerations           August 2015
               Version Four (DHCPv4)", RFC 4361, DOI 10.17487/RFC4361,
               February 2006, <http://www.rfc-editor.org/info/rfc4361>.
 
-   [RFC4388]  Woundy, R. and K. Kinnear, "Dynamic Host Configuration
-              Protocol (DHCP) Leasequery", RFC 4388,
-              DOI 10.17487/RFC4388, February 2006,
-              <http://www.rfc-editor.org/info/rfc4388>.
-
-
 
 
 
@@ -673,6 +673,11 @@ Jiang, et al.           Expires February 27, 2016              [Page 12]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
+
+   [RFC4388]  Woundy, R. and K. Kinnear, "Dynamic Host Configuration
+              Protocol (DHCP) Leasequery", RFC 4388,
+              DOI 10.17487/RFC4388, February 2006,
+              <http://www.rfc-editor.org/info/rfc4388>.
 
    [RFC4578]  Johnston, M. and S. Venaas, Ed., "Dynamic Host
               Configuration Protocol (DHCP) Options for the Intel
@@ -703,16 +708,6 @@ Internet-Draft         DHCP Privacy considerations           August 2015
               RFC 6926, DOI 10.17487/RFC6926, April 2013,
               <http://www.rfc-editor.org/info/rfc6926>.
 
-   [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
-              Morris, J., Hansen, M., and R. Smith, "Privacy
-              Considerations for Internet Protocols", RFC 6973,
-              DOI 10.17487/RFC6973, July 2013,
-              <http://www.rfc-editor.org/info/rfc6973>.
-
-   [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
-              Attack", BCP 188, RFC 7258, DOI 10.17487/RFC7258, May
-              2014, <http://www.rfc-editor.org/info/rfc7258>.
-
 Authors' Addresses
 
    Sheng Jiang
@@ -722,6 +717,11 @@ Authors' Addresses
    P.R. China
 
    Email: jiangsheng@huawei.com
+
+
+
+
+
 
 
 

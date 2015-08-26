@@ -525,6 +525,10 @@
       <?rfc include='reference.RFC.2119'?>
 
       <?rfc include='reference.RFC.2131'?>
+
+      <?rfc include='reference.RFC.6973'?>
+
+      <?rfc include='reference.RFC.7258'?>
     </references>
 
     <references title="Informative References">
@@ -555,10 +559,6 @@
       <?rfc include='reference.RFC.6225'?>
 
       <?rfc include='reference.RFC.6926'?>
-
-      <?rfc include='reference.RFC.6973'?>
-
-      <?rfc include='reference.RFC.7258'?>
 
       <?rfc include='reference.I-D.ietf-dhc-dhcpv4-active-leasequery.xml'?>
       
