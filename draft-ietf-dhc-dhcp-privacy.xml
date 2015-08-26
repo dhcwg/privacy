@@ -99,7 +99,8 @@
       may include device type, operating system information, location(s) that
       the device may have previously visited, etc. This document discusses the
       various identifiers used by DHCP and the potential privacy issues <xref
-      target="RFC6973"></xref>.</t>
+      target="RFC6973"></xref>. In particular, it also takes into consideration
+      the problem of pervasive monitoring <xref target="RFC7258"/>.</t>
 
       <t>Future works may propose protocol changes to fix the privacy issues
       that have been analyzed in this document. It is out of scope for this
@@ -110,9 +111,9 @@
       privacy or DHCP servers and relay agents are considered less important as
       they are typically open for public services. And, it is generally assumed
       that relay agent to server communication is protected from casual
-      snooping, as that communication occurs in the providers
+      snooping, as that communication occurs in the provider's
       backbone. Nevertheless, the topics involving relay agents and servers are
-      explored to some limited degree. However, future work may want to further
+      explored to some degree. However, future work may want to further
       explore privacy of DHCP servers and relay agents.</t>
     </section>
 
@@ -208,8 +209,8 @@
 
       <section title="Vendor Class and Vendor-Identifying Vendor Class Options">
         <t>The Vendor Class option <xref target="RFC2131"></xref>, the
-        Vendor-Identifying Vendor Class option and Vendor-Identifing Vendor
-        Information option<xref target="RFC3925"></xref> are used by the DHCP
+        Vendor-Identifying Vendor Class option and Vendor-Identifying Vendor
+        Information option <xref target="RFC3925"></xref> are used by the DHCP
         client to identify the vendor that manufactured the hardware on which
         the client is running.</t>
 
@@ -283,18 +284,14 @@
         address, which can identify the client's subnet/link. Also, assuming
         network topology knowledge, it also reveals client location.</t>
 
-        <section title="Subscriber-ID Option">
-          <t>A DHCP relay includes a Subscriber-ID option <xref
-          target="RFC3993"></xref> to associate some provider-specific
-          information with clients' DHCP messages that is independent of the
-          physical network configuration through which the subscriber is
-          connected.</t>
-
-          <t>The "subscriber-id" assigned by the provider is intended to be
-          stable as customers connect through different paths, and as network
-          changes occur. The Subscriber-ID is an ASCII string, which is assigned
-          and configured by the network provider.</t>
-        </section>
+        <t>A DHCP relay includes a Subscriber-ID option <xref target="RFC3993"/>
+        to associate some provider-specific information with clients' DHCP
+        messages that is independent of the physical network configuration
+        through which the subscriber is connected. The "subscriber-id" assigned
+        by the provider is intended to be stable as customers connect through
+        different paths, and as network changes occur. The Subscriber-ID is an
+        ASCII string, which is assigned and configured by the network
+        provider.</t>
 
       </section>
 
@@ -313,7 +310,7 @@
 
         <t>This mechanism exposes two important pieces of information: current
         address (which can be mapped to current location) and client's
-        hostname. The stable hostname can then by used to correlate the client
+        hostname. The stable hostname can then be used to correlate the client
         across different network attachments even when its IP addresses keep
         changing.</t>
       </section>
@@ -377,9 +374,9 @@
 
         <t>Other allocation strategies may be implemented.</t>
 
-        <t>Given the limited resource of IPv4 public address pool, allocation
-        mechanism in IPv4 may not provide much protection or leak much
-        information, if misused.</t>
+        <t>Given the limited size of most IPv4 public address pools, allocation
+        mechanisms in IPv4 may not provide much privacy protection or leak much
+        useful information, if misused.</t>
       </section>
     </section>
 
@@ -387,7 +384,7 @@
       <section title="Device type discovery">
         <t>The type of device used by the client can be guessed by the
         attacker using the Vendor Class Option, the 'chaddr' field, and by
-        parsing the Client ID Option. All of those options may contain
+        parsing the Client ID Option. All of those options may contain an
         Organizationally Unique Identifier (OUI) that represents the device's
         vendor. That knowledge can be used for device-specific vulnerability
         exploitation attacks.</t>
@@ -459,7 +456,7 @@
       <section title="Location tracking">
         <t>If a stable identifier is used for assigning an address and such
         mapping is discovered by an attacker, e.g. a hostname being put into
-        DNS, it can be used for tracking user and its habits. In particular both
+        DNS, it can be used for tracking user. In particular both
         passive (a service that the client connects to can log client's address
         and draw conclusions regarding its location and movement patterns based
         on address it is connecting from) and active (attacker can send ICMP
@@ -491,7 +488,7 @@
         subscribing to DHCPv4 lease update changes in near real-time. The
         intent of this mechanism is to update operator's database, but if
         misused, an attacker could defeat server's authentication mechanisms and
-        subscribe to all updated. He then could continue receiving updates,
+        subscribe to all updates. He then could continue receiving updates,
         without any need for local presence.</t>
       </section>
     </section>
@@ -527,11 +524,11 @@
     <references title="Normative References">
       <?rfc include='reference.RFC.2119'?>
 
+      <?rfc include='reference.RFC.2131'?>
     </references>
 
     <references title="Informative References">
 
-      <?rfc include='reference.RFC.2131'?>
 
       <?rfc include='reference.RFC.2629'?>
 
@@ -560,6 +557,8 @@
       <?rfc include='reference.RFC.6926'?>
 
       <?rfc include='reference.RFC.6973'?>
+
+      <?rfc include='reference.RFC.7258'?>
 
       <?rfc include='reference.I-D.ietf-dhc-dhcpv4-active-leasequery.xml'?>
       

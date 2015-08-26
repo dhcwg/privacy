@@ -5,10 +5,10 @@
 dhc                                                             S. Jiang
 Internet-Draft                              Huawei Technologies Co., Ltd
 Intended status: Informational                               S. Krishnan
-Expires: February 14, 2016                                      Ericsson
+Expires: February 27, 2016                                      Ericsson
                                                             T. Mrugalski
                                                                      ISC
-                                                         August 13, 2015
+                                                         August 26, 2015
 
 
                     Privacy considerations for DHCP
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 14, 2016.
+   This Internet-Draft will expire on February 27, 2016.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Jiang, et al.           Expires February 14, 2016               [Page 1]
+Jiang, et al.           Expires February 27, 2016               [Page 1]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
@@ -75,7 +75,6 @@ Table of Contents
      3.7.  Coordinate-Based Location Option  . . . . . . . . . . . .   5
      3.8.  Client System Architecture Type Option  . . . . . . . . .   6
      3.9.  Relay Agent Information Option and Sub-options  . . . . .   6
-       3.9.1.  Subscriber-ID Option  . . . . . . . . . . . . . . . .   6
    4.  Existing Mechanisms That Affect Privacy . . . . . . . . . . .   7
      4.1.  DNS Updates . . . . . . . . . . . . . . . . . . . . . . .   7
      4.2.  Allocation strategies . . . . . . . . . . . . . . . . . .   7
@@ -106,17 +105,18 @@ Table of Contents
    IPv4 hosts.  The DHCP protocol uses several identifiers that could
    become a source for gleaning information about the IPv4 host.  This
    information may include device type, operating system information,
+   location(s) that the device may have previously visited, etc.  This
 
 
 
-Jiang, et al.           Expires February 14, 2016               [Page 2]
+Jiang, et al.           Expires February 27, 2016               [Page 2]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
 
-   location(s) that the device may have previously visited, etc.  This
    document discusses the various identifiers used by DHCP and the
-   potential privacy issues [RFC6973].
+   potential privacy issues [RFC6973].  In particular, it takes into
+   consideration the problem of pervasive monitoring [RFC7258].
 
    Future works may propose protocol changes to fix the privacy issues
    that have been analyzed in this document.  It is out of scope for
@@ -128,10 +128,9 @@ Internet-Draft         DHCP Privacy considerations           August 2015
    important as they are typically open for public services.  And, it is
    generally assumed that relay agent to server communication is
    protected from casual snooping, as that communication occurs in the
-   providers backbone.  Nevertheless, the topics involving relay agents
-   and servers are explored to some limited degree.  However, future
-   work may want to further explore privacy of DHCP servers and relay
-   agents.
+   provider's backbone.  Nevertheless, the topics involving relay agents
+   and servers are explored to some degree.  However, future work may
+   want to further explore privacy of DHCP servers and relay agents.
 
 2.  Requirements Language and Terminology
 
@@ -165,7 +164,8 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
 
 
-Jiang, et al.           Expires February 14, 2016               [Page 3]
+
+Jiang, et al.           Expires February 27, 2016               [Page 3]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
@@ -221,7 +221,7 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
 
 
-Jiang, et al.           Expires February 14, 2016               [Page 4]
+Jiang, et al.           Expires February 27, 2016               [Page 4]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
@@ -243,9 +243,9 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 3.5.  Vendor Class and Vendor-Identifying Vendor Class Options
 
    The Vendor Class option [RFC2131], the Vendor-Identifying Vendor
-   Class option and Vendor-Identifing Vendor Information option[RFC3925]
-   are used by the DHCP client to identify the vendor that manufactured
-   the hardware on which the client is running.
+   Class option and Vendor-Identifying Vendor Information option
+   [RFC3925] are used by the DHCP client to identify the vendor that
+   manufactured the hardware on which the client is running.
 
    The information contained in the data area of this option is
    contained in one or more opaque fields that identify the details of
@@ -277,7 +277,7 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
 
 
-Jiang, et al.           Expires February 14, 2016               [Page 5]
+Jiang, et al.           Expires February 27, 2016               [Page 5]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
@@ -317,23 +317,23 @@ Internet-Draft         DHCP Privacy considerations           August 2015
    can identify the client's subnet/link.  Also, assuming network
    topology knowledge, it also reveals client location.
 
-3.9.1.  Subscriber-ID Option
-
    A DHCP relay includes a Subscriber-ID option [RFC3993] to associate
    some provider-specific information with clients' DHCP messages that
    is independent of the physical network configuration through which
-   the subscriber is connected.
-
-   The "subscriber-id" assigned by the provider is intended to be stable
-   as customers connect through different paths, and as network changes
-   occur.  The Subscriber-ID is an ASCII string, which is assigned and
-   configured by the network provider.
-
+   the subscriber is connected.  The "subscriber-id" assigned by the
+   provider is intended to be stable as customers connect through
+   different paths, and as network changes occur.  The Subscriber-ID is
+   an ASCII string, which is assigned and configured by the network
+   provider.
 
 
 
 
-Jiang, et al.           Expires February 14, 2016               [Page 6]
+
+
+
+
+Jiang, et al.           Expires February 27, 2016               [Page 6]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
@@ -353,7 +353,7 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
    This mechanism exposes two important pieces of information: current
    address (which can be mapped to current location) and client's
-   hostname.  The stable hostname can then by used to correlate the
+   hostname.  The stable hostname can then be used to correlate the
    client across different network attachments even when its IP
    addresses keep changing.
 
@@ -389,7 +389,7 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
 
 
-Jiang, et al.           Expires February 14, 2016               [Page 7]
+Jiang, et al.           Expires February 27, 2016               [Page 7]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
@@ -425,9 +425,9 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
    Other allocation strategies may be implemented.
 
-   Given the limited resource of IPv4 public address pool, allocation
-   mechanism in IPv4 may not provide much protection or leak much
-   information, if misused.
+   Given the limited size of most IPv4 public address pools, allocation
+   mechanisms in IPv4 may not provide much privacy protection or leak
+   much useful information, if misused.
 
 5.  Attacks
 
@@ -435,17 +435,17 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
    The type of device used by the client can be guessed by the attacker
    using the Vendor Class Option, the 'chaddr' field, and by parsing the
-   Client ID Option.  All of those options may contain Organizationally
-   Unique Identifier (OUI) that represents the device's vendor.  That
-   knowledge can be used for device-specific vulnerability exploitation
-   attacks.
+   Client ID Option.  All of those options may contain an
+   Organizationally Unique Identifier (OUI) that represents the device's
+   vendor.  That knowledge can be used for device-specific vulnerability
+   exploitation attacks.
 
 
 
 
 
 
-Jiang, et al.           Expires February 14, 2016               [Page 8]
+Jiang, et al.           Expires February 27, 2016               [Page 8]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
@@ -501,7 +501,7 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
 
 
-Jiang, et al.           Expires February 14, 2016               [Page 9]
+Jiang, et al.           Expires February 27, 2016               [Page 9]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
@@ -525,16 +525,15 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
    If a stable identifier is used for assigning an address and such
    mapping is discovered by an attacker, e.g. a hostname being put into
-   DNS, it can be used for tracking user and its habits.  In particular
-   both passive (a service that the client connects to can log client's
-   address and draw conclusions regarding its location and movement
-   patterns based on address it is connecting from) and active (attacker
-   can send ICMP echo requests or other probe packets to networks of
-   suspected client locations).  To give specific example, by accessing
-   a social portal from tomek-laptop.gdansk.starbucks.com, tomek-
-   laptop.gda.upc.pl and tomek-laptop.ug.edu.pl, the portal
-   administrator can draw conclusions about tomek-laptop's owner current
-   location and his habits.
+   DNS, it can be used for tracking user.  In particular both passive (a
+   service that the client connects to can log client's address and draw
+   conclusions regarding its location and movement patterns based on
+   address it is connecting from) and active (attacker can send ICMP
+   echo requests or other probe packets to networks of suspected client
+   locations).  To give specific example, by accessing a social portal
+   from tomek-laptop.gdansk.starbucks.com, tomek-laptop.gda.upc.pl and
+   tomek-laptop.ug.edu.pl, the portal administrator can draw conclusions
+   about tomek-laptop's owner current location and his habits.
 
 5.10.  Leasequery & bulk leasequery
 
@@ -554,18 +553,18 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
    Additionally, active leasequery
    [I-D.ietf-dhc-dhcpv4-active-leasequery] is a mechanism for
+   subscribing to DHCPv4 lease update changes in near real-time.  The
 
 
 
-Jiang, et al.           Expires February 14, 2016              [Page 10]
+Jiang, et al.           Expires February 27, 2016              [Page 10]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
 
-   subscribing to DHCPv4 lease update changes in near real-time.  The
    intent of this mechanism is to update operator's database, but if
    misused, an attacker could defeat server's authentication mechanisms
-   and subscribe to all updated.  He then could continue receiving
+   and subscribe to all updates.  He then could continue receiving
    updates, without any need for local presence.
 
 6.  Security Considerations
@@ -602,25 +601,27 @@ Internet-Draft         DHCP Privacy considerations           August 2015
               DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
+   [RFC2131]  Droms, R., "Dynamic Host Configuration Protocol",
+              RFC 2131, DOI 10.17487/RFC2131, March 1997,
+              <http://www.rfc-editor.org/info/rfc2131>.
+
 10.2.  Informative References
 
-   [I-D.ietf-dhc-dhcpv4-active-leasequery]
-              Kinnear, K., Stapp, M., Volz, B., and N. Russell, "Active
-              DHCPv4 Lease Query", draft-ietf-dhc-dhcpv4-active-
-              leasequery-03 (work in progress), June 2015.
 
 
 
 
 
-Jiang, et al.           Expires February 14, 2016              [Page 11]
+
+Jiang, et al.           Expires February 27, 2016              [Page 11]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
 
-   [RFC2131]  Droms, R., "Dynamic Host Configuration Protocol",
-              RFC 2131, DOI 10.17487/RFC2131, March 1997,
-              <http://www.rfc-editor.org/info/rfc2131>.
+   [I-D.ietf-dhc-dhcpv4-active-leasequery]
+              Kinnear, K., Stapp, M., Volz, B., and N. Russell, "Active
+              DHCPv4 Lease Query", draft-ietf-dhc-dhcpv4-active-
+              leasequery-05 (work in progress), August 2015.
 
    [RFC2629]  Rose, M., "Writing I-Ds and RFCs using XML", RFC 2629,
               DOI 10.17487/RFC2629, June 1999,
@@ -661,18 +662,23 @@ Internet-Draft         DHCP Privacy considerations           August 2015
               DOI 10.17487/RFC4388, February 2006,
               <http://www.rfc-editor.org/info/rfc4388>.
 
+
+
+
+
+
+
+
+Jiang, et al.           Expires February 27, 2016              [Page 12]
+
+Internet-Draft         DHCP Privacy considerations           August 2015
+
+
    [RFC4578]  Johnston, M. and S. Venaas, Ed., "Dynamic Host
               Configuration Protocol (DHCP) Options for the Intel
               Preboot eXecution Environment (PXE)", RFC 4578,
               DOI 10.17487/RFC4578, November 2006,
               <http://www.rfc-editor.org/info/rfc4578>.
-
-
-
-Jiang, et al.           Expires February 14, 2016              [Page 12]
-
-Internet-Draft         DHCP Privacy considerations           August 2015
-
 
    [RFC4702]  Stapp, M., Volz, B., and Y. Rekhter, "The Dynamic Host
               Configuration Protocol (DHCP) Client Fully Qualified
@@ -703,6 +709,10 @@ Internet-Draft         DHCP Privacy considerations           August 2015
               DOI 10.17487/RFC6973, July 2013,
               <http://www.rfc-editor.org/info/rfc6973>.
 
+   [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
+              Attack", BCP 188, RFC 7258, DOI 10.17487/RFC7258, May
+              2014, <http://www.rfc-editor.org/info/rfc7258>.
+
 Authors' Addresses
 
    Sheng Jiang
@@ -714,6 +724,12 @@ Authors' Addresses
    Email: jiangsheng@huawei.com
 
 
+
+Jiang, et al.           Expires February 27, 2016              [Page 13]
+
+Internet-Draft         DHCP Privacy considerations           August 2015
+
+
    Suresh Krishnan
    Ericsson
    8400 Decarie Blvd.
@@ -722,12 +738,6 @@ Authors' Addresses
 
    Phone: +1 514 345 7900 x42871
    Email: suresh.krishnan@ericsson.com
-
-
-
-Jiang, et al.           Expires February 14, 2016              [Page 13]
-
-Internet-Draft         DHCP Privacy considerations           August 2015
 
 
    Tomek Mrugalski
@@ -771,14 +781,4 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
 
 
-
-
-
-
-
-
-
-
-
-
-Jiang, et al.           Expires February 14, 2016              [Page 14]
+Jiang, et al.           Expires February 27, 2016              [Page 14]
