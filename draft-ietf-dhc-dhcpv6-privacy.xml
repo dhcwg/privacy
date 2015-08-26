@@ -545,7 +545,8 @@
       <section title="Finding client's IP address or hostname">
         <t>Many DHCPv6 deployments use DNS Updates <xref
         target="RFC4704"></xref> that put client's information (current IP
-        address, client's hostname). Client ID is also disclosed, albeit in
+        address, client's hostname) into DNS, where it is easily accessible
+        by anyone interested. Client ID is also disclosed, albeit in
         not easily accessible form (SHA-256 digest of the client-id). As
         SHA-256 is considered irreversible, DHCID can't be converted back to
         client-id. However, SHA-256 digest can be used as an unique identifier
@@ -574,7 +575,12 @@
         log client's address and draw conclusions regarding its location and
         movement patterns based on prefix it is connecting from) and active
         (attacker can send ICMPv6 echo requests or other probe packets to
-        networks of suspected client locations).</t>
+        networks of suspected client locations) can be used. To give specific
+        example, by accessing a social portal from
+        tomek-laptop.coffee.somecity.com.example,
+        tomek-laptop.mycompany.com.example and tomek-laptop.myisp.example.com,
+        the portal administrator can draw conclusions about tomek-laptop's owner
+        current location and his habits.</t>
       </section>
 
       <section title="Leasequery &amp; bulk leasequery">

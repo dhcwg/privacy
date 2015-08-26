@@ -450,15 +450,16 @@
       <section title="Location tracking">
         <t>If a stable identifier is used for assigning an address and such
         mapping is discovered by an attacker, e.g. a hostname being put into
-        DNS, it can be used for tracking user. In particular both
-        passive (a service that the client connects to can log client's address
-        and draw conclusions regarding its location and movement patterns based
-        on address it is connecting from) and active (attacker can send ICMP
-        echo requests or other probe packets to networks of suspected client
-        locations). To give specific example, by accessing a social portal from
-        tomek-laptop.gdansk.starbucks.com, tomek-laptop.gda.upc.pl and
-        tomek-laptop.ug.edu.pl, the portal administrator can draw conclusions
-        about tomek-laptop's owner current location and his habits.</t>
+        DNS, it can be used for tracking user. In particular both passive (a
+        service that the client connects to can log client's address and draw
+        conclusions regarding its location and movement patterns based on
+        address it is connecting from) and active (attacker can send ICMP echo
+        requests or other probe packets to networks of suspected client
+        locations) methods can be used. To give specific example, by accessing a
+        social portal from tomek-laptop.coffee.somecity.com.example,
+        tomek-laptop.mycompany.com.example and tomek-laptop.myisp.example.com,
+        the portal administrator can draw conclusions about tomek-laptop's owner
+        current location and his habits.</t>
       </section>
 
       <section title="Leasequery &amp; bulk leasequery">
