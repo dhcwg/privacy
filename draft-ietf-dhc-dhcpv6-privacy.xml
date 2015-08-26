@@ -246,10 +246,19 @@
         the client would like to have returned.</t>
       </section>
 
-      <section title="Vendor Class Option">
-        <t>This Vendor Class option <xref target="RFC3315"></xref> is used by
-        a DHCPv6 client to identify the vendor that manufactured the hardware
-        on which the client is running.</t>
+      <section title="Vendor Class and Vendor-specific Information Options">
+        <t>The Vendor Class option, defined in Section 22.16 of <xref
+        target="RFC3315"></xref> is used by a DHCPv6 client to identify the
+        vendor that manufactured the hardware on which the client is
+        running.</t>
+
+        <t>The Vendor-specific Information Option, defined in Section 22.17 of
+        <xref target="RFC3315"/> includes enterprise number, which identifies
+        the client's vendor and often includes a number of additional parameters
+        that are specific to a given vendor. That may include any type of
+        information the vendor deems useful. It should be noted that this
+        information may be present (and different) in both directions: client to
+        server and server to client communications.</t>
 
         <t>The information contained in the data area of this option is
         contained in one or more opaque fields that identify details of the
@@ -477,7 +486,8 @@
     <section title="Attacks">
       <section title="Device type discovery (fingerprinting)">
         <t>The type of device used by the client can be guessed by the
-        attacker using the Vendor Class option, the Client Link-layer Address
+        attacker using the Vendor Class option, Vendor-specific Information
+        option, the Client Link-layer Address
         option, and by parsing the Client ID option. All of those options may
         contain OUI (Organizationally Unique Identifier) that represents the
         device's vendor. That knowledge can be used for device-specific
@@ -488,7 +498,8 @@
 
       <section title="Operating system discovery (fingerprinting)">
         <t>The operating system running on a client can be guessed using the
-        Vendor Class option, the Client System Architecture Type option, or by
+        Vendor Class option, the Vendor-specific Information option, the Client
+        System Architecture Type option, or by
         using fingerprinting techniques on the combination of options
         requested using the Option Request option. See Section 3.4 of <xref
         target="I-D.ietf-6man-ipv6-address-generation-privacy"></xref> for a

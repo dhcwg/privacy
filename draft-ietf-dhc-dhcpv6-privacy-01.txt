@@ -73,14 +73,14 @@ Table of Contents
      3.4.  Client FQDN Option  . . . . . . . . . . . . . . . . . . .   5
      3.5.  Client Link-layer Address Option  . . . . . . . . . . . .   5
      3.6.  Option Request Option . . . . . . . . . . . . . . . . . .   6
-     3.7.  Vendor Class Option . . . . . . . . . . . . . . . . . . .   6
+     3.7.  Vendor Class and Vendor-specific Information Options  . .   6
      3.8.  Civic Location Option . . . . . . . . . . . . . . . . . .   6
      3.9.  Coordinate-Based Location Option  . . . . . . . . . . . .   6
-     3.10. Client System Architecture Type Option  . . . . . . . . .   6
+     3.10. Client System Architecture Type Option  . . . . . . . . .   7
      3.11. Relay Agent Options . . . . . . . . . . . . . . . . . . .   7
        3.11.1.  Subscriber ID  . . . . . . . . . . . . . . . . . . .   7
        3.11.2.  Interface ID . . . . . . . . . . . . . . . . . . . .   7
-       3.11.3.  Remote ID  . . . . . . . . . . . . . . . . . . . . .   7
+       3.11.3.  Remote ID  . . . . . . . . . . . . . . . . . . . . .   8
        3.11.4.  Relay-ID Option  . . . . . . . . . . . . . . . . . .   8
    4.  Existing Mechanisms That Affect Privacy . . . . . . . . . . .   8
      4.1.  Temporary addresses . . . . . . . . . . . . . . . . . . .   8
@@ -88,12 +88,12 @@ Table of Contents
      4.3.  Allocation strategies . . . . . . . . . . . . . . . . . .   9
    5.  Attacks . . . . . . . . . . . . . . . . . . . . . . . . . . .  10
      5.1.  Device type discovery (fingerprinting)  . . . . . . . . .  10
-     5.2.  Operating system discovery (fingerprinting) . . . . . . .  10
+     5.2.  Operating system discovery (fingerprinting) . . . . . . .  11
      5.3.  Finding location information  . . . . . . . . . . . . . .  11
      5.4.  Finding previously visited networks . . . . . . . . . . .  11
      5.5.  Finding a stable identity . . . . . . . . . . . . . . . .  11
      5.6.  Pervasive monitoring  . . . . . . . . . . . . . . . . . .  11
-     5.7.  Finding client's IP address or hostname . . . . . . . . .  11
+     5.7.  Finding client's IP address or hostname . . . . . . . . .  12
      5.8.  Correlation of activities over time . . . . . . . . . . .  12
      5.9.  Location tracking . . . . . . . . . . . . . . . . . . . .  12
      5.10. Leasequery & bulk leasequery  . . . . . . . . . . . . . .  12
@@ -104,7 +104,7 @@ Table of Contents
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  13
      10.1.  Normative References . . . . . . . . . . . . . . . . . .  13
      10.2.  Informative References . . . . . . . . . . . . . . . . .  14
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
 
 
@@ -294,11 +294,19 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    option, with data values as hints to the server about parameter
    values the client would like to have returned.
 
-3.7.  Vendor Class Option
+3.7.  Vendor Class and Vendor-specific Information Options
 
-   This Vendor Class option [RFC3315] is used by a DHCPv6 client to
-   identify the vendor that manufactured the hardware on which the
-   client is running.
+   The Vendor Class option, defined in Section 22.16 of [RFC3315] is
+   used by a DHCPv6 client to identify the vendor that manufactured the
+   hardware on which the client is running.
+
+   The Vendor-specific Information Option, defined in Section 22.17 of
+   [RFC3315] includes enterprise number, which identifies the client's
+   vendor and often includes a number of additional parameters that are
+   specific to a given vendor.  That may include any type of information
+   the vendor deems useful.  It should be noted that this information
+   may be present (and different) in both directions: client to server
+   and server to client communications.
 
    The information contained in the data area of this option is
    contained in one or more opaque fields that identify details of the
@@ -321,6 +329,15 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    coordinate- based geographic location information to the DHCPv6
    clients.  It enable a DHCPv6 client to obtain its location.
 
+
+
+
+
+Krishnan, et al.        Expires February 27, 2016               [Page 6]
+
+Internet-Draft        DHCPv6 Privacy considerations          August 2015
+
+
    After the relevant DHCPv6 exchanges have taken place, the location
    information is stored on the end device rather than somewhere else,
    where retrieving it might be difficult in practice.
@@ -330,14 +347,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    The Client System Architecture Type option [RFC5970] is used by
    DHCPv6 client to send a list of supported architecture types to the
    DHCPv6 server.  It is used to provide configuration information for a
-
-
-
-Krishnan, et al.        Expires February 27, 2016               [Page 6]
-
-Internet-Draft        DHCPv6 Privacy considerations          August 2015
-
-
    node that must be booted using the network rather than from local
    storage.
 
@@ -376,15 +385,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
    Although in principle Interface ID can be arbitrarily long with
    completely random values, it is often a text string that includes the
-   relay agent name followed by interface name.  This can be used for
-   fingerprinting the relay or determining client's point of attachment.
-
-3.11.3.  Remote ID
-
-   A DHCPv6 relay includes a Remote ID option [RFC4649] to identify the
-   remote host end of the circuit.
-
-
 
 
 
@@ -393,6 +393,14 @@ Krishnan, et al.        Expires February 27, 2016               [Page 7]
 
 Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
+
+   relay agent name followed by interface name.  This can be used for
+   fingerprinting the relay or determining client's point of attachment.
+
+3.11.3.  Remote ID
+
+   A DHCPv6 relay includes a Remote ID option [RFC4649] to identify the
+   remote host end of the circuit.
 
    The remote-id is vendor specific, for which the vendor is indicated
    in the enterprise-number field.  The remote-id field may encode the
@@ -434,14 +442,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    IA_TA (a container for temporary addresses).  However, it mentions
    that temporary addresses can be renewed.  Many client implementations
    renew those addresses during a renewal procedure initiated by other
-   resources (non-temporary addresses or prefixes), thus forfeiting
-   shortliveness.  Second, [RFC4704] allows servers to update DNS for
-   assigned temporary addresses.  Publishing client's IPv6 address in
-   DNS that is publicly available is a major privacy breach.
-
-
-
-
 
 
 
@@ -449,6 +449,11 @@ Krishnan, et al.        Expires February 27, 2016               [Page 8]
 
 Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
+
+   resources (non-temporary addresses or prefixes), thus forfeiting
+   shortliveness.  Second, [RFC4704] allows servers to update DNS for
+   assigned temporary addresses.  Publishing client's IPv6 address in
+   DNS that is publicly available is a major privacy breach.
 
 4.2.  DNS Updates
 
@@ -493,11 +498,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    requested to implement it.  There is at least one implementation that
    supports it.  On the other hand, the downside of such allocation is
    that the client now discloses its identifier in its IPv6 address to
-   all services it connects to.  That means that correlation of
-   activities over time, location tracking, address scanning and OS/
-   vendor discovery apply.
-
-
 
 
 
@@ -505,6 +505,10 @@ Krishnan, et al.        Expires February 27, 2016               [Page 9]
 
 Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
+
+   all services it connects to.  That means that correlation of
+   activities over time, location tracking, address scanning and OS/
+   vendor discovery apply.
 
    Hash allocation - it's an extension of identifier based allocation.
    Instead of using the identifier directly, it is being hashed first.
@@ -540,20 +544,16 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
 5.1.  Device type discovery (fingerprinting)
 
    The type of device used by the client can be guessed by the attacker
-   using the Vendor Class option, the Client Link-layer Address option,
-   and by parsing the Client ID option.  All of those options may
-   contain OUI (Organizationally Unique Identifier) that represents the
-   device's vendor.  That knowledge can be used for device-specific
-   vulnerability exploitation attacks.  See Section 3.4 of
+   using the Vendor Class option, Vendor-specific Information option,
+   the Client Link-layer Address option, and by parsing the Client ID
+   option.  All of those options may contain OUI (Organizationally
+   Unique Identifier) that represents the device's vendor.  That
+   knowledge can be used for device-specific vulnerability exploitation
+   attacks.  See Section 3.4 of
    [I-D.ietf-6man-ipv6-address-generation-privacy] for a discussion
    about this type of attack.
 
-5.2.  Operating system discovery (fingerprinting)
 
-   The operating system running on a client can be guessed using the
-   Vendor Class option, the Client System Architecture Type option, or
-   by using fingerprinting techniques on the combination of options
-   requested using the Option Request option.  See Section 3.4 of
 
 
 
@@ -562,6 +562,13 @@ Krishnan, et al.        Expires February 27, 2016              [Page 10]
 Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
 
+5.2.  Operating system discovery (fingerprinting)
+
+   The operating system running on a client can be guessed using the
+   Vendor Class option, the Vendor-specific Information option, the
+   Client System Architecture Type option, or by using fingerprinting
+   techniques on the combination of options requested using the Option
+   Request option.  See Section 3.4 of
    [I-D.ietf-6man-ipv6-address-generation-privacy] for a discussion
    about this type of attack.
 
@@ -602,6 +609,15 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    use obtained information about a single client and observer client's
    habits.
 
+
+
+
+
+Krishnan, et al.        Expires February 27, 2016              [Page 11]
+
+Internet-Draft        DHCPv6 Privacy considerations          August 2015
+
+
 5.7.  Finding client's IP address or hostname
 
    Many DHCPv6 deployments use DNS Updates [RFC4704] that put client's
@@ -610,13 +626,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    of the client-id).  As SHA-256 is considered irreversible, DHCID
    can't be converted back to client-id.  However, SHA-256 digest can be
    used as an unique identifier that is accessible by any host.
-
-
-
-Krishnan, et al.        Expires February 27, 2016              [Page 11]
-
-Internet-Draft        DHCPv6 Privacy considerations          August 2015
-
 
 5.8.  Correlation of activities over time
 
@@ -655,6 +664,16 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    circuit that leads to the host, and/or the hardware address of the
    intervening subscriber modem.
 
+
+
+
+
+
+Krishnan, et al.        Expires February 27, 2016              [Page 12]
+
+Internet-Draft        DHCPv6 Privacy considerations          August 2015
+
+
    Furthermore, the attackers may use DHCPv6 bulk leasequery [RFC5460]
    mechanism to obtain bulk information about DHCPv6 bindings, even
    without knowing the target bindings.
@@ -666,13 +685,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    misused, an attacker could defeat server's authentication mechanisms
    and subscribe to all updates.  He then could continue receiving
    updates, without any need for local presence.
-
-
-
-Krishnan, et al.        Expires February 27, 2016              [Page 12]
-
-Internet-Draft        DHCPv6 Privacy considerations          August 2015
-
 
 6.  Security Considerations
 
@@ -708,6 +720,16 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
               DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
+
+
+
+
+
+Krishnan, et al.        Expires February 27, 2016              [Page 13]
+
+Internet-Draft        DHCPv6 Privacy considerations          August 2015
+
+
    [RFC3315]  Droms, R., Ed., Bound, J., Volz, B., Lemon, T., Perkins,
               C., and M. Carney, "Dynamic Host Configuration Protocol
               for IPv6 (DHCPv6)", RFC 3315, DOI 10.17487/RFC3315, July
@@ -722,13 +744,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
               Attack", BCP 188, RFC 7258, DOI 10.17487/RFC7258, May
               2014, <http://www.rfc-editor.org/info/rfc7258>.
-
-
-
-Krishnan, et al.        Expires February 27, 2016              [Page 13]
-
-Internet-Draft        DHCPv6 Privacy considerations          August 2015
-
 
 10.2.  Informative References
 
@@ -763,6 +778,14 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
               RFC 4622, DOI 10.17487/RFC4622, July 2006,
               <http://www.rfc-editor.org/info/rfc4622>.
 
+
+
+
+Krishnan, et al.        Expires February 27, 2016              [Page 14]
+
+Internet-Draft        DHCPv6 Privacy considerations          August 2015
+
+
    [RFC4649]  Volz, B., "Dynamic Host Configuration Protocol for IPv6
               (DHCPv6) Relay Agent Remote-ID Option", RFC 4649,
               DOI 10.17487/RFC4649, August 2006,
@@ -778,13 +801,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
               Configuration Information", RFC 4776,
               DOI 10.17487/RFC4776, November 2006,
               <http://www.rfc-editor.org/info/rfc4776>.
-
-
-
-Krishnan, et al.        Expires February 27, 2016              [Page 14]
-
-Internet-Draft        DHCPv6 Privacy considerations          August 2015
-
 
    [RFC4941]  Narten, T., Draves, R., and S. Krishnan, "Privacy
               Extensions for Stateless Address Autoconfiguration in
@@ -818,6 +834,14 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
               RFC 6422, DOI 10.17487/RFC6422, December 2011,
               <http://www.rfc-editor.org/info/rfc6422>.
 
+
+
+
+Krishnan, et al.        Expires February 27, 2016              [Page 15]
+
+Internet-Draft        DHCPv6 Privacy considerations          August 2015
+
+
    [RFC6939]  Halwasia, G., Bhandari, S., and W. Dec, "Client Link-Layer
               Address Option in DHCPv6", RFC 6939, DOI 10.17487/RFC6939,
               May 2013, <http://www.rfc-editor.org/info/rfc6939>.
@@ -832,14 +856,6 @@ Authors' Addresses
 
    Phone: +1 514 345 7900 x42871
    Email: suresh.krishnan@ericsson.com
-
-
-
-
-
-Krishnan, et al.        Expires February 27, 2016              [Page 15]
-
-Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
 
    Tomek Mrugalski
@@ -858,22 +874,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    P.R. China
 
    Email: jiangsheng@huawei.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
