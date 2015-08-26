@@ -529,10 +529,12 @@ Internet-Draft         DHCP Privacy considerations           August 2015
    conclusions regarding its location and movement patterns based on
    address it is connecting from) and active (attacker can send ICMP
    echo requests or other probe packets to networks of suspected client
-   locations).  To give specific example, by accessing a social portal
-   from tomek-laptop.gdansk.starbucks.com, tomek-laptop.gda.upc.pl and
-   tomek-laptop.ug.edu.pl, the portal administrator can draw conclusions
-   about tomek-laptop's owner current location and his habits.
+   locations) methods can be used.  To give specific example, by
+   accessing a social portal from tomek-
+   laptop.coffee.somecity.com.example, tomek-
+   laptop.mycompany.com.example and tomek-laptop.myisp.example.com, the
+   portal administrator can draw conclusions about tomek-laptop's owner
+   current location and his habits.
 
 5.10.  Leasequery & bulk leasequery
 
@@ -552,8 +554,6 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
    Additionally, active leasequery
    [I-D.ietf-dhc-dhcpv4-active-leasequery] is a mechanism for
-   subscribing to DHCPv4 lease update changes in near real-time.  The
-   intent of this mechanism is to update operator's database, but if
 
 
 
@@ -562,6 +562,8 @@ Jiang, et al.           Expires February 27, 2016              [Page 10]
 Internet-Draft         DHCP Privacy considerations           August 2015
 
 
+   subscribing to DHCPv4 lease update changes in near real-time.  The
+   intent of this mechanism is to update operator's database, but if
    misused, an attacker could defeat server's authentication mechanisms
    and subscribe to all updates.  He then could continue receiving
    updates, without any need for local presence.
@@ -604,11 +606,9 @@ Internet-Draft         DHCP Privacy considerations           August 2015
               RFC 2131, DOI 10.17487/RFC2131, March 1997,
               <http://www.rfc-editor.org/info/rfc2131>.
 
-   [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
-              Morris, J., Hansen, M., and R. Smith, "Privacy
-              Considerations for Internet Protocols", RFC 6973,
-              DOI 10.17487/RFC6973, July 2013,
-              <http://www.rfc-editor.org/info/rfc6973>.
+
+
+
 
 
 
@@ -618,17 +618,17 @@ Jiang, et al.           Expires February 27, 2016              [Page 11]
 Internet-Draft         DHCP Privacy considerations           August 2015
 
 
+   [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
+              Morris, J., Hansen, M., and R. Smith, "Privacy
+              Considerations for Internet Protocols", RFC 6973,
+              DOI 10.17487/RFC6973, July 2013,
+              <http://www.rfc-editor.org/info/rfc6973>.
+
    [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
               Attack", BCP 188, RFC 7258, DOI 10.17487/RFC7258, May
               2014, <http://www.rfc-editor.org/info/rfc7258>.
 
 10.2.  Informative References
-
-   [I-D.ietf-6man-ipv6-address-generation-privacy]
-              Cooper, A., Gont, F., and D. Thaler, "Privacy
-              Considerations for IPv6 Address Generation Mechanisms",
-              draft-ietf-6man-ipv6-address-generation-privacy-07 (work
-              in progress), June 2015.
 
    [I-D.ietf-dhc-dhcpv4-active-leasequery]
               Kinnear, K., Stapp, M., Volz, B., and N. Russell, "Active

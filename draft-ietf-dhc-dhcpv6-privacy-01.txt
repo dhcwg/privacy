@@ -621,11 +621,12 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
 5.7.  Finding client's IP address or hostname
 
    Many DHCPv6 deployments use DNS Updates [RFC4704] that put client's
-   information (current IP address, client's hostname).  Client ID is
-   also disclosed, albeit in not easily accessible form (SHA-256 digest
-   of the client-id).  As SHA-256 is considered irreversible, DHCID
-   can't be converted back to client-id.  However, SHA-256 digest can be
-   used as an unique identifier that is accessible by any host.
+   information (current IP address, client's hostname) into DNS, where
+   it is easily accessible by anyone interested.  Client ID is also
+   disclosed, albeit in not easily accessible form (SHA-256 digest of
+   the client-id).  As SHA-256 is considered irreversible, DHCID can't
+   be converted back to client-id.  However, SHA-256 digest can be used
+   as an unique identifier that is accessible by any host.
 
 5.8.  Correlation of activities over time
 
@@ -650,7 +651,12 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
    address and draw conclusions regarding its location and movement
    patterns based on prefix it is connecting from) and active (attacker
    can send ICMPv6 echo requests or other probe packets to networks of
-   suspected client locations).
+   suspected client locations) can be used.  To give specific example,
+   by accessing a social portal from tomek-
+   laptop.coffee.somecity.com.example, tomek-
+   laptop.mycompany.com.example and tomek-laptop.myisp.example.com, the
+   portal administrator can draw conclusions about tomek-laptop's owner
+   current location and his habits.
 
 5.10.  Leasequery & bulk leasequery
 
@@ -660,12 +666,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
    Location information is information needed by the access concentrator
    to forward traffic to a broadband-accessible host.  This information
-   includes knowledge of the host hardware address, the port or virtual
-   circuit that leads to the host, and/or the hardware address of the
-   intervening subscriber modem.
-
-
-
 
 
 
@@ -673,6 +673,10 @@ Krishnan, et al.        Expires February 27, 2016              [Page 12]
 
 Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
+
+   includes knowledge of the host hardware address, the port or virtual
+   circuit that leads to the host, and/or the hardware address of the
+   intervening subscriber modem.
 
    Furthermore, the attackers may use DHCPv6 bulk leasequery [RFC5460]
    mechanism to obtain bulk information about DHCPv6 bindings, even
@@ -715,10 +719,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
 10.1.  Normative References
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
 
 
 
@@ -729,6 +729,11 @@ Krishnan, et al.        Expires February 27, 2016              [Page 13]
 
 Internet-Draft        DHCPv6 Privacy considerations          August 2015
 
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <http://www.rfc-editor.org/info/rfc2119>.
 
    [RFC3315]  Droms, R., Ed., Bound, J., Volz, B., Lemon, T., Perkins,
               C., and M. Carney, "Dynamic Host Configuration Protocol
@@ -772,11 +777,6 @@ Internet-Draft        DHCPv6 Privacy considerations          August 2015
               DOI 10.17487/RFC4580, June 2006,
               <http://www.rfc-editor.org/info/rfc4580>.
 
-   [RFC4622]  Saint-Andre, P., "Internationalized Resource Identifiers
-              (IRIs) and Uniform Resource Identifiers (URIs) for the
-              Extensible Messaging and Presence Protocol (XMPP)",
-              RFC 4622, DOI 10.17487/RFC4622, July 2006,
-              <http://www.rfc-editor.org/info/rfc4622>.
 
 
 

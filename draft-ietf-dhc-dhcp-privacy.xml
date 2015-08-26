@@ -555,8 +555,6 @@
       <?rfc include='reference.RFC.6926'?>
 
       <?rfc include='reference.I-D.ietf-dhc-dhcpv4-active-leasequery'?>
-
-      <?rfc include="reference.I-D.ietf-6man-ipv6-address-generation-privacy"?>
       
 </references>
   </back>
