@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!ENTITY I-D.ietf-6man-ipv6-address-generation-privacy SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-ipv6-address-generation-privacy.xml">
-]>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
@@ -13,7 +11,7 @@
      ipr="trust200902">
   <front>
     <title abbrev="DHCP Privacy considerations">Privacy considerations for
-    DHCP</title>
+    DHCPv4</title>
 
     <author fullname="Sheng Jiang" initials="S." surname="Jiang">
       <organization>Huawei Technologies Co., Ltd</organization>
@@ -68,8 +66,6 @@
           <country>USA</country>
         </postal>
 
-        <phone>+1 650 423 1345</phone>
-
         <email>tomasz.mrugalski@gmail.com</email>
       </address>
     </author>
@@ -106,7 +102,7 @@
       that have been analyzed in this document. It is out of scope for this
       document.</t>
 
-      <t>The primary focus of this document around privacy considerations for
+      <t>The primary focus of this document is around privacy considerations for
       clients to support client mobility and connection to random networks. The
       privacy or DHCP servers and relay agents are considered less important as
       they are typically open for public services. And, it is generally assumed
@@ -124,7 +120,6 @@
       target="RFC2119"></xref>. When these words are not in ALL CAPS (such as
       "should" or "Should"), they have their usual English meanings, and are
       not to be interpreted as <xref target="RFC2119"></xref> key words.</t>
-
 
       <t>In addition the following terminology is used:
       <list hangIndent="8" style="hanging">
@@ -402,11 +397,10 @@
         means. The most direct way to obtain this information is by looking into
         a message originating from the server that contains the Civic Location,
         GeoConf, or GeoLoc options. It can also be indirectly inferred using the
-        Relay Agent Information option, with the remote ID sub-option
-        (e.g. using a telephone number), the circuit ID option (e.g. if an
-        access circuit on an Access Node corresponds to a civic location), or
-        the Subscriber ID Option (if the attacker has access to subscriber
-        info).</t>
+        Relay Agent Information option, with the remote ID sub-option, the
+        circuit ID option (e.g. if an access circuit on an Access Node
+        corresponds to a civic location), or the Subscriber ID Option (if the
+        attacker has access to subscriber info).</t>
       </section>
 
       <section title="Finding previously visited networks">
@@ -503,7 +497,7 @@
 
     <section anchor="privacy-consider" title="Privacy Considerations">
       <t>This document at its entirety discusses privacy considerations in
-      DHCP. As such, no separate section about this is needed.</t>
+      DHCP. As such, no dedicated section about this is needed.</t>
     </section>
 
     <section title="IANA Considerations">
@@ -533,7 +527,6 @@
 
     <references title="Informative References">
 
-
       <?rfc include='reference.RFC.2629'?>
 
       <?rfc include='reference.RFC.3046'?>
@@ -560,7 +553,9 @@
 
       <?rfc include='reference.RFC.6926'?>
 
-      <?rfc include='reference.I-D.ietf-dhc-dhcpv4-active-leasequery.xml'?>
+      <?rfc include='reference.I-D.ietf-dhc-dhcpv4-active-leasequery'?>
+
+      <?rfc include="reference.I-D.ietf-6man-ipv6-address-generation-privacy"?>
       
 </references>
   </back>

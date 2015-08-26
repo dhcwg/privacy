@@ -11,7 +11,7 @@ Expires: February 27, 2016                                      Ericsson
                                                          August 26, 2015
 
 
-                    Privacy considerations for DHCP
+                   Privacy considerations for DHCPv4
                      draft-ietf-dhc-dhcp-privacy-01
 
 Abstract
@@ -122,15 +122,16 @@ Internet-Draft         DHCP Privacy considerations           August 2015
    that have been analyzed in this document.  It is out of scope for
    this document.
 
-   The primary focus of this document around privacy considerations for
-   clients to support client mobility and connection to random networks.
-   The privacy or DHCP servers and relay agents are considered less
-   important as they are typically open for public services.  And, it is
-   generally assumed that relay agent to server communication is
-   protected from casual snooping, as that communication occurs in the
-   provider's backbone.  Nevertheless, the topics involving relay agents
-   and servers are explored to some degree.  However, future work may
-   want to further explore privacy of DHCP servers and relay agents.
+   The primary focus of this document is around privacy considerations
+   for clients to support client mobility and connection to random
+   networks.  The privacy or DHCP servers and relay agents are
+   considered less important as they are typically open for public
+   services.  And, it is generally assumed that relay agent to server
+   communication is protected from casual snooping, as that
+   communication occurs in the provider's backbone.  Nevertheless, the
+   topics involving relay agents and servers are explored to some
+   degree.  However, future work may want to further explore privacy of
+   DHCP servers and relay agents.
 
 2.  Requirements Language and Terminology
 
@@ -158,7 +159,6 @@ Internet-Draft         DHCP Privacy considerations           August 2015
    There are several identifiers used in DHCP.  This section provides an
    introduction to the various options that will be used further in the
    document.
-
 
 
 
@@ -464,10 +464,9 @@ Internet-Draft         DHCP Privacy considerations           August 2015
    into a message originating from the server that contains the Civic
    Location, GeoConf, or GeoLoc options.  It can also be indirectly
    inferred using the Relay Agent Information option, with the remote ID
-   sub-option (e.g. using a telephone number), the circuit ID option
-   (e.g. if an access circuit on an Access Node corresponds to a civic
-   location), or the Subscriber ID Option (if the attacker has access to
-   subscriber info).
+   sub-option, the circuit ID option (e.g. if an access circuit on an
+   Access Node corresponds to a civic location), or the Subscriber ID
+   Option (if the attacker has access to subscriber info).
 
 5.4.  Finding previously visited networks
 
@@ -498,6 +497,7 @@ Internet-Draft         DHCP Privacy considerations           August 2015
    Many DHCP deployments use DNS Updates [RFC4702] that put client's
    information (current IP address, client's hostname) into DNS, where
    it is easily accessible by anyone interested.  Client ID is also
+   disclosed, albeit in not easily accessible form (SHA-256 digest of
 
 
 
@@ -506,7 +506,6 @@ Jiang, et al.           Expires February 27, 2016               [Page 9]
 Internet-Draft         DHCP Privacy considerations           August 2015
 
 
-   disclosed, albeit in not easily accessible form (SHA-256 digest of
    the client-id).  As SHA-256 is considered irreversible, DHCID can't
    be converted back to client-id.  However, SHA-256 digest can be used
    as an unique identifier that is accessible by any host.
@@ -554,6 +553,7 @@ Internet-Draft         DHCP Privacy considerations           August 2015
    Additionally, active leasequery
    [I-D.ietf-dhc-dhcpv4-active-leasequery] is a mechanism for
    subscribing to DHCPv4 lease update changes in near real-time.  The
+   intent of this mechanism is to update operator's database, but if
 
 
 
@@ -562,7 +562,6 @@ Jiang, et al.           Expires February 27, 2016              [Page 10]
 Internet-Draft         DHCP Privacy considerations           August 2015
 
 
-   intent of this mechanism is to update operator's database, but if
    misused, an attacker could defeat server's authentication mechanisms
    and subscribe to all updates.  He then could continue receiving
    updates, without any need for local presence.
@@ -578,7 +577,7 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 7.  Privacy Considerations
 
    This document at its entirety discusses privacy considerations in
-   DHCP.  As such, no separate section about this is needed.
+   DHCP.  As such, no dedicated section about this is needed.
 
 8.  IANA Considerations
 
@@ -613,6 +612,7 @@ Internet-Draft         DHCP Privacy considerations           August 2015
 
 
 
+
 Jiang, et al.           Expires February 27, 2016              [Page 11]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
@@ -623,6 +623,12 @@ Internet-Draft         DHCP Privacy considerations           August 2015
               2014, <http://www.rfc-editor.org/info/rfc7258>.
 
 10.2.  Informative References
+
+   [I-D.ietf-6man-ipv6-address-generation-privacy]
+              Cooper, A., Gont, F., and D. Thaler, "Privacy
+              Considerations for IPv6 Address Generation Mechanisms",
+              draft-ietf-6man-ipv6-address-generation-privacy-07 (work
+              in progress), June 2015.
 
    [I-D.ietf-dhc-dhcpv4-active-leasequery]
               Kinnear, K., Stapp, M., Volz, B., and N. Russell, "Active
@@ -658,12 +664,6 @@ Internet-Draft         DHCP Privacy considerations           August 2015
               DOI 10.17487/RFC3993, March 2005,
               <http://www.rfc-editor.org/info/rfc3993>.
 
-   [RFC4361]  Lemon, T. and B. Sommerfeld, "Node-specific Client
-              Identifiers for Dynamic Host Configuration Protocol
-              Version Four (DHCPv4)", RFC 4361, DOI 10.17487/RFC4361,
-              February 2006, <http://www.rfc-editor.org/info/rfc4361>.
-
-
 
 
 
@@ -673,6 +673,11 @@ Jiang, et al.           Expires February 27, 2016              [Page 12]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
 
+
+   [RFC4361]  Lemon, T. and B. Sommerfeld, "Node-specific Client
+              Identifiers for Dynamic Host Configuration Protocol
+              Version Four (DHCPv4)", RFC 4361, DOI 10.17487/RFC4361,
+              February 2006, <http://www.rfc-editor.org/info/rfc4361>.
 
    [RFC4388]  Woundy, R. and K. Kinnear, "Dynamic Host Configuration
               Protocol (DHCP) Leasequery", RFC 4388,
@@ -720,11 +725,6 @@ Authors' Addresses
 
 
 
-
-
-
-
-
 Jiang, et al.           Expires February 27, 2016              [Page 13]
 
 Internet-Draft         DHCP Privacy considerations           August 2015
@@ -746,8 +746,8 @@ Internet-Draft         DHCP Privacy considerations           August 2015
    Redwood City, CA  94063
    USA
 
-   Phone: +1 650 423 1345
    Email: tomasz.mrugalski@gmail.com
+
 
 
 
