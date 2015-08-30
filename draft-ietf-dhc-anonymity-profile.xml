@@ -34,6 +34,11 @@
 <!ENTITY rfc4578 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4578.xml'>
 
+<!ENTITY rfc6355 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6355.xml'>
+
+<!ENTITY rfc7618 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7618.xml'>
 
 <!ENTITY I-D.ietf-6man-default-iids PUBLIC '' 
 "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-default-iids.xml">
@@ -50,9 +55,6 @@
 <!ENTITY I-D.ietf-dhc-rfc3315bis PUBLIC ''
 "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-dhc-rfc3315bis.xml">
 
-<!ENTITY I-D.ietf-dhc-dynamic-shared-v4allocation PUBLIC ''
-"http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-dhc-dynamic-shared-v4allocation.xml">
-
 ]>
 
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -66,9 +68,9 @@
 <?rfc inline='yes' ?>
 
 <rfc category="std" 
-     docName="draft-ietf-dhc-anonymity-profile-02.txt" 
+     docName="draft-ietf-dhc-anonymity-profile-03.txt" 
      ipr="trust200902"
-     updates="4361" >
+     >
 
 <front>
     <title abbrev="DHCP Anonymity Profile">
@@ -172,9 +174,10 @@ disclosure, including the disclosure of implementation identifiers.
 </section>
 <section title="Application domain">
 <t>
-Mobile nodes can be tracked using multiple identifiers, the most prominent being MAC addresses. For example, when
+Mobile nodes can be tracked using multiple identifiers, the most prominent being link-layer addresses, a.k.a. MAC addresses. 
+For example, when
 devices use Wi-Fi connectivity, they place the MAC address in the header of all the packets that they transmit. 
-Standard implementation of Wi-Fi use unique 48 bit MAC addresses, assigned to the devices according to procedures
+Standard implementation of Wi-Fi use unique 48 bit link-layer addresses, assigned to the devices according to procedures
 defined by IEEE 802. Even when the Wi-Fi packets are encrypted, the portion of the header containing the addresses
 will be sent in clear text. Tracking devices can "listen to the airwaves" to find out what devices are transmitting
 near them. 
@@ -184,57 +187,66 @@ We can easily imagine that the MAC addresses can be correlated with other data, 
 names and cookies, to build a registry linking MAC addresses to the identity of devices' owners. Once that 
 correlation is done, tracking the MAC address is sufficient to track individual people, even when all application data
 sent from the devices is encrypted.
-MAC addresses can also be correlated with IP addresses of devices, negating potential privacy benefits of
-IPv6 "privacy" addresses. Privacy advocates have some reason to be concerned.
+link-layer addresses can also be correlated with IP addresses of devices, negating potential privacy benefits of
+IPv6 "privacy" addresses. Privacy advocates have reasons to be concerned.
 </t>
 <t>
 The obvious solution is to "randomize" the MAC address. Before connecting to a particular network, the device replaces
-the MAC address with a randomly drawn 48 bit value. MAC address randomization was successfully tried at the IETF in Honolulu 
-in November 2014 <xref target="IETFMACRandom" />. However, we have to consider the linkage between MAC addresses, DHCP identifiers
+the MAC address with a randomly drawn 48 bit value. Link-layer address randomization was successfully 
+tried at the IETF in Honolulu 
+in November 2014 <xref target="IETFMACRandom" />. However, we have to consider the linkage between 
+link-layer addresses, DHCP identifiers
 and IP addresses.
 </t>
-<section title="MAC Address Randomization hypotheses" >
+<section title="MAC address Randomization hypotheses" >
 <t>
-There is not yet an established standard for randomizing MAC addresses. Various prototypes have tried different strategies, such as:
+There is not yet an established standard for randomizing link-layer addresses. 
+Various prototypes have tried different strategies, such as:
 </t>
 <t>
 <list style="hanging">
-<t hangText="Per connection:">Configure a random MAC address at the time of connecting to a network, e.g. to specific Wi-Fi SSID,
+<t hangText="Per connection:">Configure a random link-layer address at the time of connecting to a network, e.g. to specific Wi-Fi SSID,
 and keep it for the duration of the connection.
 </t>
-<t hangText="Per network:">Same as "per connection," but always use the same MAC address for the same network -- different of course 
+<t hangText="Per network:">Same as "per connection," but always use the same link-layer address for the same network -- different of course 
 from the addresses used in other networks. 
 </t>
-<t hangText="Time interval:">Change the MAC address at regular time intervals.
+<t hangText="Time interval:">Change the link-layer address at regular time intervals.
 </t>
 </list>
 </t>
 <t>
-In practice, there are many reasons to keep the MAC address constant for the duration of a link-layer connection, as in the "per connection" 
-or "per network" variants. On Wi-Fi networks, changing the MAC address requires dropping the existing Wi-Fi connection and then 
-re-establishing it, which implies repeating the connection process and associated procedures. The IP addresses will change, which
-means that all required TCP connections will have to be re-established. If the network access is provided through a NAT, changing
-IP address also means that the NAT traversal procedures will have to be restarted. This means a lot of disruption. At the same time,
-an observer on the network will easily notice that a station left, another came in just after that, and that the new one appears to be
+In practice, there are many reasons to keep the link-layer address constant for 
+the duration of a link-layer connection, as in the "per connection" 
+or "per network" variants. On Wi-Fi networks, changing the link-layer address 
+requires dropping the existing Wi-Fi connection and then 
+re-establishing it, which implies repeating the connection process and associated procedures. 
+The IP addresses will change, which
+means that all required TCP connections will have to be re-established. If the network access 
+is provided through a NAT, changing
+IP address also means that the NAT traversal procedures will have to be restarted. This means 
+a lot of disruption. At the same time,
+an observer on the network will easily notice that a station left, another came in just after 
+that, and that the new one appears to be
 communicating with pretty much the same set of IP addresses as the old one. This provides for easy correlation. 
 </t>
 <t>
-The anonymity profile pretty much assumes that the MAC address randomization follows the "per connection" or "per network" strategies, 
+The anonymity profile pretty much assumes that the link-layer address randomization follows the "per connection" or "per network" strategies, 
 or a variant of the "time interval" strategy in which the interval has about the same duration as the average connection. 
 </t>
 </section>
-<section title="MAC Address Randomization and DHCP">
+<section title="MAC address Randomization and DHCP">
 <t>
-From a privacy point of view, it is clear that MAC Addresses, IP addresses and DHCP identifiers shall evolve in synchrony. 
-For example, if the MAC address changes and the DHCP identifier stays constant, then it is really easy to correlate old and 
-new MAC addresses, either by listening to DHCP traffic or by observing that the IP address remains constant, 
-since it is tied to the DHCP identifier. Conversely, if the DHCP identifier changes but the MAC address remains constant, 
+From a privacy point of view, it is clear that link-layer address, IP address and DHCP identifier shall evolve in synchrony. 
+For example, if the link-layer address changes and the DHCP identifier stays constant, then it is really easy to correlate old and 
+new link-layer addresses, either by listening to DHCP traffic or by observing that the IP address remains constant, 
+since it is tied to the DHCP identifier. Conversely, if the DHCP identifier changes but the link-layer address remains constant, 
 the old and new identifiers and addresses can be correlated by listening to L2 traffic. The procedures documented in the 
-following sections construct DHCP identifiers from the current MAC address, automatically providing for this
+following sections construct DHCP identifiers from the current link-layer address, automatically providing for this
 synchronization.
 </t>
 <t>
-The proposed anonymity profiles solve this synchronization issues by deriving most identifiers from the MAC address, 
+The proposed anonymity profiles solve this synchronization issues by deriving most identifiers from the link-layer address, 
 and generally by making making sure that DHCP parameter values do not remain constant after an address change.
 </t>
 </section>
@@ -243,21 +255,21 @@ and generally by making making sure that DHCP parameter values do not remain con
 MAC address randomization solves the trivial monitoring problem in
 which someone just uses a Wi-Fi scanner and records the MAC addresses
 seen on the air. DHCP anonymity solves the more elaborated scenario
-in which someone monitor MAC addresses and identities used in DHCP at the access
-point or DHCP server. But this are not the only ways to track a mobile device.
+in which someone monitor link-layer addresses and identities used in DHCP at the access
+point or DHCP server. But these are not the only ways to track a mobile device.
 </t>
 <t>
 Radio fingerprinting is a process that identifies a radio transmitter by the unique "fingerprint" 
 of its signal transmission, i.e., the tiny differences caused by minute imperfections of
 the radio transmission hardware. This can be applied to diverse types of radios, including
 Wi-Fi as described for example in <xref target="WiFiRadioFingerprinting" />. 
-No amount of MAC address randomization will protect against
+No amount of link-layer address randomization will protect against
 such techniques. Protections may exist, but they are outside the scope of the 
 present document. 
 </t>
 <t>
 On the other hand, we should not renounce randomization just because radio fingerprinting exists.
-The radio fingerprinting techniques are harder to deploy than just recording MAC addresses with
+The radio fingerprinting techniques are harder to deploy than just recording link-layer addresses with
 a scanner. They can only track devices for which the fingerprint are known, and thus have a 
 narrower scope of application than mass monitoring of addresses and DHCP parameters.
 </t>
@@ -284,7 +296,7 @@ identify the profiles as "using the anonymity option."
 One suggestion is  that if the client wishes to remain anonymous, 
 it would be good if the client told the server about that in case the server is willing to co-operate.
 Another possibility would be to use specific privacy-oriented construct,
-such as for example a new type of DUID of temporary DUID that would be changing over time. 
+such as for example a new type of DUID for a temporary DUID that would be changing over time. 
 </t>
 <t>
 This is not workable in a
@@ -309,9 +321,9 @@ This preference leads to some important
 </section>
 <section title="Using the anonymity profiles" anchor="profileUse">
 <t>
-There are downsides to randomizing MAC addresses and DHCP identifiers. By definition, randomization will break
-management procedures that rely on tracking MAC addresses. Even if this is not too much of a concern, we have to be worried
-about the frequency of MAC address randomization. Suppose for example that many devices would get new random MAC addresses at 
+There are downsides to randomizing link-layer addresses and DHCP identifiers. By definition, randomization will break
+management procedures that rely on tracking link-layer addresses. Even if this is not too much of a concern, we have to be worried
+about the frequency of link-layer address randomization. Suppose for example that many devices would get new random link-layer addresses at 
 short intervals, maybe every few minutes. This would generate new DHCP requests in rapid succession, with a high risk of 
 exhausting DHCPv4 address pools. Even with IPv6, there would still be a risk of increased neighbor discovery traffic, and
 bloating of various address tables. Implementers will have to be cautious when programming devices to use randomized MAC 
@@ -320,31 +332,32 @@ addresses. They will have to carefully chose the frequency with which such addre
 <t>
 This document only provides guidelines for using DHCP when clients care about privacy
 and servers do not object. We assume that the request for anonymity is materialized 
-by the assignment of a randomized MAC address to the network
+by the assignment of a randomized link-layer address to the network
 interface. Once that decision is made, the following guidelines will avoid leakage of identity in DHCP parameters or in
 assigned addresses.
 </t>
 <t>
 There may be rare situations where the clients want anonymity to attackers but not 
-to their DHCP server.  These clients should still use MAC Address randomization to
+to their DHCP server.  These clients should still use link-layer address randomization to
 hide from observers, and some form of encrypted communication to the DHCP server. 
 This scenario is not yet supported in this document.
 </t>
 <t>
 To preserve anonymity, the clients need to not use stable values for the client identifiers.
-This is clearly a tradeoff, because a stable client identifier guarantees that the client will receive consistent parameters over time. 
+This is clearly a tradeoff, because a stable client identifier guarantees that the client will 
+receive consistent parameters over time. 
 An example is given in 
-<xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" />, where the client identifier is used to 
+<xref target="RFC7618" />, where the client identifier is used to 
 guarantee that the same client will always get the same combination of IP address and port range. 
 Static clients benefit most from stable parameters, and can often be already identified by physical 
 connection layer parameters. These static clients will normally not use the anonymity profile. Mobile clients,
 in contrast, have the option of using the anonymity profile in conjunction 
-with <xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" /> 
+with <xref target="RFC7618" /> 
 if they are more concerned with privacy protection than with stable parameters.
 </t>
 
 </section>
-<section title="What about privacy for DHCP servers" >
+<section title="What about privacy for DHCP servers" anchor="serverPrivacy" >
 <t>
 This document only provides recommendations for DHCP clients. The main target are DHCP clients used in mobile devices.
 Such devices are a tempting target for various monitoring systems, and providing them with a simple anonymity
@@ -356,13 +369,14 @@ that have passed the link-layer access control and have been authorized to use t
 makes solving the server problem less urgent than solving the client problem.
 </t>
 <t>
-The server part will be covered by the general mitigation work going on in DHCP working group, following the analyses 
+Server privacy issues are 
 presented in <xref target = "I-D.ietf-dhc-dhcp-privacy" /> and <xref target="I-D.ietf-dhc-dhcpv6-privacy" />.
+Mitigation of these issues is left to further study.
 </t>
 </section>
 </section>
 
-<section title="Anonymity profile for DHCPv4">
+<section title="Anonymity profile for DHCPv4" anchor="anonymousV4" >
 <t>
 Clients using the DHCPv4 anonymity profile limit the disclosure of information by 
 controlling the header parameters and by limiting the number and values of options.
@@ -387,7 +401,7 @@ Identifier and Server Identifier options.
 Identifier and Server Identifier options.
 </t>
 <t hangText="INFORM:"> The anonymized INFORM messages MUST contain the Message Type, 
-Client Id, and Parameter Request List options. It SHOULD NOT contain any other 
+Client Identifier, and Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
 </list>
@@ -397,7 +411,8 @@ Header fields and option values SHOULD be set in accordance with the DHCP specif
 but some header fields and option values SHOULD be constructed per the following guidelines.
 </t>
 <t>
-The inclusion of HostName and FQDN options in DISCOVER, REQUEST or INFORM messages is discussed in <xref target="hostNameOption" /> and <xref target="fqdnv4" />.
+The inclusion of HostName and FQDN options in DISCOVER, REQUEST or INFORM messages is discussed in 
+<xref target="hostNameOption" /> and <xref target="fqdnv4" />.
 </t>
 
 <section title="Client IP address field" >
@@ -412,31 +427,37 @@ except in one case, when connecting
 to a different network than the last network connected. 
 If the DHCP client somehow repeated the address used in a previous network attachment,
 monitoring services might use the information to tie the two network locations. DHCP clients should ensure that
-the field is cleared when they know that the network attachment has changed, and in particular of the link layer 
+the field is cleared when they know that the network attachment has changed, and in particular if the link layer 
 address is reset by the device's administrator.
 </t>
 <t>
 The clients using the anonymity profile MUST NOT include in the message a Client IP Address that has been 
-obtained with a different MAC address.
+obtained with a different link-layer address.
 </t>
 </section>
 
 <section title="Requested IP address option" >
 <t>
-The Requested IP address option (code 50) allows the client to request that a particular IP address be assigned. 
+The Requested IP address option id defined in <xref target="RFC2132" /> with code 50.
+It allows the client to request that a particular IP address be assigned. 
 The option is mandatory in some protocol messages per <xref target="RFC2131" />, for example when a client 
 selects to use an address offered by a server. However, this option is not mandatory in the DHCPDISCOVER message. 
 It is simply a convenience, an attempt to regain the same IP address that was used in a previous connection.
 Doing so entails the risk of disclosing an IP address used by the client at a previous location, or with a 
-different MAC Address.
+different link-layer address.
 </t>
 <t>
 When using the anonymity profile, clients SHOULD NOT 
-use the Requested IP address option in DHCPDISCOVER Messages. They MUST use the option when mandated
-by the DHCP protocol, for example in DHCPREQUEST Messages.
+use the Requested IP address option in DHCPDISCOVER messages. They MUST use the option when mandated
+by the DHCP protocol, for example in DHCPREQUEST messages.
 </t>
 <t>
-There are scenarios in which a client connects to a network when a lease is still valid. In that state, the client that is concerned with privacy SHOULD perform a complete four way handshake starting with DHCPDISCOVER to obtain a new address lease. If the client can ascertain that this is exactly the same network to which it was previously connected, and if the link layer address did not change, the client MAY issue a DHCPREQUEST to try reclaim the current address.
+There are scenarios in which a client connects to a network when a lease is still valid. In that state, the client 
+that is concerned with privacy SHOULD perform a complete 
+four way handshake starting with DHCPDISCOVER to obtain a new address lease. 
+If the client can ascertain that this is exactly the same network 
+to which it was previously connected, and if the link layer address did not change, 
+the client MAY issue a DHCPREQUEST to try reclaim the current address.
 </t>
 
 </section>
@@ -460,7 +481,7 @@ DHCP messages.
 <section title="Client Identifier Option" anchor="dhcpv4ClientId">
 <t>
 The client identifier option is defined in <xref target="RFC2132"/> with option code 61. It is discussed in
-details in <xref target="RFC4361"/>. The purpose of the client identifier option is to identify the client in
+detail in <xref target="RFC4361"/>. The purpose of the client identifier option is to identify the client in
 a manner independent of the link layer address. This is particularly useful if the DHCP server is expected to 
 assign the same address to the client after a network attachment is swapped and the link layer address changes.
 It is also useful when the same node issues requests through several interfaces, and expects the DHCP server
@@ -469,7 +490,9 @@ to provide consistent configuration data over multiple interfaces.
 <t>
 The considerations for hardware independence and strong client identity have an adverse effect on the privacy 
 of mobile clients, because the hardware-independent unique identifier obviously enables very efficient tracking of the
-client's movements.
+client's movements. One option would be to not transmit this option at all, but this may affect interoperability
+and will definitely mark the client as requesting anonymity, exposing it to the risks mentioned in
+<xref target="desire" />. 
 </t>
 <t>
 The recommendations in <xref target="RFC4361"/> are very strong, stating for example that "DHCPv4
@@ -478,8 +501,7 @@ the layer two device (e.g., the Ethernet MAC address)." These strong recommendat
 between ease of management and privacy, and the tradeoff should depend on the circumstances. 
 </t>
 <t>
-
-In contradiction to <xref target="RFC4361"/>, When using the anonymity
+In contradiction to <xref target="RFC4361"/>, when using the anonymity
 profile, DHCP clients MUST use client identifiers based solely on the
 link layer address that will be used in the underlying
 connection. This will ensure that the DHCP client identifier does not
@@ -487,9 +509,6 @@ leak any information that is not already available to entities
 monitoring the network connection. It will also ensure that a strategy
 of randomizing the link layer address will not be nullified by DHCP
 options.
-
-<!-- tomek: todo: probably will need more detailed explanation what is exactly updated in
-    RFC4361: Update section X.Y with the following: ... -->
 </t>
 <t>
 There are usages of DHCP where the underlying connection is a point to point link, in which case there is no
@@ -498,6 +517,26 @@ If anonymity is desired in such networks, the client SHOULD pick a random identi
 to the current link, using for example a combination of a local secret and an identifier of the
 connection. 
 </t>
+
+</section>
+
+
+<section title="Parameter Request List" anchor="PRLoption">
+
+<t>The Parameter Request List option is defined in <xref target="RFC2132"/> with option code 61.
+It list the parameters requested from the server by the client.
+Different implementations request different parameters.<xref target="RFC2132"/> specifies that
+"the client MAY list the options in order of preference." It practice, this means that
+different client implementations will request different parameters, in different orders.</t>
+
+<t>The specific ordering of option numbers in the Parameter Request List can be used
+to fingerprint the client. This may not reveal the
+	identity of a client, but may provide additional information,
+	such as the device type, vendor type or OS type and in some cases
+	specific version.</t>
+
+	<t>The client willing to protect its privacy SHOULD arrange the option
+codes in the Parameter Request List by increasing order, from smallest to largest.</t>
 </section>
 
 <section title="Host Name Option" anchor="hostNameOption">
@@ -599,22 +638,22 @@ clients use DHCPv6 to obtain network configuration parameters, through the INFOR
 message. 
 </t>
 <t>
-The choice between the stateful and stateless scenario depends of flag and prefix options published 
+The choice between the stateful and stateless scenario depends on flag and prefix options published 
 by the "Router Advertisement" messages of local routers, as specified in <xref target="RFC4861"/>. 
 When these options enable stateless address configuration hosts using the anonymity profile 
 SHOULD choose it over stateful address configuration, because stateless configuration requires
-fewer information disclosure than stateful configuration.
+fewer information disclosures than stateful configuration.
 </t>
 <t>
 When using the anonymity profile, DHCPv6 clients carefully select DHCPv6 options used in the various
-messages that they sent. The list of options that are mandatory or optional for each message is
+messages that they send. The list of options that are mandatory or optional for each message is
 specified in <xref target="RFC3315" />. Some of these options have specific implications 
 on anonymity. The following sections provide guidance on the choice of option values when
 using the anonymity profile.
 </t>
 
       <section title="Do not send Confirm messages, unless really sure where" anchor="dhcpv6Confirm">
-	<t>The <xref target="RFC3315" /> requires clients to send a
+	<t><xref target="RFC3315" /> requires clients to send a
 	Confirm message when they attach to a new link to verify
 	whether the addressing and configuration information they
 	previously received is still valid. This requirement was
@@ -643,20 +682,20 @@ their privacy.
 <section title="Client Identifier DHCPv6 Option">
 <t>
 The client identifier option is defined in <xref target="RFC3315"/> with option code 1. The purpose of the client 
-identifier option is to identify the client to the server. The content of the option is a DHCP User ID (DUID).
+identifier option is to identify the client to the server. The content of the option is a DHCP Unique Identifier (DUID).
 One of the primary privacy concerns is that a client is
 	disclosing a stable identifier (the DUID) that can be use for
 	tracking and profiling.
-Three DUID formats are specified: Link-layer address plus time, Vendor-assigned unique ID based on Enterprise Number, 
-Link-layer address.
+Three DUID formats are specified in <xref target="RFC3315"/>: Link-layer address plus time, Vendor-assigned unique ID based on Enterprise Number, 
+Link-layer address. A fourth type, DUID-UUID is defined in <xref target="RFC6355" />. 
 </t>
 <t>
-When using the anonymity profile in conjunction with randomized MAC addresses, 
+When using the anonymity profile in conjunction with randomized link-layer addresses, 
 DHCPv6 clients MUST use the DUID format number 3, Link-layer address. The value of the 
 Link-layer address should be that currently assigned to the interface.
 </t>
 <t>
-When using the anonymity profile without the benefit of randomized MAC addresses,
+When using the anonymity profile without the benefit of randomized link-layer addresses,
 clients that want to protect their privacy
 	SHOULD generate a new randomized DUID-LLT every time they
 	attach to a new link or detect a possible link change
@@ -668,14 +707,7 @@ clients that want to protect their privacy
 	reveal the fact that the DUID is newly generated. Implementors
 	interested in hiding this fact MAY use a time stamp from the
 	past. e.g. a random timestamp from the previous year could be
-	a good value. In the most common cases the link-layer address
-	is based on MAC. The first three octets are composed of the
-	OUI (Organizationally Unique Identifier) that is expected to
-	have a value assigned to a real organization. See <xref
-	target="IEEE-OUI" /> for currently assigned values. Using a
-	value that is unassigned may disclose the fact that a DUID is
-	randomized. Using a value that belongs to a third party may
-	have legal implications.</t>
+	a good value.</t>
 
       <section title="Anonymous Information-Request">
 	<t>According to <xref target="RFC3315" />, a DHCPv6 client
@@ -697,7 +729,7 @@ clients that want to protect their privacy
 <t>
 When using the anonymity profile, DHCPv6 clients SHOULD use the Server Identifier Option (code 2) 
 as specified in <xref target="RFC3315"/>. Clients MUST only include server identifier
-values that were received with the current MAC address, because reuse of
+values that were received with the current link-layer address, because reuse of
 old values discloses information that can be used to identify the client.
 </t>
 </section>
@@ -712,8 +744,8 @@ Identity Association for Temporary Addresses Option (code 4).
 <t>
 The clients MAY use the IA Address Option (code 5) but need to balance the potential advantage of 
 "address continuity" versus the potential risk of "previous address disclosure." A potential solution
-is to remove all stored addresses when a MAC address changes, and to only use the IA Address option
-with addresses that have been explicitly assigned through the current MAC address. 
+is to remove all stored addresses when a link-layer address changes, and to only use the IA Address option
+with addresses that have been explicitly assigned through the current link-layer address. 
 </t>
 <t>
 The interaction between prefix delegation
@@ -722,18 +754,18 @@ prefix delegation when striving for anonymity.
 When using the anonymity profiles, clients SHOULD NOT use IA_PD, 
 the prefix delegation form of address assignment. 
 </t>
-<section title="Obtain temporary addresses">
+<section title="Obtain temporary addresses" anchor="v6Temporary" >
 	<t><xref target="RFC3315" /> defines a special container
 	(IA_TA) for requesting temporary addresses. This is a good
 	mechanism in principle, but there are a number of issues
-	associated with it. First, this is not widely used
+	associated with it. First, this is not a widely used
 	feature, so clients depending solely on temporary
         addresses may lock themselves out of service. 
         Secondly, <xref target="RFC3315" /> does not
-	specify any renewal mechanisms for temporary
+	specify any lifetime or lease length for temporary
 	addresses. Therefore support for renewing temporary 
         addresses may vary between
-        server implementations, including not being supported at all.
+        client implementations, including not being supported at all.
         Finally, by requesting temporary addresses a client reveals its
    desire for privacy and potentially risks countermeasures as described
    in <xref
@@ -755,7 +787,7 @@ the prefix delegation form of address assignment.
    <t>This solution may not work if the server enforces specific policies,
    e.g. only one address per client.  If client does not succeed in
    receiving a second address using a new IAID, it may release the first
-   one (using an old IAID) and then retry asking for a new address.</t>
+   one (using the old IAID) and then retry asking for a new address.</t>
 
 
 	<t>From the Operating System perspective, addresses obtained
@@ -765,7 +797,7 @@ the prefix delegation form of address assignment.
       </section>
 
 </section>
-<section title="Option Request Option">
+<section title="Option Request Option" anchor="OROv6option" >
 	<t>A DHCPv6 client may reveal other types of information,
 	besides unique identifiers. There are many ways a DHCPv6
 	client can perform certain actions and the specifics can be
@@ -780,9 +812,13 @@ the prefix delegation form of address assignment.
 	included in an Option Request Option (ORO).</t>
 
 	<t>The client willing to protect its privacy SHOULD
-	randomize options order before sending any DHCPv6
-	message. Such a client SHOULD also randomly shuffle the
-	option codes order in ORO.</t>
+	arrange options by increasing order of option codes
+before sending any DHCPv6
+	message. Such a client SHOULD also arrange
+	option codes order in ORO by increasing order of option codes.</t>
+
+<!-- CH: What we actually implemented was a strict ordering of the option codes.
+This is simpler than the random shuffle. -->
 
 	<!-- tomek: I also briefly thought about paranoid type of
 	a client that could ask in ORO for other random options.
@@ -825,7 +861,7 @@ option (code 16), as these options potentially reveal identifying information.
 <section title="Client FQDN Option">
 <t>
 The Client FQDN option is defined in <xref target="RFC4704"/> with option code 29. The option allows the 
-DHCP clients to advertize to the DHCP their fully qualified domain name (FQDN) such as "mobile.example.com." 
+DHCP clients to advertise to the DHCP server their fully qualified domain name (FQDN) such as "mobile.example.com." 
 When using the anonymity profile, DHCPv6 clients SHOULD NOT include the Client FQDN 
 option in their DHCPv6 messages because it identifies the client. As explained in 
 <xref target="fqdnv4" /> they MAY use a local-only FQDN by combining a host name derived from the
@@ -834,13 +870,13 @@ link layer address and a suffix advertised by the local DHCP server.
 </section>
 </section>
 
-<section title="Operational Considerations">
+<section title="Operational Considerations" anchor="operations" >
   <t>The anonymity profile has the effect of hiding the client identity from the
   DHCP server. This is not always desirable. Some DHCP servers provide
   facilities like publishing names and addresses in the DNS, or ensuring that
   returning clients get reassigned the same address.</t>
   <t>Clients using the anonymity profile may be consuming more resources. For
-  example when they change MAC address and request for a new IP, the old one is
+  example when they change link-layer address and request for a new IP, the old one is
   still marked as leased by the server.</t>
   <t>Implementers SHOULD provide a way for clients to control when the anonymity
   profile is used, and when standard behavior is preferred. Implementers MAY
@@ -865,17 +901,20 @@ This draft does not require any IANA action.
 The inspiration for this draft came from discussions in the Perpass mailing list. 
 Several people provided feedback on this draft,
 notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Nick Grifka, Tushar Gupta, Gabriel Montenegro, 
- Marcin Siodelski, Dave Thaler and Jun Wu.
+ Marcin Siodelski, Dave Thaler, Bernie Volz, and Jun Wu.
     </t>
 </section>
 <section title="Changes from previous versions">
+<t>
+The RFC Editor must ensure that this section is removed prior to RFC publication.
+</t>
 <t>
 Changes from draft-00 to draft-01:
 </t>
 <t>
 <list style="numbers" >
 <t>
-In <xref target="profileUse" />, added guidance when using <xref target="I-D.ietf-dhc-dynamic-shared-v4allocation" />.
+In <xref target="profileUse" />, added guidance when using <xref target="RFC7618" />.
 </t>
 <t>
 In <xref target="dhcpv4ClientId" />, added guidance for case when no link layer address is available.
@@ -890,6 +929,67 @@ to account for the "good" use of Confirm when roaming between access points on t
 </t>
 </list>
 </t>
+
+<t>
+Changes from draft-01 to draft-02:
+</t>
+<t>
+<list style="numbers" >
+<t>
+In <xref target="anonymousV4" />, checked the requirements of parameters in messages to 
+ensure consistency with the main text. 
+</t>
+<t>
+In <xref target="dhcpv4ClientId" />, added guidance for case when no link layer address is available.
+</t>
+<t>
+In <xref target="hostNameOption" />, specified that clients SHOULD NOT send the option, and that the optional 
+obfuscation mechanism is just a suggestion.
+</t>
+<t>
+Updated the text in <xref target="v6Temporary" /> for temporary IPv6 address allocation.
+</t>
+<t>
+Rewrote <xref target="operations" /> on operational requirements for clarity.
+</t>
+</list>
+</t>
+
+<t>
+Changes from draft-02 to draft-03:
+</t>
+<t>
+<list style="numbers" >
+<t>
+Removed the update of <xref target="RFC4361" /> since we are specifying when to use that RFC, but are not
+recommending any specific change.
+</t>
+<t>
+Fixed a number of typos and nits.
+</t>
+<t>
+In <xref target="serverPrivacy" />, specified that mitigation of server privacy issues is left for further study.
+</t>
+<t>
+In <xref target="dhcpv4ClientId" />, added text explaining why the client identifier option should still be sent, even when
+anonymity is desired.
+</t>
+<t>
+Added <xref target="PRLoption" /> specifying the ordering of requested option codes in the PRL parameter.
+</t>
+<t>
+Changed the requirement in <xref target="OROv6option" /> from "randomized order of options" to "increasing order 
+of option codes."
+</t>
+<t>
+In <xref target="v6Temporary" /> revised the language stating lack of support for renewing
+temporary addresses, as RFC 3315 does in fact specify a mechanism for doing so.
+</t>
+</list>
+</t>
+
+
+
 </section>
 </middle>
 
@@ -910,11 +1010,12 @@ to account for the "good" use of Confirm when roaming between access points on t
 
 <references title="Informative References">
     &rfc4578;
+    &rfc6355;
+    &rfc7618;
     &I-D.ietf-dhc-dhcp-privacy;
     &I-D.ietf-dhc-dhcpv6-privacy;
     &I-D.ietf-6man-default-iids;
     &I-D.ietf-6man-ipv6-address-generation-privacy;
-    &I-D.ietf-dhc-dynamic-shared-v4allocation;
 
     <reference anchor="CNBC" target="http://www.cbc.ca/news/politics/csec-used-airport-wi-fi-to-track-canadian-travellers-edward-snowden-documents-1.2517881">
         <front>
@@ -978,21 +1079,6 @@ digital modulation scheme
             </abstract>  
         </front>
     </reference>
-
-
-      <reference anchor="IEEE-OUI" target="http://www.ieee.org/netstorage/standards/oui.txt">
-        <front>
-          <title>Organizationally Unique Identifiers
-          http://www.ieee.org/netstorage/standards/oui.txt</title>
-
-          <author>
-            <organization>IEEE</organization>
-          </author>
-
-          <date />
-        </front>
-      </reference>
-
 
 </references>  
 
