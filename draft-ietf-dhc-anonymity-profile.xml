@@ -529,14 +529,23 @@ Different implementations request different parameters.<xref target="RFC2132"/> 
 "the client MAY list the options in order of preference." It practice, this means that
 different client implementations will request different parameters, in different orders.</t>
 
-<t>The specific ordering of option numbers in the Parameter Request List can be used
+<t>The specific ordering of option numbers in the Parameter Request List and
+the ordering of options in the message can be used
 to fingerprint the client. This may not reveal the
 	identity of a client, but may provide additional information,
 	such as the device type, vendor type or OS type and in some cases
 	specific version.</t>
 
-	<t>The client willing to protect its privacy SHOULD arrange the option
-codes in the Parameter Request List by increasing order, from smallest to largest.</t>
+<t>
+   The client willing to protect its privacy SHOULD randomize options
+   order before sending any DHCPv4 message.  Such a client SHOULD also
+   randomly shuffle the option codes order in PRL. If this random
+ordering cannot be implemented, the client MAY
+	arrange options by increasing order of option codes and
+order option codes order in PRL by increasing order of option codes
+before sending any DHCPv6
+	message.</t>
+
 </section>
 
 <section title="Host Name Option" anchor="hostNameOption">
@@ -811,11 +820,15 @@ the prefix delegation form of address assignment.
 	related technique utilizes the order in which option codes are
 	included in an Option Request Option (ORO).</t>
 
-	<t>The client willing to protect its privacy SHOULD
-	arrange options by increasing order of option codes
+<t>
+   The client willing to protect its privacy SHOULD randomize options
+   order before sending any DHCPv6 message.  Such a client SHOULD also
+   randomly shuffle the option codes order in ORO. If this random
+ordering cannot be implemented, the client MAY
+	arrange options by increasing order of option codes and
+order option codes order in ORO by increasing order of option codes
 before sending any DHCPv6
-	message. Such a client SHOULD also arrange
-	option codes order in ORO by increasing order of option codes.</t>
+	message.</t>
 
 <!-- CH: What we actually implemented was a strict ordering of the option codes.
 This is simpler than the random shuffle. -->
@@ -975,11 +988,11 @@ In <xref target="dhcpv4ClientId" />, added text explaining why the client identi
 anonymity is desired.
 </t>
 <t>
-Added <xref target="PRLoption" /> specifying the ordering of requested option codes in the PRL parameter.
+Added <xref target="PRLoption" /> specifying the random ordering of requested option codes in the PRL parameter, with an alternative option for strict ordering.
 </t>
 <t>
-Changed the requirement in <xref target="OROv6option" /> from "randomized order of options" to "increasing order 
-of option codes."
+Changed the requirement in <xref target="OROv6option" /> to allow "increasing order 
+of option codes" as an alternative to "randomized order of options".
 </t>
 <t>
 In <xref target="v6Temporary" /> revised the language stating lack of support for renewing
