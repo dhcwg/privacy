@@ -415,6 +415,32 @@ The inclusion of HostName and FQDN options in DISCOVER, REQUEST or INFORM messag
 <xref target="hostNameOption" /> and <xref target="fqdnv4" />.
 </t>
 
+<section title="Option encoding and avoiding fingerprinting" anchor="finger4" >
+<t>
+There are many choices for implementing DHCPv4 messages. Clients can choose to
+transmit a specific set of options, pick particular encoding for these options,
+and transmit options in different orders. These choices can be use to fingerprint
+the client.  
+</t>
+<t>
+The following sections provide guidance on the encoding of options. However, this
+guidance alone may not be sufficient to prevent fingerprinting from revealing 
+information, such as the device type, vendor type or OS type and in some cases
+specific version, or from revealing whether the client is using the anonymity
+profile.
+</t>
+<t>
+The client willing to protect its privacy SHOULD limit the subset of options
+sent in messages to the subset listed in the following sections.
+</t>
+<t>
+The client willing to protect its privacy SHOULD randomize options
+order before sending any DHCPv4 message. If this random
+ordering cannot be implemented, the client MAY
+arrange options by increasing order of option codes.
+</t>
+</section>
+
 <section title="Client IP address field" >
 <t>
 Four bytes in the header of the DHCP messages carry the "Client IP address" (ciaddr) as defined in <xref target="RFC2131"/>. 
@@ -523,28 +549,26 @@ connection.
 
 <section title="Parameter Request List" anchor="PRLoption">
 
-<t>The Parameter Request List option is defined in <xref target="RFC2132"/> with option code 61.
+<t>The Parameter Request List (PRL) option is defined in <xref target="RFC2132"/> with option code 61.
 It list the parameters requested from the server by the client.
 Different implementations request different parameters.<xref target="RFC2132"/> specifies that
 "the client MAY list the options in order of preference." It practice, this means that
 different client implementations will request different parameters, in different orders.</t>
 
-<t>The specific ordering of option numbers in the Parameter Request List and
-the ordering of options in the message can be used
+<t>The choice of option numbers and the specific ordering of option numbers in the Parameter Request 
+List can be used
 to fingerprint the client. This may not reveal the
 	identity of a client, but may provide additional information,
 	such as the device type, vendor type or OS type and in some cases
-	specific version.</t>
-
+	specific version.
+</t>
 <t>
-   The client willing to protect its privacy SHOULD randomize options
-   order before sending any DHCPv4 message.  Such a client SHOULD also
-   randomly shuffle the option codes order in PRL. If this random
+The client willing to protect its privacy SHOULD only request a minimal 
+number of options in PRL, and SHOULD also
+randomly shuffle the option codes order in PRL. If this random
 ordering cannot be implemented, the client MAY
-	arrange options by increasing order of option codes and
-order option codes order in PRL by increasing order of option codes
-before sending any DHCPv6
-	message.</t>
+order option codes order in PRL by increasing order of option codes.
+</t>
 
 </section>
 
@@ -660,6 +684,31 @@ specified in <xref target="RFC3315" />. Some of these options have specific impl
 on anonymity. The following sections provide guidance on the choice of option values when
 using the anonymity profile.
 </t>
+
+<section title="Option encoding and avoiding fingerprinting" anchor="finger6" >
+<t>
+There are many choices for implementing DHCPv6 messages. As explained in <xref target="finger4"/>,
+these choices can be use to fingerprint the client.  
+</t>
+<t>
+The following sections provide guidance on the encoding of options. However, this
+guidance alone may not be sufficient to prevent fingerprinting from revealing 
+information, such as the device type, vendor type or OS type and in some cases
+specific version, or from revealing whether the client is using the anonymity
+profile.
+</t>
+<t>
+The client willing to protect its privacy SHOULD limit the subset of options
+sent in messages to the subset listed in the following sections.
+</t>
+<t>
+The client willing to protect its privacy SHOULD randomize options
+order before sending any DHCPv6 message. If this random
+ordering cannot be implemented, the client MAY
+arrange options by increasing order of option codes.
+</t>
+
+</section>
 
       <section title="Do not send Confirm messages, unless really sure where" anchor="dhcpv6Confirm">
 	<t><xref target="RFC3315" /> requires clients to send a
@@ -807,28 +856,20 @@ the prefix delegation form of address assignment.
 
 </section>
 <section title="Option Request Option" anchor="OROv6option" >
-	<t>A DHCPv6 client may reveal other types of information,
-	besides unique identifiers. There are many ways a DHCPv6
-	client can perform certain actions and the specifics can be
-	used to fingerprint the client. This may not reveal the
-	identity of a client, but may provide additional information,
-	such as the device type, vendor type or OS type and in some cases
-	specific version.</t>
-
-	<t>One specific method used for fingerprinting utilizes the
-	order in which options are included in the message. Another
-	related technique utilizes the order in which option codes are
-	included in an Option Request Option (ORO).</t>
 
 <t>
-   The client willing to protect its privacy SHOULD randomize options
-   order before sending any DHCPv6 message.  Such a client SHOULD also
-   randomly shuffle the option codes order in ORO. If this random
+The Option Request Option (ORO) is defined in <xref target="RFC3315"/> with option code 6. It specifies
+the options that the client is requesting from the server.
+The choice of requested options and the order of encoding of these options in the ORO
+can be used to fingerprint the client.
+</t>
+<t>
+The client willing to protect its privacy SHOULD only request a 
+minimal subset of options and SHOULD
+randomly shuffle the option codes order in ORO. If this random
 ordering cannot be implemented, the client MAY
-	arrange options by increasing order of option codes and
-order option codes order in ORO by increasing order of option codes
-before sending any DHCPv6
-	message.</t>
+order option codes in ORO by increasing order of option codes.
+</t>
 
 <!-- CH: What we actually implemented was a strict ordering of the option codes.
 This is simpler than the random shuffle. -->
@@ -982,6 +1023,9 @@ Fixed a number of typos and nits.
 </t>
 <t>
 In <xref target="serverPrivacy" />, specified that mitigation of server privacy issues is left for further study.
+</t>
+<t>
+Moved the guidance on avoiding fingerprinting to <xref target="finger4" /> and <xref target="finger6" />.
 </t>
 <t>
 In <xref target="dhcpv4ClientId" />, added text explaining why the client identifier option should still be sent, even when

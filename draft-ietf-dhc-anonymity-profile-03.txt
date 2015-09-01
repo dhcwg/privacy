@@ -76,36 +76,36 @@ Table of Contents
      2.4.  Operating system fingerprinting . . . . . . . . . . . . .   6
      2.5.  No anonymity profile identification . . . . . . . . . . .   6
      2.6.  Using the anonymity profiles  . . . . . . . . . . . . . .   7
-     2.7.  What about privacy for DHCP servers . . . . . . . . . . .   7
+     2.7.  What about privacy for DHCP servers . . . . . . . . . . .   8
    3.  Anonymity profile for DHCPv4  . . . . . . . . . . . . . . . .   8
-     3.1.  Client IP address field . . . . . . . . . . . . . . . . .   9
-     3.2.  Requested IP address option . . . . . . . . . . . . . . .   9
-     3.3.  Client hardware address . . . . . . . . . . . . . . . . .  10
-     3.4.  Client Identifier Option  . . . . . . . . . . . . . . . .  10
-     3.5.  Parameter Request List  . . . . . . . . . . . . . . . . .  11
-     3.6.  Host Name Option  . . . . . . . . . . . . . . . . . . . .  11
-     3.7.  Client FQDN Option  . . . . . . . . . . . . . . . . . . .  12
-     3.8.  UUID/GUID-based Client Identifier Option  . . . . . . . .  13
-     3.9.  User and Vendor Class DHCP options  . . . . . . . . . . .  13
-   4.  Anonymity profile for DHCPv6  . . . . . . . . . . . . . . . .  13
-     4.1.  Do not send Confirm messages, unless really sure where  .  14
-     4.2.  Client Identifier DHCPv6 Option . . . . . . . . . . . . .  14
-       4.2.1.  Anonymous Information-Request . . . . . . . . . . . .  15
-     4.3.  Server Identifier Option  . . . . . . . . . . . . . . . .  15
-     4.4.  Address assignment options  . . . . . . . . . . . . . . .  15
-       4.4.1.  Obtain temporary addresses  . . . . . . . . . . . . .  16
-     4.5.  Option Request Option . . . . . . . . . . . . . . . . . .  16
-       4.5.1.  Previous option values  . . . . . . . . . . . . . . .  17
-     4.6.  Authentication Option . . . . . . . . . . . . . . . . . .  17
-     4.7.  User and Vendor Class DHCPv6 options  . . . . . . . . . .  17
-     4.8.  Client FQDN Option  . . . . . . . . . . . . . . . . . . .  17
-   5.  Operational Considerations  . . . . . . . . . . . . . . . . .  18
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  18
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
-   8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  18
-   9.  Changes from previous versions  . . . . . . . . . . . . . . .  18
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  20
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  20
+     3.1.  Option encoding and avoiding fingerprinting . . . . . . .   9
+     3.2.  Client IP address field . . . . . . . . . . . . . . . . .   9
+     3.3.  Requested IP address option . . . . . . . . . . . . . . .  10
+     3.4.  Client hardware address . . . . . . . . . . . . . . . . .  10
+     3.5.  Client Identifier Option  . . . . . . . . . . . . . . . .  11
+     3.6.  Parameter Request List  . . . . . . . . . . . . . . . . .  11
+     3.7.  Host Name Option  . . . . . . . . . . . . . . . . . . . .  12
+     3.8.  Client FQDN Option  . . . . . . . . . . . . . . . . . . .  13
+     3.9.  UUID/GUID-based Client Identifier Option  . . . . . . . .  13
+     3.10. User and Vendor Class DHCP options  . . . . . . . . . . .  14
+   4.  Anonymity profile for DHCPv6  . . . . . . . . . . . . . . . .  14
+     4.1.  Option encoding and avoiding fingerprinting . . . . . . .  14
+     4.2.  Do not send Confirm messages, unless really sure where  .  15
+     4.3.  Client Identifier DHCPv6 Option . . . . . . . . . . . . .  15
+       4.3.1.  Anonymous Information-Request . . . . . . . . . . . .  16
+     4.4.  Server Identifier Option  . . . . . . . . . . . . . . . .  16
+     4.5.  Address assignment options  . . . . . . . . . . . . . . .  16
+       4.5.1.  Obtain temporary addresses  . . . . . . . . . . . . .  17
+     4.6.  Option Request Option . . . . . . . . . . . . . . . . . .  17
+       4.6.1.  Previous option values  . . . . . . . . . . . . . . .  18
+     4.7.  Authentication Option . . . . . . . . . . . . . . . . . .  18
+     4.8.  User and Vendor Class DHCPv6 options  . . . . . . . . . .  18
+     4.9.  Client FQDN Option  . . . . . . . . . . . . . . . . . . .  18
+   5.  Operational Considerations  . . . . . . . . . . . . . . . . .  19
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  19
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  19
+   8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  19
+   9.  Changes from previous versions  . . . . . . . . . . . . . . .  19
 
 
 
@@ -114,8 +114,10 @@ Huitema, et al.           Expires March 4, 2016                 [Page 2]
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  21
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  22
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  21
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  21
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  22
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
 
 1.  Introduction
 
@@ -160,8 +162,6 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    address in the header of all the packets that they transmit.
    Standard implementation of Wi-Fi use unique 48 bit link-layer
    addresses, assigned to the devices according to procedures defined by
-   IEEE 802.  Even when the Wi-Fi packets are encrypted, the portion of
-   the header containing the addresses will be sent in clear text.
 
 
 
@@ -170,6 +170,8 @@ Huitema, et al.           Expires March 4, 2016                 [Page 3]
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
+   IEEE 802.  Even when the Wi-Fi packets are encrypted, the portion of
+   the header containing the addresses will be sent in clear text.
    Tracking devices can "listen to the airwaves" to find out what
    devices are transmitting near them.
 
@@ -216,8 +218,6 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    connection process and associated procedures.  The IP addresses will
    change, which means that all required TCP connections will have to be
    re-established.  If the network access is provided through a NAT,
-   changing IP address also means that the NAT traversal procedures will
-   have to be restarted.  This means a lot of disruption.  At the same
 
 
 
@@ -226,6 +226,8 @@ Huitema, et al.           Expires March 4, 2016                 [Page 4]
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
+   changing IP address also means that the NAT traversal procedures will
+   have to be restarted.  This means a lot of disruption.  At the same
    time, an observer on the network will easily notice that a station
    left, another came in just after that, and that the new one appears
    to be communicating with pretty much the same set of IP addresses as
@@ -271,8 +273,6 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    transmission hardware.  This can be applied to diverse types of
    radios, including Wi-Fi as described for example in
    [WiFiRadioFingerprinting].  No amount of link-layer address
-   randomization will protect against such techniques.  Protections may
-   exist, but they are outside the scope of the present document.
 
 
 
@@ -281,6 +281,9 @@ Huitema, et al.           Expires March 4, 2016                 [Page 5]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
+
+   randomization will protect against such techniques.  Protections may
+   exist, but they are outside the scope of the present document.
 
    On the other hand, we should not renounce randomization just because
    radio fingerprinting exists.  The radio fingerprinting techniques are
@@ -327,9 +330,6 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    monitoring mechanisms.  Therefore we feel that it is preferable to
    not disclose one's desire for privacy.
 
-   This preference leads to some important implications.  In particular,
-   we make an effort to make the mitigation techniques difficult to
-   distinguish from regular client behaviors, if at all possible.
 
 
 
@@ -337,6 +337,10 @@ Huitema, et al.           Expires March 4, 2016                 [Page 6]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
+
+   This preference leads to some important implications.  In particular,
+   we make an effort to make the mitigation techniques difficult to
+   distinguish from regular client behaviors, if at all possible.
 
 2.6.  Using the anonymity profiles
 
@@ -380,12 +384,8 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    conjunction with [RFC7618] if they are more concerned with privacy
    protection than with stable parameters.
 
-2.7.  What about privacy for DHCP servers
 
-   This document only provides recommendations for DHCP clients.  The
-   main target are DHCP clients used in mobile devices.  Such devices
-   are a tempting target for various monitoring systems, and providing
-   them with a simple anonymity solution is urgent.  We can argue that
+
 
 
 
@@ -394,6 +394,12 @@ Huitema, et al.           Expires March 4, 2016                 [Page 7]
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
+2.7.  What about privacy for DHCP servers
+
+   This document only provides recommendations for DHCP clients.  The
+   main target are DHCP clients used in mobile devices.  Such devices
+   are a tempting target for various monitoring systems, and providing
+   them with a simple anonymity solution is urgent.  We can argue that
    some mobile devices embed DHCP servers, and that providing solutions
    for such devices is also quite important.  Two plausible examples
    would be a DHCP server for a car network, or a DHCP server for a
@@ -436,12 +442,6 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
       Type, Client Identifier, and Parameter Request List options.  It
       SHOULD NOT contain any other option.
 
-   Header fields and option values SHOULD be set in accordance with the
-   DHCP specification, but some header fields and option values SHOULD
-   be constructed per the following guidelines.
-
-   The inclusion of HostName and FQDN options in DISCOVER, REQUEST or
-   INFORM messages is discussed in Section 3.6 and Section 3.7.
 
 
 
@@ -450,7 +450,36 @@ Huitema, et al.           Expires March 4, 2016                 [Page 8]
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
-3.1.  Client IP address field
+   Header fields and option values SHOULD be set in accordance with the
+   DHCP specification, but some header fields and option values SHOULD
+   be constructed per the following guidelines.
+
+   The inclusion of HostName and FQDN options in DISCOVER, REQUEST or
+   INFORM messages is discussed in Section 3.7 and Section 3.8.
+
+3.1.  Option encoding and avoiding fingerprinting
+
+   There are many choices for implementing DHCPv4 messages.  Clients can
+   choose to transmit a specific set of options, pick particular
+   encoding for these options, and transmit options in different orders.
+   These choices can be use to fingerprint the client.
+
+   The following sections provide guidance on the encoding of options.
+   However, this guidance alone may not be sufficient to prevent
+   fingerprinting from revealing information, such as the device type,
+   vendor type or OS type and in some cases specific version, or from
+   revealing whether the client is using the anonymity profile.
+
+   The client willing to protect its privacy SHOULD limit the subset of
+   options sent in messages to the subset listed in the following
+   sections.
+
+   The client willing to protect its privacy SHOULD randomize options
+   order before sending any DHCPv4 message.  If this random ordering
+   cannot be implemented, the client MAY arrange options by increasing
+   order of option codes.
+
+3.2.  Client IP address field
 
    Four bytes in the header of the DHCP messages carry the "Client IP
    address" (ciaddr) as defined in [RFC2131].  In DHCP, this field is
@@ -467,11 +496,21 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    they know that the network attachment has changed, and in particular
    if the link layer address is reset by the device's administrator.
 
+
+
+
+
+
+Huitema, et al.           Expires March 4, 2016                 [Page 9]
+
+Internet-Draft           DHCP Anonymity Profile           September 2015
+
+
    The clients using the anonymity profile MUST NOT include in the
    message a Client IP Address that has been obtained with a different
    link-layer address.
 
-3.2.  Requested IP address option
+3.3.  Requested IP address option
 
    The Requested IP address option id defined in [RFC2132] with code 50.
    It allows the client to request that a particular IP address be
@@ -498,15 +537,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    the client MAY issue a DHCPREQUEST to try reclaim the current
    address.
 
-
-
-
-Huitema, et al.           Expires March 4, 2016                 [Page 9]
-
-Internet-Draft           DHCP Anonymity Profile           September 2015
-
-
-3.3.  Client hardware address
+3.4.  Client hardware address
 
    Sixteen bytes in the header of the DHCP messages carry the "Client
    hardware address" (chaddr) as defined in [RFC2131].  The presence of
@@ -523,7 +554,15 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    the hardware address is reset to a new value, or randomized, the DHCP
    client SHOULD use the new randomized value in the DHCP messages.
 
-3.4.  Client Identifier Option
+
+
+
+Huitema, et al.           Expires March 4, 2016                [Page 10]
+
+Internet-Draft           DHCP Anonymity Profile           September 2015
+
+
+3.5.  Client Identifier Option
 
    The client identifier option is defined in [RFC2132] with option code
    61.  It is discussed in detail in [RFC4361].  The purpose of the
@@ -554,14 +593,6 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    clients MUST use client identifiers based solely on the link layer
    address that will be used in the underlying connection.  This will
    ensure that the DHCP client identifier does not leak any information
-
-
-
-Huitema, et al.           Expires March 4, 2016                [Page 10]
-
-Internet-Draft           DHCP Anonymity Profile           September 2015
-
-
    that is not already available to entities monitoring the network
    connection.  It will also ensure that a strategy of randomizing the
    link layer address will not be nullified by DHCP options.
@@ -573,31 +604,37 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    unique to the current link, using for example a combination of a
    local secret and an identifier of the connection.
 
-3.5.  Parameter Request List
+3.6.  Parameter Request List
 
-   The Parameter Request List option is defined in [RFC2132] with option
-   code 61.  It list the parameters requested from the server by the
-   client.  Different implementations request different
+   The Parameter Request List (PRL) option is defined in [RFC2132] with
+   option code 61.  It list the parameters requested from the server by
+   the client.  Different implementations request different
    parameters.[RFC2132] specifies that "the client MAY list the options
+
+
+
+Huitema, et al.           Expires March 4, 2016                [Page 11]
+
+Internet-Draft           DHCP Anonymity Profile           September 2015
+
+
    in order of preference."  It practice, this means that different
    client implementations will request different parameters, in
    different orders.
 
-   The specific ordering of option numbers in the Parameter Request List
-   and the ordering of options in the message can be used to fingerprint
-   the client.  This may not reveal the identity of a client, but may
+   The choice of option numbers and the specific ordering of option
+   numbers in the Parameter Request List can be used to fingerprint the
+   client.  This may not reveal the identity of a client, but may
    provide additional information, such as the device type, vendor type
    or OS type and in some cases specific version.
 
-   The client willing to protect its privacy SHOULD randomize options
-   order before sending any DHCPv4 message.  Such a client SHOULD also
-   randomly shuffle the option codes order in PRL.  If this random
-   ordering cannot be implemented, the client MAY arrange options by
-   increasing order of option codes and order option codes order in PRL
-   by increasing order of option codes before sending any DHCPv6
-   message.
+   The client willing to protect its privacy SHOULD only request a
+   minimal number of options in PRL, and SHOULD also randomly shuffle
+   the option codes order in PRL.  If this random ordering cannot be
+   implemented, the client MAY order option codes order in PRL by
+   increasing order of option codes.
 
-3.6.  Host Name Option
+3.7.  Host Name Option
 
    The Host Name option is defined in [RFC2132] with option code 12.
    Depending on implementations, the option value can carry either a
@@ -610,14 +647,6 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    even simple host names can provide a significant amount of
    information on the identity of the device.  They are typically chosen
    to be unique in the context where the device is most often used.  If
-
-
-
-Huitema, et al.           Expires March 4, 2016                [Page 11]
-
-Internet-Draft           DHCP Anonymity Profile           September 2015
-
-
    that context is wide enough, in a large company or in a big
    university, the host name will be a pretty good identifier of the
    device.  Monitoring services could use that information in
@@ -637,6 +666,14 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    local link.  Clients MAY use the following algorithm: compute a
    secure hash of a local secret and of the link layer address that will
    be used in the underlying connection, and then use the hexadecimal
+
+
+
+Huitema, et al.           Expires March 4, 2016                [Page 12]
+
+Internet-Draft           DHCP Anonymity Profile           September 2015
+
+
    representation of the first 6 bytes of the hash as the obfuscated
    host name.
 
@@ -644,7 +681,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    hosts that require anonymity, as explained in Section 2.5.  For this
    reason, the above algorithm is just a suggestion.
 
-3.7.  Client FQDN Option
+3.8.  Client FQDN Option
 
    The Client FQDN option is defined in [RFC4702] with option code 81.
    The option allows the DHCP clients to advertise to the DHCP server
@@ -665,19 +702,10 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    Name Option, with a suffix matching the connection-specific DNS
    suffix being advertised by that DHCP server.  Having a name in the
    DNS allows working with legacy systems that require one to be there,
-
-
-
-
-Huitema, et al.           Expires March 4, 2016                [Page 12]
-
-Internet-Draft           DHCP Anonymity Profile           September 2015
-
-
    e.g., by verifying a forward and reverse lookup succeeds with the
    same result.
 
-3.8.  UUID/GUID-based Client Identifier Option
+3.9.  UUID/GUID-based Client Identifier Option
 
    The UUID/GUID-based Client Machine Identifier option is defined in
    [RFC4578], with option code 97.  The option is part of a set of
@@ -693,7 +721,16 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    reasons, nodes visiting untrusted networks MUST disable the PXE
    functions, and MUST NOT send the corresponding options.
 
-3.9.  User and Vendor Class DHCP options
+
+
+
+
+Huitema, et al.           Expires March 4, 2016                [Page 13]
+
+Internet-Draft           DHCP Anonymity Profile           September 2015
+
+
+3.10.  User and Vendor Class DHCP options
 
    Vendor identifying options are defined in [RFC2132] and [RFC3925].
    When using the anonymity profile, DHCP clients SHOULD NOT use the
@@ -722,14 +759,6 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    flag and prefix options published by the "Router Advertisement"
    messages of local routers, as specified in [RFC4861].  When these
    options enable stateless address configuration hosts using the
-
-
-
-Huitema, et al.           Expires March 4, 2016                [Page 13]
-
-Internet-Draft           DHCP Anonymity Profile           September 2015
-
-
    anonymity profile SHOULD choose it over stateful address
    configuration, because stateless configuration requires fewer
    information disclosures than stateful configuration.
@@ -741,7 +770,36 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    implications on anonymity.  The following sections provide guidance
    on the choice of option values when using the anonymity profile.
 
-4.1.  Do not send Confirm messages, unless really sure where
+4.1.  Option encoding and avoiding fingerprinting
+
+   There are many choices for implementing DHCPv6 messages.  As
+   explained in Section 3.1, these choices can be use to fingerprint the
+   client.
+
+   The following sections provide guidance on the encoding of options.
+   However, this guidance alone may not be sufficient to prevent
+
+
+
+Huitema, et al.           Expires March 4, 2016                [Page 14]
+
+Internet-Draft           DHCP Anonymity Profile           September 2015
+
+
+   fingerprinting from revealing information, such as the device type,
+   vendor type or OS type and in some cases specific version, or from
+   revealing whether the client is using the anonymity profile.
+
+   The client willing to protect its privacy SHOULD limit the subset of
+   options sent in messages to the subset listed in the following
+   sections.
+
+   The client willing to protect its privacy SHOULD randomize options
+   order before sending any DHCPv6 message.  If this random ordering
+   cannot be implemented, the client MAY arrange options by increasing
+   order of option codes.
+
+4.2.  Do not send Confirm messages, unless really sure where
 
    [RFC3315] requires clients to send a Confirm message when they attach
    to a new link to verify whether the addressing and configuration
@@ -762,7 +820,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    same network MAY send Confirm messages while still protecting their
    privacy.
 
-4.2.  Client Identifier DHCPv6 Option
+4.3.  Client Identifier DHCPv6 Option
 
    The client identifier option is defined in [RFC3315] with option code
    1.  The purpose of the client identifier option is to identify the
@@ -776,15 +834,16 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
 
    When using the anonymity profile in conjunction with randomized link-
    layer addresses, DHCPv6 clients MUST use the DUID format number 3,
-   Link-layer address.  The value of the Link-layer address should be
-   that currently assigned to the interface.
 
 
 
-Huitema, et al.           Expires March 4, 2016                [Page 14]
+Huitema, et al.           Expires March 4, 2016                [Page 15]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
+
+   Link-layer address.  The value of the Link-layer address should be
+   that currently assigned to the interface.
 
    When using the anonymity profile without the benefit of randomized
    link-layer addresses, clients that want to protect their privacy
@@ -798,7 +857,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    this fact MAY use a time stamp from the past. e.g. a random timestamp
    from the previous year could be a good value.
 
-4.2.1.  Anonymous Information-Request
+4.3.1.  Anonymous Information-Request
 
    According to [RFC3315], a DHCPv6 client typically includes its client
    identifier in most of the messages it sends.  There is one exception,
@@ -811,7 +870,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    specific options if it is configured to do so, but the need for
    anonymity precludes such options anyway.
 
-4.3.  Server Identifier Option
+4.4.  Server Identifier Option
 
    When using the anonymity profile, DHCPv6 clients SHOULD use the
    Server Identifier Option (code 2) as specified in [RFC3315].  Clients
@@ -819,7 +878,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    the current link-layer address, because reuse of old values discloses
    information that can be used to identify the client.
 
-4.4.  Address assignment options
+4.5.  Address assignment options
 
    When using the anonymity profile, DHCPv6 clients might have to use
    SOLICIT or REQUEST messages to obtain IPv6 addresses through the DHCP
@@ -831,16 +890,17 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    The clients MAY use the IA Address Option (code 5) but need to
    balance the potential advantage of "address continuity" versus the
    potential risk of "previous address disclosure."  A potential
-   solution is to remove all stored addresses when a link-layer address
-   changes, and to only use the IA Address option with addresses that
-   have been explicitly assigned through the current link-layer address.
 
 
 
-Huitema, et al.           Expires March 4, 2016                [Page 15]
+Huitema, et al.           Expires March 4, 2016                [Page 16]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
+
+   solution is to remove all stored addresses when a link-layer address
+   changes, and to only use the IA Address option with addresses that
+   have been explicitly assigned through the current link-layer address.
 
    The interaction between prefix delegation and anonymity require
    further study.  For now, the simple solution is to avoid using prefix
@@ -848,7 +908,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    profiles, clients SHOULD NOT use IA_PD, the prefix delegation form of
    address assignment.
 
-4.4.1.  Obtain temporary addresses
+4.5.1.  Obtain temporary addresses
 
    [RFC3315] defines a special container (IA_TA) for requesting
    temporary addresses.  This is a good mechanism in principle, but
@@ -864,7 +924,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
 
    Clients interested in their privacy SHOULD NOT use IA_TA.  They
    should simply send an IA_NA with a randomized IAID.  This, along with
-   the mitigation technique discussed in Section 4.3, will ensure that a
+   the mitigation technique discussed in Section 4.4, will ensure that a
    client will get a new address that can be renewed and can be used as
    long as needed.  To get a new address, it can send Request message
    with a new randomized IAID before releasing the other one.  This will
@@ -881,37 +941,29 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    From the Operating System perspective, addresses obtained using this
    technique SHOULD be treated as temporary as specified in [RFC4941].
 
-4.5.  Option Request Option
+4.6.  Option Request Option
 
-   A DHCPv6 client may reveal other types of information, besides unique
-   identifiers.  There are many ways a DHCPv6 client can perform certain
-   actions and the specifics can be used to fingerprint the client.
-   This may not reveal the identity of a client, but may provide
-   additional information, such as the device type, vendor type or OS
-   type and in some cases specific version.
+   The Option Request Option (ORO) is defined in [RFC3315] with option
+   code 6.  It specifies the options that the client is requesting from
+   the server.  The choice of requested options and the order of
 
 
 
-
-Huitema, et al.           Expires March 4, 2016                [Page 16]
+Huitema, et al.           Expires March 4, 2016                [Page 17]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
-   One specific method used for fingerprinting utilizes the order in
-   which options are included in the message.  Another related technique
-   utilizes the order in which option codes are included in an Option
-   Request Option (ORO).
+   encoding of these options in the ORO can be used to fingerprint the
+   client.
 
-   The client willing to protect its privacy SHOULD randomize options
-   order before sending any DHCPv6 message.  Such a client SHOULD also
-   randomly shuffle the option codes order in ORO.  If this random
-   ordering cannot be implemented, the client MAY arrange options by
-   increasing order of option codes and order option codes order in ORO
-   by increasing order of option codes before sending any DHCPv6
-   message.
+   The client willing to protect its privacy SHOULD only request a
+   minimal subset of options and SHOULD randomly shuffle the option
+   codes order in ORO.  If this random ordering cannot be implemented,
+   the client MAY order option codes in ORO by increasing order of
+   option codes.
 
-4.5.1.  Previous option values
+4.6.1.  Previous option values
 
    According to [RFC3315], the client that includes an Option Request
    Option in a Solicit or Request message MAY additionally include
@@ -923,7 +975,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    instances of options because old values might be used to identify the
    client.
 
-4.6.  Authentication Option
+4.7.  Authentication Option
 
    The purpose of the Authentication option (code 11) is to authenticate
    the identity of clients and servers and the contents of DHCP
@@ -934,29 +986,30 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    are operating in a trusted environment, e.g., in a work place
    network.
 
-4.7.  User and Vendor Class DHCPv6 options
+4.8.  User and Vendor Class DHCPv6 options
 
    When using the anonymity profile, DHCPv6 clients SHOULD NOT use the
    User Class option (code 15) or the Vendor Class option (code 16), as
    these options potentially reveal identifying information.
 
-4.8.  Client FQDN Option
+4.9.  Client FQDN Option
 
    The Client FQDN option is defined in [RFC4704] with option code 29.
    The option allows the DHCP clients to advertise to the DHCP server
    their fully qualified domain name (FQDN) such as
    "mobile.example.com."  When using the anonymity profile, DHCPv6
+   clients SHOULD NOT include the Client FQDN option in their DHCPv6
+   messages because it identifies the client.  As explained in
+   Section 3.8 they MAY use a local-only FQDN by combining a host name
 
 
 
-Huitema, et al.           Expires March 4, 2016                [Page 17]
+
+Huitema, et al.           Expires March 4, 2016                [Page 18]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
-   clients SHOULD NOT include the Client FQDN option in their DHCPv6
-   messages because it identifies the client.  As explained in
-   Section 3.7 they MAY use a local-only FQDN by combining a host name
    derived from the link layer address and a suffix advertised by the
    local DHCP server.
 
@@ -1003,21 +1056,21 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
 
    1.  In Section 2.6, added guidance when using [RFC7618].
 
+   2.  In Section 3.5, added guidance for case when no link layer
+       address is available.
 
 
-Huitema, et al.           Expires March 4, 2016                [Page 18]
+
+Huitema, et al.           Expires March 4, 2016                [Page 19]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
-   2.  In Section 3.4, added guidance for case when no link layer
-       address is available.
-
-   3.  In Section 3.6, changed the recommended mechanism for obfuscating
+   3.  In Section 3.7, changed the recommended mechanism for obfuscating
        host names, in order to avoid reveal the underlying link layer
        address.
 
-   4.  In Section 4.1, added an exception to the "should not send
+   4.  In Section 4.2, added an exception to the "should not send
        confirm" recommendation, to account for the "good" use of Confirm
        when roaming between access points on the same network.
 
@@ -1026,14 +1079,14 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    1.  In Section 3, checked the requirements of parameters in messages
        to ensure consistency with the main text.
 
-   2.  In Section 3.4, added guidance for case when no link layer
+   2.  In Section 3.5, added guidance for case when no link layer
        address is available.
 
-   3.  In Section 3.6, specified that clients SHOULD NOT send the
+   3.  In Section 3.7, specified that clients SHOULD NOT send the
        option, and that the optional obfuscation mechanism is just a
        suggestion.
 
-   4.  Updated the text in Section 4.4.1 for temporary IPv6 address
+   4.  Updated the text in Section 4.5.1 for temporary IPv6 address
        allocation.
 
    5.  Rewrote Section 5 on operational requirements for clarity.
@@ -1048,25 +1101,28 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
    3.  In Section 2.7, specified that mitigation of server privacy
        issues is left for further study.
 
-   4.  In Section 3.4, added text explaining why the client identifier
+   4.  Moved the guidance on avoiding fingerprinting to Section 3.1 and
+       Section 4.1.
+
+   5.  In Section 3.5, added text explaining why the client identifier
        option should still be sent, even when anonymity is desired.
 
-   5.  Added Section 3.5 specifying the random ordering of requested
+   6.  Added Section 3.6 specifying the random ordering of requested
        option codes in the PRL parameter, with an alternative option for
        strict ordering.
 
-   6.  Changed the requirement in Section 4.5 to allow "increasing order
+   7.  Changed the requirement in Section 4.6 to allow "increasing order
        of option codes" as an alternative to "randomized order of
        options".
 
 
 
-Huitema, et al.           Expires March 4, 2016                [Page 19]
+Huitema, et al.           Expires March 4, 2016                [Page 20]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
-   7.  In Section 4.4.1 revised the language stating lack of support for
+   8.  In Section 4.5.1 revised the language stating lack of support for
        renewing temporary addresses, as RFC 3315 does in fact specify a
        mechanism for doing so.
 
@@ -1117,7 +1173,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
 
-Huitema, et al.           Expires March 4, 2016                [Page 20]
+Huitema, et al.           Expires March 4, 2016                [Page 21]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
@@ -1173,7 +1229,7 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
 
-Huitema, et al.           Expires March 4, 2016                [Page 21]
+Huitema, et al.           Expires March 4, 2016                [Page 22]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
@@ -1229,7 +1285,7 @@ Authors' Addresses
 
 
 
-Huitema, et al.           Expires March 4, 2016                [Page 22]
+Huitema, et al.           Expires March 4, 2016                [Page 23]
 
 Internet-Draft           DHCP Anonymity Profile           September 2015
 
@@ -1285,4 +1341,4 @@ Internet-Draft           DHCP Anonymity Profile           September 2015
 
 
 
-Huitema, et al.           Expires March 4, 2016                [Page 23]
+Huitema, et al.           Expires March 4, 2016                [Page 24]
