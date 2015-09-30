@@ -68,7 +68,7 @@
 <?rfc inline='yes' ?>
 
 <rfc category="std" 
-     docName="draft-ietf-dhc-anonymity-profile-03.txt" 
+     docName="draft-ietf-dhc-anonymity-profile-04.txt" 
      ipr="trust200902"
      >
 
@@ -384,24 +384,32 @@ The number of options depend on the specific DHCP message:
 </t>
 <t>
 <list style="hanging">
-<t hangText="DISCOVER:"> The anonymized DISCOVER messages MUST contain the Message Type, 
-Client Identifier, and Parameter Request List options. It SHOULD NOT contain any other 
+<t hangText="DHCPDISCOVER:"> The anonymized DHCPDISCOVER messages MUST contain the Message Type, 
+SHOULD contain the
+Client Identifier, and 
+MAY contain the
+Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
-<t hangText="REQUEST:"> The anonymized REQUEST messages SHOULD contain the Message Type, 
-Client Identifier, Requested IP address and Parameter Request List options. 
+<t hangText="DHCPREQUEST:"> The anonymized DHCPREQUEST messages MUST contain the Message Type, 
+SHOULD contain the
+Client Identifier and Requested IP address, and 
+MAY contain the Parameter Request List options. 
 If the message is in response
 to an OFFER, it SHOULD contain the corresponding Server Identifier option. It SHOULD NOT contain 
 any other option.
 </t>
-<t hangText="DECLINE:"> The anonymized DECLINE messages SHOULD contain the Message Type, Client 
+<t hangText="DHCPDECLINE:"> The anonymized DHCPDECLINE messages MUST contain the Message Type, and 
+SHOULD contain the Client 
 Identifier and Server Identifier options. 
 </t> 
-<t hangText="RELEASE:"> The anonymized RELEASE messages SHOULD contain the Message Type, Client 
+<t hangText="DHCPRELEASE:"> The anonymized DHCPRELEASE messages MUST contain the Message Type, and 
+SHOULD contain the Client 
 Identifier and Server Identifier options.
 </t>
 <t hangText="INFORM:"> The anonymized INFORM messages MUST contain the Message Type, 
-Client Identifier, and Parameter Request List options. It SHOULD NOT contain any other 
+SHOULD contain the
+Client Identifier, and MAY contain the Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
 </list>
@@ -411,7 +419,7 @@ Header fields and option values SHOULD be set in accordance with the DHCP specif
 but some header fields and option values SHOULD be constructed per the following guidelines.
 </t>
 <t>
-The inclusion of HostName and FQDN options in DISCOVER, REQUEST or INFORM messages is discussed in 
+The inclusion of HostName and FQDN options in DHCPDISCOVER, REQUEST or INFORM messages is discussed in 
 <xref target="hostNameOption" /> and <xref target="fqdnv4" />.
 </t>
 
@@ -462,7 +470,7 @@ obtained with a different link-layer address.
 </t>
 </section>
 
-<section title="Requested IP address option" >
+<section title="Requested IP address option" anchor="requestedIP" >
 <t>
 The Requested IP address option id defined in <xref target="RFC2132" /> with code 50.
 It allows the client to request that a particular IP address be assigned. 
@@ -478,7 +486,9 @@ use the Requested IP address option in DHCPDISCOVER messages. They MUST use the 
 by the DHCP protocol, for example in DHCPREQUEST messages.
 </t>
 <t>
-There are scenarios in which a client connects to a network when a lease is still valid. In that state, the client 
+There are scenarios in which a client connecting to a network remembers
+previously allocated address, i.e. is in the INIT-REBOOT state.
+In that state, the client 
 that is concerned with privacy SHOULD perform a complete 
 four way handshake starting with DHCPDISCOVER to obtain a new address lease. 
 If the client can ascertain that this is exactly the same network 
@@ -791,7 +801,8 @@ values that were received with the current link-layer address, because reuse of
 old values discloses information that can be used to identify the client.
 </t>
 </section>
-<section title="Address assignment options">
+
+<section title="Address assignment options -- old version">
 <t>
 When using the anonymity profile, DHCPv6 clients might have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
 through the DHCP server. The clients SHOULD only use the options necessary to perform the requested 
@@ -812,7 +823,7 @@ prefix delegation when striving for anonymity.
 When using the anonymity profiles, clients SHOULD NOT use IA_PD, 
 the prefix delegation form of address assignment. 
 </t>
-<section title="Obtain temporary addresses" anchor="v6Temporary" >
+<section title="Obtain temporary addresses" anchor="v6TemporaryOld" >
 	<t><xref target="RFC3315" /> defines a special container
 	(IA_TA) for requesting temporary addresses. This is a good
 	mechanism in principle, but there are a number of issues
@@ -851,9 +862,78 @@ the prefix delegation form of address assignment.
 	<t>From the Operating System perspective, addresses obtained
 	using this technique SHOULD be treated as temporary 
 	as specified in <xref target="RFC4941" />.</t>
-
       </section>
 
+</section>
+
+<section title="Address assignment options -- new version" anchor="useIA_NA">
+<t>
+When using the anonymity profile, DHCPv6 clients might have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
+through the DHCP server. Clients interested in privacy SHOULD request addresses using the 
+Identity Association for Non-temporary Addresses Option (IA_NA, code 3).
+</t>
+<t>
+The IA_NA option includes an IAID parameter that identifies a unique identity association
+for the interface for which the
+Address is respected. Clients interested in protecting their privacy MUST ensure that 
+the IAID does not enable client identification. They also need to conform to the
+requirement of <xref target="RFC3315"/> that the IAID for that IA MUST be consistent 
+across restarts of the DHCP client. We interpret that as requiring that the IAID MUST be constant
+for the association, as long as the link layer Address remains constant.
+</t>
+<t>
+Clients MAY meet the privacy, uniqueness and stability requirement of the IAID using
+by constructing it as the combination of one byte encoding the interface number 
+in the system, and three bytes of the link layer address. 
+</t>
+<t>
+The clients MAY use the IA Address Option (code 5) but need to balance the potential advantage of 
+"address continuity" versus the potential risk of "previous address disclosure." A potential solution
+is to remove all stored addresses when a link-layer address changes, and to only use the IA Address option
+with addresses that have been explicitly assigned through the current link-layer address. 
+</t>
+<section title="Obtain temporary addresses" anchor="v6Temporary" >
+	<t><xref target="RFC3315" /> defines a special container
+	(IA_TA, code 4) for requesting temporary addresses. This is a good
+	mechanism in principle, but there are a number of issues
+	associated with it. First, this is not a widely used
+	feature, so clients depending solely on temporary
+        addresses may lock themselves out of service. 
+        Secondly, <xref target="RFC3315" /> does not
+	specify any lifetime or lease length for temporary
+	addresses. Therefore support for renewing temporary 
+        addresses may vary between
+        client implementations, including not being supported at all.
+        Finally, by requesting temporary addresses a client reveals its
+   desire for privacy and potentially risks countermeasures as described
+   in <xref
+	target="desire"/>.</t>
+
+
+	<t>Because of these Clients interested in their privacy SHOULD NOT use
+	IA_TA.</t>
+
+
+<t>The addresses obtained according to <xref target="useIA_NA" /> are temporary
+in nature, and will be discarded when the link layer address is changed. They thus meet most of 
+the use cases of temporary addresses. Clients interested in their privacy
+should not publish their IPv6 addresses in the DNS or otherwise associate them 
+with name services, and thus do not normally need two classes of addresses, one public,
+one temporary.</t>
+
+<t>The use of mechanisms to allocate several IPv6 addresses to a client while
+preserving privacy is for further study.</t>
+
+</section>
+<section title="Prefix delegation" >
+<t>
+The interaction between prefix delegation
+and anonymity require further study. For now, the simple solution is to avoid using
+prefix delegation when striving for anonymity. 
+When using the anonymity profiles, clients SHOULD NOT use IA_PD, 
+the prefix delegation form of address assignment. 
+</t>
+</section>
 </section>
 <section title="Option Request Option" anchor="OROv6option" >
 
@@ -1045,6 +1125,22 @@ temporary addresses, as RFC 3315 does in fact specify a mechanism for doing so.
 </list>
 </t>
 
+<t>
+Changes from draft-03 to draft-04:
+</t>
+<t>
+<list style="numbers" >
+<t>
+In <xref target="anonymousV4" />, tightened the normative language and the use of message codes.
+</t>
+<t>
+In <xref target="requestedIP" />, clarified the reference to the INIT-REBOOT scenario.
+</t>
+<t>
+Revised the writing of <xref target="useIA_NA" /> for greater clarity.
+</t>
+</list>
+</t>
 
 
 </section>
