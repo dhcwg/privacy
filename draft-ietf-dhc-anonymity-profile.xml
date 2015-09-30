@@ -875,7 +875,7 @@ Identity Association for Non-temporary Addresses Option (IA_NA, code 3).
 <t>
 The IA_NA option includes an IAID parameter that identifies a unique identity association
 for the interface for which the
-Address is respected. Clients interested in protecting their privacy MUST ensure that 
+Address is requested. Clients interested in protecting their privacy MUST ensure that 
 the IAID does not enable client identification. They also need to conform to the
 requirement of <xref target="RFC3315"/> that the IAID for that IA MUST be consistent 
 across restarts of the DHCP client. We interpret that as requiring that the IAID MUST be constant
