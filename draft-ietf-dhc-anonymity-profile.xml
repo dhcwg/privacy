@@ -247,7 +247,7 @@ synchronization.
 </t>
 <t>
 The proposed anonymity profiles solve this synchronization issues by deriving most identifiers from the link-layer address, 
-and generally by making making sure that DHCP parameter values do not remain constant after an address change.
+and generally by making sure that DHCP parameter values do not remain constant after an address change.
 </t>
 </section>
 <section title="Radio fingerprinting" >
@@ -340,7 +340,7 @@ assigned addresses.
 There may be rare situations where the clients want anonymity to attackers but not 
 to their DHCP server.  These clients should still use link-layer address randomization to
 hide from observers, and some form of encrypted communication to the DHCP server. 
-This scenario is not yet supported in this document.
+This scenario is out of scope for this document.
 </t>
 <t>
 To preserve anonymity, the clients need to not use stable values for the client identifiers.
@@ -384,32 +384,37 @@ The number of options depend on the specific DHCP message:
 </t>
 <t>
 <list style="hanging">
-<t hangText="DHCPDISCOVER:"> The anonymized DHCPDISCOVER messages MUST contain the Message Type, 
-SHOULD contain the
-Client Identifier, and 
+<t hangText="DHCPDISCOVER:"> The anonymized DHCPDISCOVER messages 
+MUST contain the Message Type, 
+MAY contain the Client Identifier, and 
 MAY contain the
 Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
-<t hangText="DHCPREQUEST:"> The anonymized DHCPREQUEST messages MUST contain the Message Type, 
-SHOULD contain the
-Client Identifier and Requested IP address, and 
+<t hangText="DHCPREQUEST:"> The anonymized DHCPREQUEST messages 
+MUST contain the Message Type, 
+MAY contain the
+Client Identifier, and 
 MAY contain the Parameter Request List options. 
 If the message is in response
-to an OFFER, it SHOULD contain the corresponding Server Identifier option. It SHOULD NOT contain 
-any other option.
+to a DHCPOFFER, it MUST contain the corresponding Server Identifier option
+and the Requested IP address. If the message is not in response to a 
+DHCPOFFER, it MAY contain a Requested IP address as explained in 
+<xref target="requestedIP" />.
+It SHOULD NOT contain any other option.
 </t>
-<t hangText="DHCPDECLINE:"> The anonymized DHCPDECLINE messages MUST contain the Message Type, and 
-SHOULD contain the Client 
-Identifier and Server Identifier options. 
+<t hangText="DHCPDECLINE:"> The anonymized DHCPDECLINE messages 
+MUST contain the Message Type, Server Identifier, and Requested IP address options, 
+and MAY contain the Client Identifier  options. 
 </t> 
-<t hangText="DHCPRELEASE:"> The anonymized DHCPRELEASE messages MUST contain the Message Type, and 
-SHOULD contain the Client 
-Identifier and Server Identifier options.
+<t hangText="DHCPRELEASE:"> The anonymized DHCPRELEASE messages 
+MUST contain the Message Type and Server Identifier options, and 
+MAY contain the Client Identifier option.
 </t>
-<t hangText="INFORM:"> The anonymized INFORM messages MUST contain the Message Type, 
-SHOULD contain the
-Client Identifier, and MAY contain the Parameter Request List options. It SHOULD NOT contain any other 
+<t hangText="INFORM:"> The anonymized INFORM messages 
+MUST contain the Message Type, 
+and MAY contain the
+Client Identifier and Parameter Request List options. It SHOULD NOT contain any other 
 option.
 </t>
 </list>
@@ -419,11 +424,12 @@ Header fields and option values SHOULD be set in accordance with the DHCP specif
 but some header fields and option values SHOULD be constructed per the following guidelines.
 </t>
 <t>
-The inclusion of HostName and FQDN options in DHCPDISCOVER, REQUEST or INFORM messages is discussed in 
+The inclusion of HostName and FQDN options in DHCPDISCOVER, DHCPREQUEST or 
+DHCPINFORM messages is discussed in 
 <xref target="hostNameOption" /> and <xref target="fqdnv4" />.
 </t>
 
-<section title="Option encoding and avoiding fingerprinting" anchor="finger4" >
+<section title="Avoiding fingerprinting" anchor="finger4" >
 <t>
 There are many choices for implementing DHCPv4 messages. Clients can choose to
 transmit a specific set of options, pick particular encoding for these options,
@@ -431,7 +437,8 @@ and transmit options in different orders. These choices can be use to fingerprin
 the client.  
 </t>
 <t>
-The following sections provide guidance on the encoding of options. However, this
+The following sections provide guidance on the encoding of options and
+fields within the packets. However, this
 guidance alone may not be sufficient to prevent fingerprinting from revealing 
 information, such as the device type, vendor type or OS type and in some cases
 specific version, or from revealing whether the client is using the anonymity
@@ -497,7 +504,7 @@ the client MAY issue a DHCPREQUEST to try reclaim the current address.
 </t>
 
 </section>
-<section title="Client hardware address">
+<section title="Client hardware address field">
 <t>
 Sixteen bytes in the header of the DHCP messages carry the "Client hardware address" (chaddr) as defined 
 in <xref target="RFC2131"/>. The presence of this address is necessary for the proper operation of the
@@ -557,7 +564,7 @@ connection.
 </section>
 
 
-<section title="Parameter Request List" anchor="PRLoption">
+<section title="Parameter Request List Option" anchor="PRLoption">
 
 <t>The Parameter Request List (PRL) option is defined in <xref target="RFC2132"/> with option code 61.
 It list the parameters requested from the server by the client.
