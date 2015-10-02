@@ -411,7 +411,7 @@ and MAY contain the Client Identifier  options.
 MUST contain the Message Type and Server Identifier options, and 
 MAY contain the Client Identifier option.
 </t>
-<t hangText="INFORM:"> The anonymized INFORM messages 
+<t hangText="DHCPINFORM:"> The anonymized DHCPINFORM messages 
 MUST contain the Message Type, 
 and MAY contain the
 Client Identifier and Parameter Request List options. It SHOULD NOT contain any other 
@@ -809,71 +809,7 @@ old values discloses information that can be used to identify the client.
 </t>
 </section>
 
-<section title="Address assignment options -- old version">
-<t>
-When using the anonymity profile, DHCPv6 clients might have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
-through the DHCP server. The clients SHOULD only use the options necessary to perform the requested 
-DHCPv6 transactions, such as 
-Identity Association for Non-temporary Addresses Option (code 3) or
-Identity Association for Temporary Addresses Option (code 4).
-</t>
-<t>
-The clients MAY use the IA Address Option (code 5) but need to balance the potential advantage of 
-"address continuity" versus the potential risk of "previous address disclosure." A potential solution
-is to remove all stored addresses when a link-layer address changes, and to only use the IA Address option
-with addresses that have been explicitly assigned through the current link-layer address. 
-</t>
-<t>
-The interaction between prefix delegation
-and anonymity require further study. For now, the simple solution is to avoid using
-prefix delegation when striving for anonymity. 
-When using the anonymity profiles, clients SHOULD NOT use IA_PD, 
-the prefix delegation form of address assignment. 
-</t>
-<section title="Obtain temporary addresses" anchor="v6TemporaryOld" >
-	<t><xref target="RFC3315" /> defines a special container
-	(IA_TA) for requesting temporary addresses. This is a good
-	mechanism in principle, but there are a number of issues
-	associated with it. First, this is not a widely used
-	feature, so clients depending solely on temporary
-        addresses may lock themselves out of service. 
-        Secondly, <xref target="RFC3315" /> does not
-	specify any lifetime or lease length for temporary
-	addresses. Therefore support for renewing temporary 
-        addresses may vary between
-        client implementations, including not being supported at all.
-        Finally, by requesting temporary addresses a client reveals its
-   desire for privacy and potentially risks countermeasures as described
-   in <xref
-	target="desire"/>.</t>
-
-	<t>Clients interested in their privacy SHOULD NOT use
-	IA_TA. They should simply send an IA_NA with a randomized
-	IAID. This, along with the mitigation technique discussed in
-	<xref target="random-duid"/>, will ensure that a client will
-	get a new address that can be renewed and can be used as long
-	as needed. To get a new address, it can send Request message
-	with a new randomized IAID before releasing the other
-	one. This will cause the server to assign a new address, as it
-	still has a valid lease for the old IAID value. Once a new
-	address is assigned, the address obtained using the older 
-        IAID value can be released safely, using the Release message 
-        or it may simply be allowed to time out.</t>
-
-   <t>This solution may not work if the server enforces specific policies,
-   e.g. only one address per client.  If client does not succeed in
-   receiving a second address using a new IAID, it may release the first
-   one (using the old IAID) and then retry asking for a new address.</t>
-
-
-	<t>From the Operating System perspective, addresses obtained
-	using this technique SHOULD be treated as temporary 
-	as specified in <xref target="RFC4941" />.</t>
-      </section>
-
-</section>
-
-<section title="Address assignment options -- new version" anchor="useIA_NA">
+<section title="Address assignment options" anchor="useIA_NA">
 <t>
 When using the anonymity profile, DHCPv6 clients might have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
 through the DHCP server. Clients interested in privacy SHOULD request addresses using the 
@@ -923,7 +859,8 @@ with addresses that have been explicitly assigned through the current link-layer
 
 <t>The addresses obtained according to <xref target="useIA_NA" /> are temporary
 in nature, and will be discarded when the link layer address is changed. They thus meet most of 
-the use cases of temporary addresses. Clients interested in their privacy
+the use cases of the temporary addresses defined in <xref target="RFC4941"/>. Clients interested 
+in their privacy
 should not publish their IPv6 addresses in the DNS or otherwise associate them 
 with name services, and thus do not normally need two classes of addresses, one public,
 one temporary.</t>
@@ -1042,7 +979,7 @@ This draft does not require any IANA action.
 The inspiration for this draft came from discussions in the Perpass mailing list. 
 Several people provided feedback on this draft,
 notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Nick Grifka, Tushar Gupta, Gabriel Montenegro, 
- Marcin Siodelski, Dave Thaler, Bernie Volz, and Jun Wu.
+Marcin Siodelski, Dave Thaler, Bernie Volz, and Jun Wu.
     </t>
 </section>
 <section title="Changes from previous versions">
@@ -1133,7 +1070,7 @@ temporary addresses, as RFC 3315 does in fact specify a mechanism for doing so.
 </t>
 
 <t>
-Changes from draft-03 to draft-04:
+Changes from draft-03 to draft-04 address comments received during Working Group Last Call:
 </t>
 <t>
 <list style="numbers" >
