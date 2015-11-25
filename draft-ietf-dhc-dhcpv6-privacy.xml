@@ -7,7 +7,7 @@
 <?rfc iprnotified="no"?>
 <?rfc strict="yes"?>
 <?rfc compact="yes"?>
-<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-01"
+<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-02"
      ipr="trust200902">
   <front>
     <title abbrev="DHCPv6 Privacy considerations">Privacy considerations for
@@ -107,7 +107,7 @@
 
       <t>The primary focus of this document is around privacy considerations for
       clients to support client mobility and connection to random networks. The
-      privacy or DHCP servers and relay agents are considered less important as
+      privacy of DHCP servers and relay agents are considered less important as
       they are typically open for public services. And, it is generally assumed
       that relay agent to server communication is protected from casual
       snooping, as that communication occurs in the provider's backbone.
@@ -156,18 +156,21 @@
         is DUID-LLT that is based on link-layer address. It is commonly
         implemented in most popular clients.</t>
 
-        <t>It is important to understand DUID lifecycle. Clients and servers
-        are expected to generate their DUID once (during first operation) and
-        store it in a non-volatile storage or use the same deterministic
-        algorithm to generate the same DUID value again. This means that most
-        implementations will use the available link-layer address during its
-        first boot. Even if the administrator enables privacy extensions (see
-        <xref target="RFC4941"></xref>) and its equivalent for link-layer
-        address randomization, it is likely that those privacy mechanisms were
-        disabled during the first device boot. Hence the original,
-        unobfuscated link-layer address will likely end up being announced as
-        client DUID, even if the link-layer address has changed (or even if
-        being changed on a periodic basis).</t>
+        <t>It is important to understand DUID lifecycle. Clients and servers are
+        expected to generate their DUID once (during first operation) and store
+        it in a non-volatile storage or use the same deterministic algorithm to
+        generate the same DUID value again. This means that most implementations
+        will use the available link-layer address during its first boot. A user
+        may enable privacy extensions (which define how stateless addresses can
+        use random information instead of IEEE identifiers, see <xref
+        target="RFC4941"></xref> for details) and its equivalent for link-layer
+        address randomization (several OSes provide such a capability) and get a
+        false impression that the true link-layer address of his device is not
+        disclosed. It is likely that those privacy mechanisms were disabled
+        during the first device boot. Hence the original, unobfuscated
+        link-layer address will likely end up being announced as client DUID,
+        even if the link-layer address has changed (or even if being changed on
+        a periodic basis).</t>
       </section>
 
       <section title="Client ID Option">
@@ -175,9 +178,8 @@
         target="RFC3315"></xref> is used to carry the DUID of a DHCPv6 client
         between a client and a server. There is an analogous Server Identifier
         Option but it is not as interesting in the privacy context (unless a
-        host can be convinced to start acting as a server). Client ID is an
-        example of DUID. See <xref target="duid"></xref> for relevant
-        discussion about DUIDs.</t>
+        host can be convinced to start acting as a server). See
+        <xref target="duid"></xref> for relevant discussion about DUIDs.</t>
       </section>
 
       <section title="IA_NA, IA_TA, IA_PD, IA Address and IA Prefix Options">
@@ -342,7 +344,7 @@
           received the client message that is being relayed.</t>
 
           <t>Although in principle Interface ID can be arbitrarily long with
-          completely random values, it is often a text string that includes the
+          completely random values, it is sometimes a text string that includes the
           relay agent name followed by interface name. This can be used for
           fingerprinting the relay or determining client's point of
           attachment.</t>
@@ -393,8 +395,8 @@
         that a client can request a temporary address for a specific purpose,
         use it, and then never renew it. i.e. let it expire.</t>
 
-        <t>There are number of serious issues, both protocolar and
-        implementational, that make them nearly useless for their original
+        <t>There are a number of serious issues, both related to protocol and
+        its implementations, that make temporary addresses nearly useless for their original
         goal. First, <xref target="RFC3315"></xref> does not include T1 and T2
         renewal timers in IA_TA (a container for temporary addresses).
         However, it mentions that temporary addresses can be renewed. Many
@@ -438,19 +440,19 @@
         scanning attacks much easier.</t>
 
         <t>Identifier-based allocation - a server may choose to allocate an
-        address that is based on one of available identifiers, e.g. IID or MAC
-        address. This has a property of being convenient for converting IP
-        address to/from other identifiers, especially if the identifier is or
-        contains MAC address. It is also convenient, as returning client is
-        very likely to get the same address, even if the server does not store
-        previous client's address. Those properties are convenient for system
-        administrators, so DHCPv6 server implementors are sometimes requested
-        to implement it. There is at least one implementation that supports
-        it. On the other hand, the downside of such allocation is that the
-        client now discloses its identifier in its IPv6 address to all
-        services it connects to. That means that correlation of activities
-        over time, location tracking, address scanning and OS/vendor discovery
-        apply.</t>
+        address that is based on one of available identifiers, e.g. Interface
+        Identifier (IID) or MAC address. This has a property of being convenient
+        for converting IP address to/from other identifiers, especially if the
+        identifier is or contains MAC address. It is also convenient, as
+        returning client is very likely to get the same address, even if the
+        server does not store previous client's address. Those properties are
+        convenient for system administrators, so DHCPv6 server implementors are
+        sometimes requested to implement it. There is at least one
+        implementation that supports it. On the other hand, the downside of such
+        allocation is that the client now discloses its identifier in its IPv6
+        address to all services it connects to. That means that correlation of
+        activities over time, location tracking, address scanning and OS/vendor
+        discovery apply.</t>
 
         <t>Hash allocation - it's an extension of identifier based allocation.
         Instead of using the identifier directly, it is being hashed first. If
@@ -520,7 +522,8 @@
         <t>When DHCPv6 clients connect to a network, they attempt to obtain
         the same address they had used before they attached to the network.
         They do this by putting the previously assigned address(es) in the IA
-        Address Option(s) inside the IA_NA, IA_TA. By observing these
+        Address Option(s) inside the IA_NA. <xref target="RFC3315"/> also
+        allows sending IA_TA in such case. By observing these
         addresses, an attacker can identify the network the client had
         previously visited.</t>
       </section>
@@ -619,7 +622,7 @@
 
     <section anchor="privacy-consider" title="Privacy Considerations">
       <t>This document at its entirety discusses privacy considerations in
-      DHCPv6. As such, no dedicated section about this is needed.</t>
+      DHCPv6. As such, no dedicated discussion is needed.</t>
     </section>
 
     <section title="IANA Considerations">
