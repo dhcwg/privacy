@@ -156,21 +156,19 @@
         is DUID-LLT that is based on link-layer address. It is commonly
         implemented in most popular clients.</t>
 
-        <t>It is important to understand DUID lifecycle. Clients and servers are
-        expected to generate their DUID once (during first operation) and store
-        it in a non-volatile storage or use the same deterministic algorithm to
-        generate the same DUID value again. This means that most implementations
-        will use the available link-layer address during its first boot. A user
-        may enable privacy extensions (which define how stateless addresses can
-        use random information instead of IEEE identifiers, see <xref
-        target="RFC4941"></xref> for details) and its equivalent for link-layer
-        address randomization (several OSes provide such a capability) and get a
-        false impression that the true link-layer address of his device is not
-        disclosed. It is likely that those privacy mechanisms were disabled
-        during the first device boot. Hence the original, unobfuscated
-        link-layer address will likely end up being announced as client DUID,
-        even if the link-layer address has changed (or even if being changed on
-        a periodic basis).</t>
+        <t>It is important to understand DUID lifecycle.  Clients and servers
+        are expected to generate their DUID once (during first operation) and
+        store it in a non-volatile storage or use the same deterministic
+        algorithm to generate the same DUID value again.  This means that most
+        implementations will use the available link-layer address during its
+        first boot.  Even if the administrator enables link-layer address
+        randomization, it is likely that it was disabled during the first device
+        boot.  Hence the original, unobfuscated link-layer address will likely
+        end up being announced as client DUID, even if the link-layer address
+        has changed (or even if being changed on a periodic basis).  The
+        exposure of the original link-layer address in DUID will also undermine
+        other privacy extensions such as <xref target="RFC4941"/>.</t>
+
       </section>
 
       <section title="Client ID Option">
@@ -396,21 +394,25 @@
         use it, and then never renew it. i.e. let it expire.</t>
 
         <t>There are a number of serious issues, both related to protocol and
-        its implementations, that make temporary addresses nearly useless for their original
-        goal. First, <xref target="RFC3315"></xref> does not include T1 and T2
-        renewal timers in IA_TA (a container for temporary addresses).
-        However, it mentions that temporary addresses can be renewed. Many
-        client implementations renew those addresses during a renewal
-        procedure initiated by other resources (non-temporary addresses or
-        prefixes), thus forfeiting shortliveness. Second, <xref
-        target="RFC4704"></xref> allows servers to update DNS for assigned
-        temporary addresses. Publishing client's IPv6 address in DNS that is
-        publicly available is a major privacy breach.</t>
+        its implementations, that make temporary addresses nearly useless for
+        their original goal. First, <xref target="RFC3315"></xref> does not
+        include T1 and T2 renewal timers in IA_TA (a container for temporary
+        addresses).  However, in section 18.1.3 it explicitly mentions that
+        temporary addresses can be renewed. Client implementations may
+        mistakenly renew temporary addresses if they are not careful (i.e., by
+        including the IA_TA with the same IAID in Renew or Rebind requests,
+        rather than a new IAID - see <xref target="RFC3315"/> Section 22.5),
+        thus forfeiting short liveness.  <xref target="RFC4704"/> does not
+        explicitly prohibit servers to update DNS for assigned temporary
+        addresses and there are implementations that can be configured to do
+        that. However, this is not advised as publishing a client's IPv6 address
+        in DNS that is publicly available is a major privacy breach.</t>
       </section>
 
       <section title="DNS Updates">
-        <t>DNS Updates <xref target="RFC4704"></xref> defines a mechanism that
-        allows both clients and server to insert into DNS domain information
+        <t>The Client FQDN Option<xref target="RFC4704"></xref> used along with
+        DNS Update <xref target="RFC2136"/> defines a mechanism that
+        allows both clients and server to insert into the DNS domain information
         about clients. Both forward (AAAA) and reverse (PTR) resource records
         can be updated. This allows other nodes to conveniently refer to a
         host, despite the fact that its IPv6 address may be changing.</t>
@@ -439,16 +441,17 @@
         tend to be clustered at the beginning of available pool, it makes
         scanning attacks much easier.</t>
 
-        <t>Identifier-based allocation - a server may choose to allocate an
-        address that is based on one of available identifiers, e.g. Interface
-        Identifier (IID) or MAC address. This has a property of being convenient
+        <t>Identifier-based allocation - some server implementations use a
+        fixed identifier for a specific client, seemingly taken from the
+        client's MAC address when available or some lower bits of client's
+        source IPv6 address. This has a property of being convenient
         for converting IP address to/from other identifiers, especially if the
         identifier is or contains MAC address. It is also convenient, as
         returning client is very likely to get the same address, even if the
-        server does not store previous client's address. Those properties are
+        server does not retain previous client's address. Those properties are
         convenient for system administrators, so DHCPv6 server implementors are
         sometimes requested to implement it. There is at least one
-        implementation that supports it. On the other hand, the downside of such
+        implementation that supports it. The downside of such
         allocation is that the client now discloses its identifier in its IPv6
         address to all services it connects to. That means that correlation of
         activities over time, location tracking, address scanning and OS/vendor
@@ -519,11 +522,13 @@
       </section>
 
       <section title="Finding previously visited networks">
-        <t>When DHCPv6 clients connect to a network, they attempt to obtain
-        the same address they had used before they attached to the network.
-        They do this by putting the previously assigned address(es) in the IA
-        Address Option(s) inside the IA_NA. <xref target="RFC3315"/> also
-        allows sending IA_TA in such case. By observing these
+
+        <t>When DHCPv6 clients connect to a network, they attempt to obtain the
+        same address they had used before they attached to the network.  They do
+        this by putting the previously assigned address(es) in the IA Address
+        Option(s). <xref target="RFC3315"/> does not exclude IA_TA in such a
+        case, so it is possible that a client implementation includes an address
+        contained in an IA_TA for the Confirm message.  By observing these
         addresses, an attacker can identify the network the client had
         previously visited.</t>
       </section>
@@ -631,8 +636,8 @@
 
     <section anchor="acks" title="Acknowledgements">
       <t>The authors would like to thanks the valuable comments made by
-      Stephen Farrell, Ted Lemon, Ines Robles, Russ White, Christian Schaefer
-      and other members of DHC WG.</t>
+      Stephen Farrell, Ted Lemon, Ines Robles, Russ White, Christian Schaefer,
+      Jinmei Tatuya, Bernie Volz and other members of DHC WG.</t>
 
       <t>This document was produced using the xml2rfc tool <xref
       target="RFC2629"></xref>.</t>
@@ -651,9 +656,11 @@
     </references>
 
     <references title="Informative References">
-      <?rfc include='reference.RFC.3633'?>
+      <?rfc include='reference.RFC.2136'?>
 
       <?rfc include='reference.RFC.2629'?>
+
+      <?rfc include='reference.RFC.3633'?>
 
       <?rfc include='reference.RFC.4580'?>
 
