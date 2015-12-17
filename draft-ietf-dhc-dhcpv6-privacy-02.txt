@@ -690,8 +690,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    mechanism to obtain bulk information about DHCPv6 bindings, even
    without knowing the target bindings.
 
-   Additionally, active leasequery
-   [I-D.ietf-dhc-dhcpv6-active-leasequery] is a mechanism for
+   Additionally, active leasequery [RFC7653] is a mechanism for
    subscribing to DHCPv6 lease update changes in near real-time.  The
    intent of this mechanism is to update operator's database, but if
    misused, an attacker could defeat server's authentication mechanisms
@@ -722,6 +721,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    Schaefer, Jinmei Tatuya, Bernie Volz and other members of DHC WG.
 
    This document was produced using the xml2rfc tool [RFC2629].
+
 
 
 
@@ -762,11 +762,6 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
               draft-ietf-6man-ipv6-address-generation-privacy-08 (work
               in progress), September 2015.
 
-   [I-D.ietf-dhc-dhcpv6-active-leasequery]
-              Dushyant, D., Kinnear, K., and D. Kukrety, "DHCPv6 Active
-              Leasequery", draft-ietf-dhc-dhcpv6-active-leasequery-04
-              (work in progress), July 2015.
-
    [RFC2136]  Vixie, P., Ed., Thomson, S., Rekhter, Y., and J. Bound,
               "Dynamic Updates in the Domain Name System (DNS UPDATE)",
               RFC 2136, DOI 10.17487/RFC2136, April 1997,
@@ -775,6 +770,11 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    [RFC2629]  Rose, M., "Writing I-Ds and RFCs using XML", RFC 2629,
               DOI 10.17487/RFC2629, June 1999,
               <http://www.rfc-editor.org/info/rfc2629>.
+
+   [RFC3633]  Troan, O. and R. Droms, "IPv6 Prefix Options for Dynamic
+              Host Configuration Protocol (DHCP) version 6", RFC 3633,
+              DOI 10.17487/RFC3633, December 2003,
+              <http://www.rfc-editor.org/info/rfc3633>.
 
 
 
@@ -785,11 +785,6 @@ Krishnan, et al.          Expires June 19, 2016                [Page 14]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
-
-   [RFC3633]  Troan, O. and R. Droms, "IPv6 Prefix Options for Dynamic
-              Host Configuration Protocol (DHCP) version 6", RFC 3633,
-              DOI 10.17487/RFC3633, December 2003,
-              <http://www.rfc-editor.org/info/rfc3633>.
 
    [RFC4580]  Volz, B., "Dynamic Host Configuration Protocol for IPv6
               (DHCPv6) Relay Agent Subscriber-ID Option", RFC 4580,
@@ -835,17 +830,17 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
               RFC 6225, DOI 10.17487/RFC6225, July 2011,
               <http://www.rfc-editor.org/info/rfc6225>.
 
+   [RFC6355]  Narten, T. and J. Johnson, "Definition of the UUID-Based
+              DHCPv6 Unique Identifier (DUID-UUID)", RFC 6355,
+              DOI 10.17487/RFC6355, August 2011,
+              <http://www.rfc-editor.org/info/rfc6355>.
+
 
 
 Krishnan, et al.          Expires June 19, 2016                [Page 15]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
-
-   [RFC6355]  Narten, T. and J. Johnson, "Definition of the UUID-Based
-              DHCPv6 Unique Identifier (DUID-UUID)", RFC 6355,
-              DOI 10.17487/RFC6355, August 2011,
-              <http://www.rfc-editor.org/info/rfc6355>.
 
    [RFC6422]  Lemon, T. and Q. Wu, "Relay-Supplied DHCP Options",
               RFC 6422, DOI 10.17487/RFC6422, December 2011,
@@ -854,6 +849,10 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    [RFC6939]  Halwasia, G., Bhandari, S., and W. Dec, "Client Link-Layer
               Address Option in DHCPv6", RFC 6939, DOI 10.17487/RFC6939,
               May 2013, <http://www.rfc-editor.org/info/rfc6939>.
+
+   [RFC7653]  Raghuvanshi, D., Kinnear, K., and D. Kukrety, "DHCPv6
+              Active Leasequery", RFC 7653, DOI 10.17487/RFC7653,
+              October 2015, <http://www.rfc-editor.org/info/rfc7653>.
 
 Authors' Addresses
 
@@ -883,6 +882,7 @@ Authors' Addresses
    P.R. China
 
    Email: jiangsheng@huawei.com
+
 
 
 

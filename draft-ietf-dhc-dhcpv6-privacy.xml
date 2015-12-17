@@ -607,8 +607,7 @@
         target="RFC5460"></xref> mechanism to obtain bulk information about
         DHCPv6 bindings, even without knowing the target bindings.</t>
 
-        <t>Additionally, active leasequery <xref
-        target="I-D.ietf-dhc-dhcpv6-active-leasequery" /> is a mechanism for
+        <t>Additionally, active leasequery <xref target="RFC7653" /> is a mechanism for
         subscribing to DHCPv6 lease update changes in near real-time. The
         intent of this mechanism is to update operator's database, but if
         misused, an attacker could defeat server's authentication mechanisms and
@@ -686,9 +685,10 @@
 
       <?rfc include='reference.RFC.6939'?>
 
+      <?rfc include='reference.RFC.7653'?>
+
       <?rfc include='reference.I-D.ietf-6man-ipv6-address-generation-privacy'?>
 
-      <?rfc include='reference.I-D.ietf-dhc-dhcpv6-active-leasequery'?>
     </references>
   </back>
 </rfc>
