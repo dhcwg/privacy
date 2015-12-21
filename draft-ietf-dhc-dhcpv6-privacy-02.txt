@@ -5,10 +5,10 @@
 dhc                                                          S. Krishnan
 Internet-Draft                                                  Ericsson
 Intended status: Informational                              T. Mrugalski
-Expires: June 19, 2016                                               ISC
+Expires: June 22, 2016                                               ISC
                                                                 S. Jiang
                                             Huawei Technologies Co., Ltd
-                                                       December 17, 2015
+                                                       December 20, 2015
 
 
                    Privacy considerations for DHCPv6
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 19, 2016.
+   This Internet-Draft will expire on June 22, 2016.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Krishnan, et al.          Expires June 19, 2016                 [Page 1]
+Krishnan, et al.          Expires June 22, 2016                 [Page 1]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -66,9 +66,9 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   3.  Identifiers in DHCPv6 . . . . . . . . . . . . . . . . . . . .   4
+   3.  DHCPv6 options carrying identifiers . . . . . . . . . . . . .   4
      3.1.  DUID  . . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.2.  Client ID Option  . . . . . . . . . . . . . . . . . . . .   4
+     3.2.  Client Identifier Option  . . . . . . . . . . . . . . . .   4
      3.3.  IA_NA, IA_TA, IA_PD, IA Address and IA Prefix Options . .   4
      3.4.  Client FQDN Option  . . . . . . . . . . . . . . . . . . .   5
      3.5.  Client Link-layer Address Option  . . . . . . . . . . . .   5
@@ -78,9 +78,9 @@ Table of Contents
      3.9.  Coordinate-Based Location Option  . . . . . . . . . . . .   6
      3.10. Client System Architecture Type Option  . . . . . . . . .   7
      3.11. Relay Agent Options . . . . . . . . . . . . . . . . . . .   7
-       3.11.1.  Subscriber ID  . . . . . . . . . . . . . . . . . . .   7
-       3.11.2.  Interface ID . . . . . . . . . . . . . . . . . . . .   7
-       3.11.3.  Remote ID  . . . . . . . . . . . . . . . . . . . . .   8
+       3.11.1.  Subscriber ID Option . . . . . . . . . . . . . . . .   7
+       3.11.2.  Interface ID Option  . . . . . . . . . . . . . . . .   7
+       3.11.3.  Remote ID Option . . . . . . . . . . . . . . . . . .   8
        3.11.4.  Relay-ID Option  . . . . . . . . . . . . . . . . . .   8
    4.  Existing Mechanisms That Affect Privacy . . . . . . . . . . .   8
      4.1.  Temporary addresses . . . . . . . . . . . . . . . . . . .   8
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Krishnan, et al.          Expires June 19, 2016                 [Page 2]
+Krishnan, et al.          Expires June 22, 2016                 [Page 2]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -165,16 +165,18 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                 [Page 3]
+Krishnan, et al.          Expires June 22, 2016                 [Page 3]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
-3.  Identifiers in DHCPv6
+3.  DHCPv6 options carrying identifiers
 
-   There are several identifiers used in DHCPv6.  This section provides
-   an introduction to the various options that will be used further in
-   the document.
+   In DHCPv6, there are many options which include identification
+   information or can be used to extract the identification information
+   about the client.  This section enumerates various options and
+   identifiers conveyed in them, which can be used to disclose client
+   identification.
 
 3.1.  DUID
 
@@ -201,7 +203,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    basis).  The exposure of the original link-layer address in DUID will
    also undermine other privacy extensions such as [RFC4941].
 
-3.2.  Client ID Option
+3.2.  Client Identifier Option
 
    The Client Identifier Option (OPTION_CLIENTID) [RFC3315] is used to
    carry the DUID of a DHCPv6 client between a client and a server.
@@ -216,16 +218,16 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    [RFC3315] is used to carry the parameters and any non-temporary
    addresses associated with the given IA_NA.  The Identity Association
    for Temporary Addresses (IA_TA) option [RFC3315] is analogous to the
-   IA_NA option but for temporary addresses.  The IA Address option
-   [RFC3315] is used to specify IPv6 addresses associated with an IA_NA
 
 
 
-Krishnan, et al.          Expires June 19, 2016                 [Page 4]
+Krishnan, et al.          Expires June 22, 2016                 [Page 4]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
+   IA_NA option but for temporary addresses.  The IA Address option
+   [RFC3315] is used to specify IPv6 addresses associated with an IA_NA
    or an IA_TA and is encapsulated within the Options field of such an
    IA_NA or IA_TA option.  The Identity Association for Prefix
    Delegation (IA_PD) [RFC3633] option is used to carry the prefixes
@@ -233,12 +235,12 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    [RFC3633] is used to specify IPv6 prefixes associated with an IA_PD
    and is encapsulated within the Options field of such an IA_PD option.
 
-   To differentiate between instances of the same type of IA containers,
-   each IA_NA, IA_TA and IA_PD options have an IAID field that is unique
-   for each client/option type pair.  It is up to the client to pick
-   unique IAID values.  At least one popular implementation uses last
-   four octets of the link-layer address.  In most cases, that means
-   that merely two bytes are missing for a full link-layer address
+   To differentiate between instances of the same type of IA containers
+   for a client, each IA_NA, IA_TA and IA_PD options have an IAID field
+   with a unique value for a given IA type.  It is up to the client to
+   pick unique IAID values.  At least one popular implementation uses
+   last four octets of the link-layer address.  In most cases, that
+   means that merely two bytes are missing for a full link-layer address
    reconstruction.  However, the first three octets in a typical link-
    layer address are vendor identifier.  That can be determined with
    high level of certainty using other means, thus allowing full link-
@@ -275,9 +277,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-
-
-Krishnan, et al.          Expires June 19, 2016                 [Page 5]
+Krishnan, et al.          Expires June 22, 2016                 [Page 5]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -316,7 +316,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 3.8.  Civic Location Option
 
-   DHCPv6 servers use the Civic Location option [RFC4776] to delivery of
+   DHCPv6 servers use the Civic Location option [RFC4776] to deliver the
    location information (the civic and postal addresses) from the DHCPv6
    server to the DHCPv6 clients.  It may refer to three locations: the
    location of the DHCPv6 server, the location of the network element
@@ -333,7 +333,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                 [Page 6]
+Krishnan, et al.          Expires June 22, 2016                 [Page 6]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -368,7 +368,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    The following subsections describe various options inserted by the
    relay agents.
 
-3.11.1.  Subscriber ID
+3.11.1.  Subscriber ID Option
 
    A DHCPv6 relay may include a Subscriber ID option [RFC4580] to
    associate some provider-specific information with clients' DHCPv6
@@ -377,7 +377,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    In many deployments, the relay agent that inserts this option is
    configured to use client's link-layer address as Subscriber ID.
 
-3.11.2.  Interface ID
+3.11.2.  Interface ID Option
 
    A DHCPv6 relay includes the Interface ID [RFC3315] option to identify
    the interface on which it received the client message that is being
@@ -389,7 +389,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                 [Page 7]
+Krishnan, et al.          Expires June 22, 2016                 [Page 7]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -397,7 +397,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
    for fingerprinting the relay or determining client's point of
    attachment.
 
-3.11.3.  Remote ID
+3.11.3.  Remote ID Option
 
    A DHCPv6 relay includes a Remote ID option [RFC4649] to identify the
    remote host end of the circuit.
@@ -445,7 +445,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                 [Page 8]
+Krishnan, et al.          Expires June 22, 2016                 [Page 8]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -501,7 +501,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                 [Page 9]
+Krishnan, et al.          Expires June 22, 2016                 [Page 9]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -557,7 +557,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                [Page 10]
+Krishnan, et al.          Expires June 22, 2016                [Page 10]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -613,7 +613,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                [Page 11]
+Krishnan, et al.          Expires June 22, 2016                [Page 11]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -669,7 +669,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                [Page 12]
+Krishnan, et al.          Expires June 22, 2016                [Page 12]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -725,7 +725,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                [Page 13]
+Krishnan, et al.          Expires June 22, 2016                [Page 13]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -781,7 +781,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                [Page 14]
+Krishnan, et al.          Expires June 22, 2016                [Page 14]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -837,7 +837,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 19, 2016                [Page 15]
+Krishnan, et al.          Expires June 22, 2016                [Page 15]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -893,4 +893,4 @@ Authors' Addresses
 
 
 
-Krishnan, et al.          Expires June 19, 2016                [Page 16]
+Krishnan, et al.          Expires June 22, 2016                [Page 16]

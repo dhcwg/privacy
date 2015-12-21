@@ -139,10 +139,13 @@
 
     </section>
 
-    <section title="Identifiers in DHCPv6">
-      <t>There are several identifiers used in DHCPv6. This section provides
-      an introduction to the various options that will be used further in the
-      document.</t>
+    <section title="DHCPv6 options carrying identifiers">
+      <t>In DHCPv6, there are many options which include identification
+information or can be used to extract the identification information
+about the client. This section enumerates various options and
+identifiers conveyed in them, which can be used to disclose client
+identification.
+</t>
 
       <section anchor="duid" title="DUID">
         <t>Each DHCPv6 client and server has a DHCPv6 Unique Identifier (DUID)
@@ -171,7 +174,7 @@
 
       </section>
 
-      <section title="Client ID Option">
+      <section title="Client Identifier Option">
         <t>The Client Identifier Option (OPTION_CLIENTID) <xref
         target="RFC3315"></xref> is used to carry the DUID of a DHCPv6 client
         between a client and a server. There is an analogous Server Identifier
@@ -197,8 +200,9 @@
         Options field of such an IA_PD option.</t>
 
         <t>To differentiate between instances of the same type of IA
-        containers, each IA_NA, IA_TA and IA_PD options have an IAID field
-        that is unique for each client/option type pair. It is up to the
+        containers for a client, each IA_NA, IA_TA and IA_PD options 
+        have an IAID field with a unique value for a given IA type.
+        It is up to the
         client to pick unique IAID values. At least one popular implementation
         uses last four octets of the link-layer address. In most cases, that
         means that merely two bytes are missing for a full link-layer address
@@ -269,7 +273,7 @@
 
       <section title="Civic Location Option">
         <t>DHCPv6 servers use the Civic Location option <xref
-        target="RFC4776"></xref> to delivery of location information (the
+        target="RFC4776"></xref> to deliver the location information (the
         civic and postal addresses) from the DHCPv6 server to the DHCPv6
         clients. It may refer to three locations: the location of the DHCPv6
         server, the location of the network element believed to be closest to
@@ -326,7 +330,7 @@
         <t>The following subsections describe various options inserted by the
         relay agents.</t>
 
-        <section title="Subscriber ID">
+        <section title="Subscriber ID Option">
           <t>A DHCPv6 relay may include a Subscriber ID option <xref
           target="RFC4580"></xref> to associate some provider-specific
           information with clients' DHCPv6 messages that is independent of the
@@ -336,7 +340,7 @@
           configured to use client's link-layer address as Subscriber ID.</t>
         </section>
 
-        <section title="Interface ID">
+        <section title="Interface ID Option">
           <t>A DHCPv6 relay includes the Interface ID <xref
           target="RFC3315"></xref> option to identify the interface on which it
           received the client message that is being relayed.</t>
@@ -348,7 +352,7 @@
           attachment.</t>
         </section>
 
-        <section title="Remote ID">
+        <section title="Remote ID Option">
           <t>A DHCPv6 relay includes a Remote ID option <xref
           target="RFC4649"></xref> to identify the remote host end of the
           circuit.</t>
