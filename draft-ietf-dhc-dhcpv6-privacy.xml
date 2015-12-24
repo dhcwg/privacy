@@ -286,18 +286,15 @@ identification.
         server to provide the coordinate- based geographic location
         information to the DHCPv6 clients. It enable a DHCPv6 client to obtain
         its location.</t>
-
-        <t>After the relevant DHCPv6 exchanges have taken place, the location
-        information is stored on the end device rather than somewhere else,
-        where retrieving it might be difficult in practice.</t>
       </section>
 
       <section title="Client System Architecture Type Option">
         <t>The Client System Architecture Type option <xref
         target="RFC5970"></xref> is used by DHCPv6 client to send a list of
-        supported architecture types to the DHCPv6 server. It is used to
-        provide configuration information for a node that must be booted using
-        the network rather than from local storage.</t>
+        supported architecture types to the DHCPv6 server. It is used by 
+        clients that must be booted using the network rather than from local storage,
+        so the server can decide which boot
+        file should be provided to the client.</t>
 
         <t><!--Client Network Interface Identifier [RFC5970] seems not in use. It provides information about the level of UNDI support.--></t>
       </section>
@@ -388,8 +385,7 @@ identification.
     </section>
 
     <section title="Existing Mechanisms That Affect Privacy">
-      <t>This section describes available DHCPv6 mechanisms that one can use
-      to protect or enhance one's privacy.</t>
+      <t>This section describes deployed DHCPv6 mechanisms that can affect privacy.</t>
 
       <section title="Temporary addresses">
         <t><xref target="RFC3315"></xref> defines a mechanism for a client to
