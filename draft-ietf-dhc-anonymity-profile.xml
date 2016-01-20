@@ -68,7 +68,7 @@
 <?rfc inline='yes' ?>
 
 <rfc category="std" 
-     docName="draft-ietf-dhc-anonymity-profile-04.txt" 
+     docName="draft-ietf-dhc-anonymity-profile-05.txt" 
      ipr="trust200902"
      >
 
@@ -124,7 +124,7 @@
 
 
 
-    <date year="2015" />
+    <date year="2016" />
 
     <abstract>
         <t> 
@@ -133,8 +133,7 @@ even if the device administrator takes care of randomizing other potential
 identifications like link-layer addresses or IPv6 addresses. The anonymity profile
 is designed for clients that wish to remain anonymous to the visited network.
 The profile provides guidelines on the composition of DHCP or DHCPv6 requests,
-designed to minimize disclosure of identifying information. This draft updates
-RFC4361.
+designed to minimize disclosure of identifying information.
         </t>
     </abstract>
 </front>
@@ -688,7 +687,7 @@ clients use DHCPv6 to obtain network configuration parameters, through the INFOR
 message. 
 </t>
 <t>
-The choice between the stateful and stateless scenario depends on flag and prefix options published 
+The choice between the stateful and stateless scenarios depends on flag and prefix options published 
 by the "Router Advertisement" messages of local routers, as specified in <xref target="RFC4861"/>. 
 When these options enable stateless address configuration hosts using the anonymity profile 
 SHOULD choose it over stateful address configuration, because stateless configuration requires
@@ -702,7 +701,7 @@ on anonymity. The following sections provide guidance on the choice of option va
 using the anonymity profile.
 </t>
 
-<section title="Option encoding and avoiding fingerprinting" anchor="finger6" >
+<section title="Avoiding fingerprinting" anchor="finger6" >
 <t>
 There are many choices for implementing DHCPv6 messages. As explained in <xref target="finger4"/>,
 these choices can be use to fingerprint the client.  
@@ -822,12 +821,12 @@ Address is requested. Clients interested in protecting their privacy MUST ensure
 the IAID does not enable client identification. They also need to conform to the
 requirement of <xref target="RFC3315"/> that the IAID for that IA MUST be consistent 
 across restarts of the DHCP client. We interpret that as requiring that the IAID MUST be constant
-for the association, as long as the link layer Address remains constant.
+for the association, as long as the link layer address remains constant.
 </t>
 <t>
-Clients MAY meet the privacy, uniqueness and stability requirement of the IAID using
+Clients MAY meet the privacy, uniqueness and stability requirement of the IAID
 by constructing it as the combination of one byte encoding the interface number 
-in the system, and three bytes of the link layer address. 
+in the system, and the first three bytes of the link layer address. 
 </t>
 <t>
 The clients MAY use the IA Address Option (code 5) but need to balance the potential advantage of 
@@ -1086,6 +1085,29 @@ Revised the writing of <xref target="useIA_NA" /> for greater clarity.
 </list>
 </t>
 
+<t>
+Changes from draft-04 to draft-05 address comments received after Working Group Last Call:
+</t>
+
+<t>
+<list style="numbers" >
+<t>
+Changed the title of <xref target="finger6" /> to "Avoiding fingerprinting" to align with <xref target="finger4" />.
+</t>
+<t>
+Fixed editing nits in <xref target="useIA_NA" />, and added specification that the IAID is 
+composed of the interface identifier and the first three bytes of the HW address. This 
+matches the implementation in Windows 10, and insures that variations will not be
+used to fingerprint the client software.
+</t>
+<t>
+Dropping "This draft updates RFC4361" from the Abstract, since this draft does not actually update RFC4361.
+</t>
+<t>
+Pruned the list of normative references.
+</t>
+</list>
+</t>
 
 </section>
 </middle>
@@ -1094,25 +1116,25 @@ Revised the writing of <xref target="useIA_NA" /> for greater clarity.
 <references title="Normative References">
     &rfc2119;
     &rfc2131;
-    &rfc2132;
     &rfc3315;
-    &rfc3925;
-    &rfc4361;
     &rfc4702;
-    &rfc4704;
     &rfc4861;
     &rfc4941;
-    &I-D.ietf-dhc-rfc3315bis;
 </references>
 
 <references title="Informative References">
+    &rfc2132;
+    &rfc3925;
+    &rfc4361;
     &rfc4578;
+    &rfc4704;
     &rfc6355;
     &rfc7618;
     &I-D.ietf-dhc-dhcp-privacy;
     &I-D.ietf-dhc-dhcpv6-privacy;
     &I-D.ietf-6man-default-iids;
     &I-D.ietf-6man-ipv6-address-generation-privacy;
+    &I-D.ietf-dhc-rfc3315bis;
 
     <reference anchor="CNBC" target="http://www.cbc.ca/news/politics/csec-used-airport-wi-fi-to-track-canadian-travellers-edward-snowden-documents-1.2517881">
         <front>
