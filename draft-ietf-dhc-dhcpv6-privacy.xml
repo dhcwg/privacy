@@ -7,7 +7,7 @@
 <?rfc iprnotified="no"?>
 <?rfc strict="yes"?>
 <?rfc compact="yes"?>
-<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-02"
+<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-03"
      ipr="trust200902">
   <front>
     <title abbrev="DHCPv6 Privacy considerations">Privacy considerations for
@@ -144,7 +144,7 @@
 information or can be used to extract the identification information
 about the client. This section enumerates various options and
 identifiers conveyed in them, which can be used to disclose client
-identification.
+identification. The attacks that are enabled by such disclosures are detailed in Section 5.
 </t>
 
       <section anchor="duid" title="DUID">
@@ -514,7 +514,7 @@ identification.
       <section title="Finding location information">
         <t>The location information can be obtained by the attacker by many
         means. The most direct way to obtain this information is by looking into
-        a message originating from the server server that contains the Civic
+        a message originating from the server that contains the Civic
         Location or GeoLoc option. It can also be indirectly inferred using the
         Remote ID Option, the Interface ID option (e.g. if an access circuit on
         an Access Node corresponds to a civic location), or the Subscriber ID
@@ -592,7 +592,7 @@ identification.
       </section>
 
       <section title="Leasequery &amp; bulk leasequery">
-        <t>Attackers may pretend as an access concentrator, either DHCPv6
+        <t>Attackers may masquerade as an access concentrator, either DHCPv6
         relay agent or DHCPv6 client, to obtain location information directly
         from the DHCP server(s) using the DHCPv6 Leasequery <xref
         target="RFC5007"></xref> mechanism.</t>
@@ -636,8 +636,8 @@ identification.
     <section anchor="acks" title="Acknowledgements">
       <t>The authors would like to thank Stephen Farrell, Ted Lemon,
       Ines Robles, Russ White, Christian Schaefer, Jinmei Tatuya,
-      Bernie Volz, Marcin Siodelski, Christian Huitema and other
-      members of DHC WG for their valuable comments.</t>
+      Bernie Volz, Marcin Siodelski, Christian Huitema, Brian Haberman
+      and other members of DHC WG for their valuable comments.</t>
 
       <t>This document was produced using the xml2rfc tool <xref
       target="RFC2629"></xref>.</t>
