@@ -5,10 +5,10 @@
 dhc                                                          S. Krishnan
 Internet-Draft                                                  Ericsson
 Intended status: Informational                              T. Mrugalski
-Expires: June 25, 2016                                               ISC
+Expires: June 29, 2016                                               ISC
                                                                 S. Jiang
                                             Huawei Technologies Co., Ltd
-                                                       December 23, 2015
+                                                       December 27, 2015
 
 
                    Privacy considerations for DHCPv6
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 25, 2016.
+   This Internet-Draft will expire on June 29, 2016.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Krishnan, et al.          Expires June 25, 2016                 [Page 1]
+Krishnan, et al.          Expires June 29, 2016                 [Page 1]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Krishnan, et al.          Expires June 25, 2016                 [Page 2]
+Krishnan, et al.          Expires June 29, 2016                 [Page 2]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -165,7 +165,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                 [Page 3]
+Krishnan, et al.          Expires June 29, 2016                 [Page 3]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -221,7 +221,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                 [Page 4]
+Krishnan, et al.          Expires June 29, 2016                 [Page 4]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -277,7 +277,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                 [Page 5]
+Krishnan, et al.          Expires June 29, 2016                 [Page 5]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -333,7 +333,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                 [Page 6]
+Krishnan, et al.          Expires June 29, 2016                 [Page 6]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -389,7 +389,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                 [Page 7]
+Krishnan, et al.          Expires June 29, 2016                 [Page 7]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -445,7 +445,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                 [Page 8]
+Krishnan, et al.          Expires June 29, 2016                 [Page 8]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -501,7 +501,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                 [Page 9]
+Krishnan, et al.          Expires June 29, 2016                 [Page 9]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -557,7 +557,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                [Page 10]
+Krishnan, et al.          Expires June 29, 2016                [Page 10]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -613,7 +613,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                [Page 11]
+Krishnan, et al.          Expires June 29, 2016                [Page 11]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -669,7 +669,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                [Page 12]
+Krishnan, et al.          Expires June 29, 2016                [Page 12]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -716,16 +716,16 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 9.  Acknowledgements
 
-   The authors would like to thanks the valuable comments made by
-   Stephen Farrell, Ted Lemon, Ines Robles, Russ White, Christian
-   Schaefer, Jinmei Tatuya, Bernie Volz and other members of DHC WG.
+   The authors would like to thank Stephen Farrell, Ted Lemon, Ines
+   Robles, Russ White, Christian Schaefer, Jinmei Tatuya, Bernie Volz,
+   Marcin Siodelski, Christian Huitema and other members of DHC WG for
+   their valuable comments.
 
    This document was produced using the xml2rfc tool [RFC2629].
 
 
 
-
-Krishnan, et al.          Expires June 25, 2016                [Page 13]
+Krishnan, et al.          Expires June 29, 2016                [Page 13]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -781,7 +781,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                [Page 14]
+Krishnan, et al.          Expires June 29, 2016                [Page 14]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -837,7 +837,7 @@ Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
 
 
-Krishnan, et al.          Expires June 25, 2016                [Page 15]
+Krishnan, et al.          Expires June 29, 2016                [Page 15]
 
 Internet-Draft        DHCPv6 Privacy considerations        December 2015
 
@@ -893,4 +893,4 @@ Authors' Addresses
 
 
 
-Krishnan, et al.          Expires June 25, 2016                [Page 16]
+Krishnan, et al.          Expires June 29, 2016                [Page 16]

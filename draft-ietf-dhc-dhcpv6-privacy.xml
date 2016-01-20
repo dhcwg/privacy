@@ -74,7 +74,7 @@
       </address>
     </author>
 
-    <date/>
+    <date />
 
     <area>Internet</area>
 
@@ -634,9 +634,10 @@ identification.
     </section>
 
     <section anchor="acks" title="Acknowledgements">
-      <t>The authors would like to thanks the valuable comments made by
-      Stephen Farrell, Ted Lemon, Ines Robles, Russ White, Christian Schaefer,
-      Jinmei Tatuya, Bernie Volz and other members of DHC WG.</t>
+      <t>The authors would like to thank Stephen Farrell, Ted Lemon,
+      Ines Robles, Russ White, Christian Schaefer, Jinmei Tatuya,
+      Bernie Volz, Marcin Siodelski, Christian Huitema and other
+      members of DHC WG for their valuable comments.</t>
 
       <t>This document was produced using the xml2rfc tool <xref
       target="RFC2629"></xref>.</t>
