@@ -34,6 +34,9 @@
 <!ENTITY rfc4578 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4578.xml'>
 
+<!ENTITY rfc6059 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6059.xml'>
+
 <!ENTITY rfc6355 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6355.xml'>
 
@@ -68,7 +71,7 @@
 <?rfc inline='yes' ?>
 
 <rfc category="std" 
-     docName="draft-ietf-dhc-anonymity-profile-05.txt" 
+     docName="draft-ietf-dhc-anonymity-profile-06.txt" 
      ipr="trust200902"
      >
 
@@ -478,13 +481,15 @@ obtained with a different link-layer address.
 
 <section title="Requested IP address option" anchor="requestedIP" >
 <t>
-The Requested IP address option id defined in <xref target="RFC2132" /> with code 50.
+The Requested IP address option is defined in <xref target="RFC2132" /> with code 50.
 It allows the client to request that a particular IP address be assigned. 
 The option is mandatory in some protocol messages per <xref target="RFC2131" />, for example when a client 
 selects to use an address offered by a server. However, this option is not mandatory in the DHCPDISCOVER message. 
 It is simply a convenience, an attempt to regain the same IP address that was used in a previous connection.
 Doing so entails the risk of disclosing an IP address used by the client at a previous location, or with a 
-different link-layer address.
+different link-layer address. The risk exists for all forms of IP addresses, public or private, as some 
+private addresses may be used in a wide scope, e.g. when an Internet Service Provider
+is using Network Address Translation.
 </t>
 <t>
 When using the anonymity profile, clients SHOULD NOT 
@@ -565,7 +570,7 @@ connection.
 
 <section title="Parameter Request List Option" anchor="PRLoption">
 
-<t>The Parameter Request List (PRL) option is defined in <xref target="RFC2132"/> with option code 61.
+<t>The Parameter Request List (PRL) option is defined in <xref target="RFC2132"/> with option code 55.
 It list the parameters requested from the server by the client.
 Different implementations request different parameters.<xref target="RFC2132"/> specifies that
 "the client MAY list the options in order of preference." It practice, this means that
@@ -645,7 +650,7 @@ that require one to be there, e.g., by verifying a forward and reverse lookup
 succeeds with the same result.
 </t> 
 </section>
-<section title="UUID/GUID-based Client Identifier Option" >
+<section title="UUID/GUID-based Client Identifier Option" anchor="PXEOption" >
 <t>
 The UUID/GUID-based Client Machine Identifier option is defined in <xref target="RFC4578"/>, with option code 97. 
 The option is 
@@ -654,10 +659,16 @@ perform management functions on a device before its main OS is operational. The 
 a 16-octet Globally Unique Identifier (GUID), which uniquely identifies the device.
 </t>
 <t>
-The PXE system is clearly designed for devices operating in a controlled environment, and its functions are 
-not meant to be used by mobile nodes visiting untrusted networks. If only for privacy reasons, nodes visiting
-untrusted networks MUST disable the PXE functions, and MUST NOT send the 
-corresponding options.
+The PXE system is clearly designed for devices operating in a controlled 
+environment. The main usage of the PXE system is to install a new version of
+the operating system through a high speed Ethernet connection. The process
+is typically controlled from the user interface during the boot process. 
+Common sense seems to dictate that getting a new operating system from an
+unauthenticated server at an untrusted location is a really bad idea, and
+that even if the option was available users would not activate it. In any
+case, the option is only used in the "pre boot" environment, and is there is
+no reason to use it once the system is up and running. If only for privacy 
+reasons, nodes visiting untrusted networks MUST NOT send or use the PXE options.
 </t>
 </section>
 
@@ -747,21 +758,26 @@ in some scenarios, e.g. roaming between two access points in the
 same wireless network. DHCPv6 clients that can verify that the
 previous link and the current link are part of the same 
 network MAY send Confirm messages while still protecting 
-their privacy.
+their privacy. Such link identification should happen before DHCPv6
+is used, and thus cannot depend on the DHCPv6 information used in
+<xref target="RFC6059" />.  In practice, the most reliable detection 
+of network attachment is through link layer security, e.g. 
+<xref target="IEEE8021X" />.
 </t>
 
 
       </section>
 
-<section title="Client Identifier DHCPv6 Option">
+<section title="Client Identifier DHCPv6 Option" anchor="V6ClientId">
 <t>
 The client identifier option is defined in <xref target="RFC3315"/> with option code 1. The purpose of the client 
 identifier option is to identify the client to the server. The content of the option is a DHCP Unique Identifier (DUID).
 One of the primary privacy concerns is that a client is
 	disclosing a stable identifier (the DUID) that can be use for
 	tracking and profiling.
-Three DUID formats are specified in <xref target="RFC3315"/>: Link-layer address plus time, Vendor-assigned unique ID based on Enterprise Number, 
-Link-layer address. A fourth type, DUID-UUID is defined in <xref target="RFC6355" />. 
+Three DUID formats are specified in <xref target="RFC3315"/>: Link-layer address 
+plus time (DUID-LLT), Vendor-assigned unique ID based on Enterprise Number, and
+Link-layer address. A fourth type, DUID-UUID is defined in <xref target="RFC6355" />.
 </t>
 <t>
 When using the anonymity profile in conjunction with randomized link-layer addresses, 
@@ -777,11 +793,11 @@ clients that want to protect their privacy
 	there are several factors should be taken into
 	consideration. The DUID type SHOULD be set to 1
 	(DUID-LLT). Hardware type SHOULD be set appropriately to the
-	hardware type.  Time MAY be set to current time, but this will
-	reveal the fact that the DUID is newly generated. Implementors
-	interested in hiding this fact MAY use a time stamp from the
-	past. e.g. a random timestamp from the previous year could be
-	a good value.</t>
+	hardware type. The link address embedded in the LLT SHOULD be
+        set to a randomized value. Time SHOULD be set to a random timestamp from 
+        the previous year. Time MAY be set to current time, but this will
+	reveal the fact that the DUID is newly generated, and could
+        provide information for device fingerprinting.</t>
 
       <section title="Anonymous Information-Request">
 	<t>According to <xref target="RFC3315" />, a DHCPv6 client
@@ -811,7 +827,8 @@ old values discloses information that can be used to identify the client.
 <section title="Address assignment options" anchor="useIA_NA">
 <t>
 When using the anonymity profile, DHCPv6 clients might have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
-through the DHCP server. Clients interested in privacy SHOULD request addresses using the 
+through the DHCP server. In DHCPv6, the collection of addresses assigned to
+a client is indemtified by an Identity Association (IA).Clients interested in privacy SHOULD request addresses using the 
 Identity Association for Non-temporary Addresses Option (IA_NA, code 3).
 </t>
 <t>
@@ -977,7 +994,8 @@ This draft does not require any IANA action.
     <t> 
 The inspiration for this draft came from discussions in the Perpass mailing list. 
 Several people provided feedback on this draft,
-notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Nick Grifka, Tushar Gupta, Gabriel Montenegro, 
+notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Nick Grifka, Tushar Gupta, 
+Brian Haberman, Gabriel Montenegro, 
 Marcin Siodelski, Dave Thaler, Bernie Volz, and Jun Wu.
     </t>
 </section>
@@ -1088,7 +1106,6 @@ Revised the writing of <xref target="useIA_NA" /> for greater clarity.
 <t>
 Changes from draft-04 to draft-05 address comments received after Working Group Last Call:
 </t>
-
 <t>
 <list style="numbers" >
 <t>
@@ -1105,6 +1122,34 @@ Dropping "This draft updates RFC4361" from the Abstract, since this draft does n
 </t>
 <t>
 Pruned the list of normative references.
+</t>
+</list>
+</t>
+<t>
+Changes from draft-05 to draft-06 address comments received during AD evaluation
+</t>
+<t>
+<list style="numbers" >
+<t>
+In <xref target="requestedIP" />, clarified that the requirement to not publish
+addresses from previous networks also applies to private addresses.
+</t>
+<t>
+In <xref target="PRLoption" />, corrected the value of the option number to 55.
+</t>
+<t>
+In <xref target="PXEOption" />, provided more guidance on disabling the PXE option.
+</t>
+<t>
+In <xref target="dhcpv6Confirm" />, provided guidance on network identification, with
+references to <xref target="RFC6059" /> and <xref target="IEEE8021X" />.
+</t>
+<t>
+In <xref target="useIA_NA" />, expanded the Identity Association (IA) acronym.
+</t>
+<t>
+In <xref target="V6ClientId"/>, spelled out DUID-LLT and tightened the text to make randomized 
+identifiers the recommended default.
 </t>
 </list>
 </t>
@@ -1128,6 +1173,7 @@ Pruned the list of normative references.
     &rfc4361;
     &rfc4578;
     &rfc4704;
+    &rfc6059;
     &rfc6355;
     &rfc7618;
     &I-D.ietf-dhc-dhcp-privacy;
@@ -1135,6 +1181,17 @@ Pruned the list of normative references.
     &I-D.ietf-6man-default-iids;
     &I-D.ietf-6man-ipv6-address-generation-privacy;
     &I-D.ietf-dhc-rfc3315bis;
+
+    <reference anchor="IEEE8021X" target="http://standards.ieee.org/getieee802/download/802.1X-2010.pdf">
+        <front>
+            <title>IEEE Standards for Local and Metropolitan Area Networks:  Port based Network Access Control</title>
+            <author>
+                 <organization>IEEE Std 802.1X-2010</organization>
+            </author>
+            <date month="Feb" year="2010" />             
+        </front>
+    </reference>
+
 
     <reference anchor="CNBC" target="http://www.cbc.ca/news/politics/csec-used-airport-wi-fi-to-track-canadian-travellers-edward-snowden-documents-1.2517881">
         <front>
