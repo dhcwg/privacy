@@ -13,13 +13,16 @@
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2132.xml'>
 <!ENTITY rfc3315 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3315.xml'>
+<!ENTITY rfc3633 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3633.xml'>
 <!ENTITY rfc3925 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3925.xml'>
 <!ENTITY rfc3942 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3942.xml'>
+<!ENTITY rfc4086 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4086.xml'>
 <!ENTITY rfc4361 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4361.xml'>
-
 <!ENTITY rfc4702 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4702.xml'>
 <!ENTITY rfc4704 PUBLIC ''
@@ -36,10 +39,10 @@
 
 <!ENTITY rfc6059 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6059.xml'>
-
 <!ENTITY rfc6355 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6355.xml'>
-
+<!ENTITY rfc7217 PUBLIC ''
+   'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7217.xml'>
 <!ENTITY rfc7618 PUBLIC ''
    'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7618.xml'>
 
@@ -71,7 +74,7 @@
 <?rfc inline='yes' ?>
 
 <rfc category="std" 
-     docName="draft-ietf-dhc-anonymity-profile-06.txt" 
+     docName="draft-ietf-dhc-anonymity-profile-07.txt" 
      ipr="trust200902"
      >
 
@@ -560,11 +563,13 @@ options.
 <t>
 There are usages of DHCP where the underlying connection is a point to point link, in which case there is no
 link layer address available to construct a non-revealing identifier. 
-If anonymity is desired in such networks, the client SHOULD pick a random identifier that is unique
+If anonymity is desired in such networks, the client SHOULD pick a random identifier that is 
+highly likely to be unique
 to the current link, using for example a combination of a local secret and an identifier of the
-connection. 
+connection. The algorithm for combining secret and identifiers described in 
+section 5 of <xref target="RFC7217" /> solves a similar problem. The criteria
+for the generation of random numbers are stated in <xref target="RFC4086" />.
 </t>
-
 </section>
 
 
@@ -789,7 +794,9 @@ When using the anonymity profile without the benefit of randomized link-layer ad
 clients that want to protect their privacy
 	SHOULD generate a new randomized DUID-LLT every time they
 	attach to a new link or detect a possible link change
-	event. The exact details are left up to implementors, but
+	event. Syntactically this identifier will conform to <xref target="RFC3315" /> 
+        but its content is meaningless.
+        The exact details are left up to implementors, but
 	there are several factors should be taken into
 	consideration. The DUID type SHOULD be set to 1
 	(DUID-LLT). Hardware type SHOULD be set appropriately to the
@@ -797,7 +804,11 @@ clients that want to protect their privacy
         set to a randomized value. Time SHOULD be set to a random timestamp from 
         the previous year. Time MAY be set to current time, but this will
 	reveal the fact that the DUID is newly generated, and could
-        provide information for device fingerprinting.</t>
+        provide information for device fingerprinting.
+The criteria for generating highly unique random numbers
+are listed in <xref target="RFC4086" />.
+
+</t>
 
       <section title="Anonymous Information-Request">
 	<t>According to <xref target="RFC3315" />, a DHCPv6 client
@@ -885,13 +896,23 @@ one temporary.</t>
 preserving privacy is for further study.</t>
 
 </section>
-<section title="Prefix delegation" >
+<section title="Prefix delegation" anchor="IA_PD" >
 <t>
-The interaction between prefix delegation
-and anonymity require further study. For now, the simple solution is to avoid using
-prefix delegation when striving for anonymity. 
-When using the anonymity profiles, clients SHOULD NOT use IA_PD, 
-the prefix delegation form of address assignment. 
+The use of DHCPv6 address assignment option for Prefix Delegation is defined in 
+<xref target="RFC3633" />. 
+Because current host OS implementations do not typically request prefixes, clients that wish 
+to use DHCPv6 PD - just like clients that wish to use any DHCP or DHCPv6 option that is not 
+currently widely used - should recognize that doing so will serve as a form of fingerprinting 
+unless or until client use of DHCPv6 PD becomes more widespread.
+</t>
+<t>
+The anonymity properties of DHCPv6 Prefix Delegation, which use IA_PD identity associations, 
+are similar to those of of DHCPv6 address assignment using IA_NA identity associations. The
+IAID could potentially be used to identify the client, and a prefix hint sent in the IA_PD Prefix 
+option could be used to track the client's previous location. 
+Clients that desire anonymity and never request more than one 
+prefix SHOULD set the IAID value to zero, as authorized in section 6 of <xref target="RFC3633" />,
+and SHOULD NOT document any previously assigned prefix in the IA_PD Prefix option.
 </t>
 </section>
 </section>
@@ -972,6 +993,9 @@ link layer address and a suffix advertised by the local DHCP server.
   <t>Clients using the anonymity profile may be consuming more resources. For
   example when they change link-layer address and request for a new IP, the old one is
   still marked as leased by the server.</t>
+  <t>Some DHCP servers will only give addresses to pre-registered MAC addresses,
+  forcing clients to choose between remaining anonymous and obtaining
+  connectivity.</t>
   <t>Implementers SHOULD provide a way for clients to control when the anonymity
   profile is used, and when standard behavior is preferred. Implementers MAY
   implement this control by tying use of the anonymity profile to that of
@@ -994,7 +1018,8 @@ This draft does not require any IANA action.
     <t> 
 The inspiration for this draft came from discussions in the Perpass mailing list. 
 Several people provided feedback on this draft,
-notably Noel Anderson, Lorenzo Colitti, Stephen Farrell, Nick Grifka, Tushar Gupta, 
+notably Noel Anderson, Brian Carpenter,
+Lorenzo Colitti, Stephen Farrell, Nick Grifka, Tushar Gupta, 
 Brian Haberman, Gabriel Montenegro, 
 Marcin Siodelski, Dave Thaler, Bernie Volz, and Jun Wu.
     </t>
@@ -1154,6 +1179,28 @@ identifiers the recommended default.
 </list>
 </t>
 
+<t>
+Changes from draft-06 to draft-07 address comments received during IETF last call
+</t>
+<t>
+<list style="numbers" >
+<t>
+Added informative references to <xref target="RFC4086"/> and <xref target="RFC7217"/> in <xref target="dhcpv4ClientId"/>.
+</t>
+<t>
+In <xref target="V6ClientId" />, added precision that the generated DUID-LLT are meaningless, and added an
+informative reference to <xref target="RFC4086" />.
+</t>
+<t>
+In <xref target="IA_PD"/>, reworked the text to reflect the consensus from IPv6 experts and
+provide informed guidance on the use of the option if prefix delegation is required.
+</t>
+<t>
+In <xref target="operations" />, noticed servers that might mandate link layer address registration. 
+</t>
+</list>
+</t>
+
 </section>
 </middle>
 
@@ -1162,6 +1209,7 @@ identifiers the recommended default.
     &rfc2119;
     &rfc2131;
     &rfc3315;
+    &rfc3633;
     &rfc4702;
     &rfc4861;
     &rfc4941;
@@ -1170,11 +1218,13 @@ identifiers the recommended default.
 <references title="Informative References">
     &rfc2132;
     &rfc3925;
+    &rfc4086;
     &rfc4361;
     &rfc4578;
     &rfc4704;
     &rfc6059;
     &rfc6355;
+    &rfc7217;
     &rfc7618;
     &I-D.ietf-dhc-dhcp-privacy;
     &I-D.ietf-dhc-dhcpv6-privacy;
