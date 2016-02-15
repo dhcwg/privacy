@@ -7,7 +7,7 @@
 <?rfc iprnotified="no"?>
 <?rfc strict="yes"?>
 <?rfc compact="yes"?>
-<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-03"
+<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-04"
      ipr="trust200902">
   <front>
     <title abbrev="DHCPv6 Privacy considerations">Privacy considerations for
@@ -82,10 +82,10 @@
 
     <abstract>
       <t>DHCPv6 is a protocol that is used to provide addressing and
-      configuration information to IPv6 hosts. This document described
+      configuration information to IPv6 hosts. This document describes
       the privacy issues associated with the use of DHCPv6 by the
       Internet users. It is intended to be an analysis of the present
-      situation and doe not propose any solutions.</t>
+      situation and does not propose any solutions.</t>
     </abstract>
   </front>
 
@@ -455,7 +455,7 @@ identification. The attacks that are enabled by such disclosures are detailed in
         allocation is that the client now discloses its identifier in its IPv6
         address to all services it connects to. That means that correlation of
         activities over time, location tracking, address scanning and OS/vendor
-        discovery apply.</t>
+        discovery attacks apply.</t>
 
         <t>Hash allocation - it's an extension of identifier based allocation.
         Instead of using the identifier directly, it is being hashed first. If
@@ -463,17 +463,28 @@ identification. The attacks that are enabled by such disclosures are detailed in
         the identifier, a property that eliminates susceptibility to address
         scanning and OS/vendor discovery. If the hash is poorly implemented
         (e.g. can be reverted), it introduces no improvement over
-        identifier-based allocation.</t>
+        identifier-based allocation. Even a well implemented hash does
+        not mitigate the threat of correlation over time. Hash
+        allocation usually shows degrading performance when pool
+        utilization is high, as the server has to repeatedly calculate
+        hash for a single request until an available address is
+        found. Depending on the implementation, hash allocation may be
+        slower or faster as compared to random allocation, but in any
+        case it's almost always slower than iterative allocation.</t>
 
-        <t>Random allocation - a server can pick a resource randomly out of
+        <t>Random allocation - a server can pick a resource pseudo-randomly out of
         available pool. That strategy works well in scenarios where pool
         utilization is small, as the likelihood of collision (resulting in the
         server needing to repeat randomization) is small. With the pool
         allocation increasing, the collision is disproportionally large, due
         to birthday paradox. With high pool utilization (e.g. when 90% of
-        available resources being allocated already), the server will use most
-        computational resources to repeatedly pick a random resource, which
-        will degrade its performance. This allocation scheme essentially
+        available resources being allocated already), the server will
+        use a lot of computational resources to repeatedly pick a
+        resource pseudo-randomly (which is typically a more costly operation
+        than e.g. increasing address by one in interative allocation).
+        Experiencing pool exhaustion almost never happens for
+        addresses as the IPv6 address space is large, but may happen for prefixes.
+        This allocation scheme essentially
         prevents returning clients from getting the same address or prefix
         again. On the other hand, it is beneficial from privacy perspective as
         addresses and prefixes generated that way are not susceptible to
@@ -512,13 +523,29 @@ identification. The attacks that are enabled by such disclosures are detailed in
       </section>
 
       <section title="Finding location information">
-        <t>The location information can be obtained by the attacker by many
+        <t>The physical location information can be obtained by the attacker by many
         means. The most direct way to obtain this information is by looking into
         a message originating from the server that contains the Civic
         Location or GeoLoc option. It can also be indirectly inferred using the
         Remote ID Option, the Interface ID option (e.g. if an access circuit on
         an Access Node corresponds to a civic location), or the Subscriber ID
         Option (if the attacker has access to subscriber info).</t>
+
+        <t>Another way to discover client's physical location is to use
+        geolocation services. Those services typically map IP prefixes
+        into geographical locations. Those services are
+        usually based on known locations of the subnet, so they may
+        reveal client's location as precise as they can locate a
+        network it is connected to. They usually are not able to
+        discover specific physical location within a network. That is
+        not awlays true and it depends on the quality of the
+        apriori information available in the geolocation services databases.
+        It should be noted that this threat is general to the DHCP
+        mechanism. Regardless of the allocation strategy
+        used by the DHCPv6 server implementation, the addresses
+        assigned will always belong to the subnet the server is configured to
+        manage. Cases of using ULA (Unique Local Addresses) assigned
+        by the DHCPv6 server are out of scope for this document.</t>
       </section>
 
       <section title="Finding previously visited networks">
@@ -540,14 +567,34 @@ identification. The attacks that are enabled by such disclosures are detailed in
         Client ID options can serve as long lived identifiers of DHCPv6
         clients. The Client FQDN option can also provide an identity that can
         easily be correlated with web server activity logs.</t>
+
+        <t>It should be noted that in general case, the MAC addresses as such
+        are not available in the DHCPv6 packets. Therefore they cannot be used
+        directly in a reliable way. However, they may become indirectly
+        available using other mechanisms: client-id contains link-local address
+        if DUID-LL or DUID-LLT types are used, source IPv6 address may use
+        EUI-64 that contains MAC address, some access technologies may specify
+        MAC address in dedicated options (e.g. cable modems use MAC addresses in
+        DOCSIS options). Relay agents may insert additional information that are
+        used to help the server to identify the client. This could be Remote-Id
+        option, Subscriber-Id option, client link-layer address option or vendor
+        specific information options. Options inserted by relay agents usually
+        traverse only relay-server path, so they typically can't be eavesdropped
+        by intercepting client's transmissions. This depends on the actual
+        deployment model and used access technologies.</t>
       </section>
 
       <section title="Pervasive monitoring">
-        <t>This is an enhancement, or a combination of most aforementioned
-        mechanisms. Operator (or anyone who has access to its data), who
-        controls non-trivial number of access points or network segments, may
-        use obtained information about a single client and observer client's
-        habits.</t>
+        <t>Pervasive Monitoring (PM) is widespread (and often covert)
+        surveillance through intrusive gathering of protocol artefacts,
+        including application content, or protocol metadata such as headers.
+        Active or passive wiretaps and traffic analysis, (e.g., correlation,
+        timing or measuring packet sizes), or subverting the cryptographic keys
+        used to secure protocols can also be used as part of pervasive
+        monitoring.  PM is distinguished by being indiscriminate and very large
+        scale, rather than by introducing new types of technical compromise.</t>
+
+        <t>See <xref target="RFC7258"/> for a discussion about PM.</t>
       </section>
 
       <section title="Finding client's IP address or hostname">
@@ -636,11 +683,12 @@ identification. The attacks that are enabled by such disclosures are detailed in
     <section anchor="acks" title="Acknowledgements">
       <t>The authors would like to thank Stephen Farrell, Ted Lemon,
       Ines Robles, Russ White, Christian Schaefer, Jinmei Tatuya,
-      Bernie Volz, Marcin Siodelski, Christian Huitema, Brian Haberman
-      and other members of DHC WG for their valuable comments.</t>
+      Bernie Volz, Marcin Siodelski, Christian Huitema, Brian Haberman,
+      Robert Sparks, and other members of DHC WG for their valuable
+      comments.</t>
 
       <t>This document was produced using the xml2rfc tool <xref
-      target="RFC2629"></xref>.</t>
+      target="RFC7749"></xref>.</t>
     </section>
   </middle>
 
@@ -653,12 +701,12 @@ identification. The attacks that are enabled by such disclosures are detailed in
       <?rfc include='reference.RFC.6973'?>
 
       <?rfc include='reference.RFC.7258'?>
+
+      <?rfc include='reference.I-D.ietf-6man-ipv6-address-generation-privacy'?>
     </references>
 
     <references title="Informative References">
       <?rfc include='reference.RFC.2136'?>
-
-      <?rfc include='reference.RFC.2629'?>
 
       <?rfc include='reference.RFC.3633'?>
 
@@ -688,8 +736,7 @@ identification. The attacks that are enabled by such disclosures are detailed in
 
       <?rfc include='reference.RFC.7653'?>
 
-      <?rfc include='reference.I-D.ietf-6man-ipv6-address-generation-privacy'?>
-
+      <?rfc include='reference.RFC.7749'?>
     </references>
   </back>
 </rfc>
