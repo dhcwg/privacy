@@ -140,13 +140,34 @@
         </list></t>
     </section>
 
-    <section title="DHCPv6 options carrying identifiers">
+    <section title="Identifiers in DHCPv6 options and fields">
       <t>In DHCPv6, there are many options that include identification
-      information or that can be used to extract identification information
-      about the client. This section enumerates various options and the
-      identifiers conveyed in them, which can be used to disclose client
-      identification. The attacks that are enabled by such disclosures are
-      detailed in Section 5.</t>
+      information or that can be used to extract identification
+      information about the client. This section enumerates various
+      options or fields and the identifiers conveyed in them, which
+      can be used to disclose client identification. The attacks that
+      are enabled by such disclosures are detailed in Section 5.</t>
+
+      <section anchor="src-addr" title="Source IPv6 address">
+
+        <t>Although IPv6 link-local address is technically not a part
+        of DHCPv6, it appears in the DHCPv6 transmissions, so it is
+        mentioned here for completeness.</t>
+
+        <t>If the client does not use privacy extensions
+        (see <xref target="RFC4941"/>) or similar solutions and its
+        IPv6 link-local address is based on physical link-layer
+        address, this information is disclosed to the DHCPv6 server
+        and to anyone who manages to intercept this transmission.</t>
+
+        <t>There are multiple cases where IPv6 link-local addresses
+        are used in DHCPv6. Initial client transmissions are always
+        sent from the IPv6 link-local addresses even when the server
+        unicast option (see Sections 22.12 and 18 of <xref
+        target="RFC3315"/> for details) is enabled. If there are relay
+        agents, they forward client's traffic wrapped in Relay-forward
+        and store original source IPv6 address in peer-address field.</t>
+      </section>
 
       <section anchor="duid" title="DUID">
         <t>Each DHCPv6 client and server has a DHCPv6 Unique Identifier (DUID)
@@ -465,13 +486,7 @@
         scanning and OS/vendor discovery. If the hash is poorly implemented
         (e.g., can be reversed), it introduces no improvement over
         identifier-based allocation. Even a well implemented hash does not
-        mitigate the threat of correlation over time. Hash allocation usually
-        shows degrading performance when pool utilization is high, as the
-        server has to repeatedly calculate hash for a single request until an
-        available address is found. Depending on the implementation, hash
-        allocation may be slower or faster as compared to random allocation,
-        but in any case it's almost always slower than iterative
-        allocation.</t>
+        mitigate the threat of correlation over time.</t>
 
         <t>Random allocation - a server can pick a resource pseudo-randomly
         out of an available pool. This allocation scheme essentially prevents
@@ -672,10 +687,11 @@
     </section>
 
     <section anchor="acks" title="Acknowledgements">
-      <t>The authors would like to thank Stephen Farrell, Ted Lemon, Ines
-      Robles, Russ White, Christian Schaefer, Jinmei Tatuya, Bernie Volz,
-      Marcin Siodelski, Christian Huitema, Brian Haberman, Robert Sparks, and
-      other members of DHC WG for their valuable comments.</t>
+      <t>The authors would like to thank Stephen Farrell, Ted Lemon,
+      Ines Robles, Russ White, Christian Schaefer, Jinmei Tatuya,
+      Bernie Volz, Marcin Siodelski, Christian Huitema, Brian
+      Haberman, Robert Sparks, Peter Yee and other members of DHC WG
+      for their valuable comments.</t>
 
       <t>This document was produced using the xml2rfc tool <xref
       target="RFC7749"></xref>.</t>
