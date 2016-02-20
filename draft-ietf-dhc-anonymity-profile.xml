@@ -74,7 +74,7 @@
 <?rfc inline='yes' ?>
 
 <rfc category="std" 
-     docName="draft-ietf-dhc-anonymity-profile-07.txt" 
+     docName="draft-ietf-dhc-anonymity-profile-08.txt" 
      ipr="trust200902"
      >
 
@@ -147,12 +147,13 @@ designed to minimize disclosure of identifying information.
 <middle>
 <section title="Introduction">
 <t>
-Reports surfaced recently of systems that would monitor the wireless connections of 
+There have been reports of systems that would monitor the wireless connections of 
 passengers at Canadian airports <xref target="CNBC" />. We can assume that these are either fragments
 or trial runs of a wider system that would attempt to monitor Internet users as they roam through 
 wireless access points and other temporary network attachments. We can also assume that privacy 
 conscious users will attempt to evade this monitoring, for example by ensuring that low level 
-identifiers such as link-layer addresses are "randomized," so that the devices do not broadcast a unique identifier
+identifiers such as link-layer addresses are "randomized," so that the devices do not broadcast
+the same unique identifier
 in every location that they visit.
 </t>
 <t>
@@ -177,7 +178,7 @@ disclosure, including the disclosure of implementation identifiers.
 </t>
 </section>
 </section>
-<section title="Application domain">
+<section title="Application domain" anchor="appdomain" >
 <t>
 Mobile nodes can be tracked using multiple identifiers, the most prominent being link-layer addresses, a.k.a. MAC addresses. 
 For example, when
@@ -199,7 +200,9 @@ IPv6 "privacy" addresses. Privacy advocates have reasons to be concerned.
 The obvious solution is to "randomize" the MAC address. Before connecting to a particular network, the device replaces
 the MAC address with a randomly drawn 48 bit value. Link-layer address randomization was successfully 
 tried at the IETF in Honolulu 
-in November 2014 <xref target="IETFMACRandom" />. However, we have to consider the linkage between 
+in November 2014 <xref target="IETFMACRandom" /> and in following meetings <xref target="IETFTrialsAndMore"/>; 
+it is studied in the IEEE 802 EC Privacy Recommendation Study Group <xref target="IEEE802PRSG"/>.
+However, we have to consider the linkage between 
 link-layer addresses, DHCP identifiers
 and IP addresses.
 </t>
@@ -233,7 +236,7 @@ IP address also means that the NAT traversal procedures will have to be restarte
 a lot of disruption. At the same time,
 an observer on the network will easily notice that a station left, another came in just after 
 that, and that the new one appears to be
-communicating with pretty much the same set of IP addresses as the old one. This provides for easy correlation. 
+communicating with the same set of IP addresses as the old one. This provides for easy correlation. 
 </t>
 <t>
 The anonymity profile pretty much assumes that the link-layer address randomization follows the "per connection" or "per network" strategies, 
@@ -310,7 +313,8 @@ This is not workable in a
 	network) might be actively participating in surveillance and
 	anti-privacy, willingly or not. 
 Declaring a preference for anonymity is a bit
-   like walking around with a Guy Fawkes mask.  When anonymity is
+   like walking around with a Guy Fawkes mask. (See <xref target="GuyFawkesMask"/> for 
+an explanation of this usage.) When anonymity is
    required, it is generally not a good idea to stick out of the crowd.
 Simply revealing the desire
 	for privacy, could cause the attacker to react by triggering
@@ -335,8 +339,8 @@ bloating of various address tables. Implementers will have to be cautious when p
 addresses. They will have to carefully chose the frequency with which such addresses will be renewed.
 </t>
 <t>
-This document only provides guidelines for using DHCP when clients care about privacy
-and servers do not object. We assume that the request for anonymity is materialized 
+This document only provides guidelines for using DHCP when clients care about privacy. 
+We assume that the request for anonymity is materialized 
 by the assignment of a randomized link-layer address to the network
 interface. Once that decision is made, the following guidelines will avoid leakage of identity in DHCP parameters or in
 assigned addresses.
@@ -450,11 +454,11 @@ specific version, or from revealing whether the client is using the anonymity
 profile.
 </t>
 <t>
-The client willing to protect its privacy SHOULD limit the subset of options
-sent in messages to the subset listed in the following sections.
+The client intending to protect its privacy SHOULD limit the subset of options
+sent in messages to the subset listed in the remaining subsections.
 </t>
 <t>
-The client willing to protect its privacy SHOULD randomize options
+The client intending to protect its privacy SHOULD randomize options
 order before sending any DHCPv4 message. If this random
 ordering cannot be implemented, the client MAY
 arrange options by increasing order of option codes.
@@ -472,7 +476,7 @@ There is very little privacy implication of sending this address in the DHCP mes
 except in one case, when connecting 
 to a different network than the last network connected. 
 If the DHCP client somehow repeated the address used in a previous network attachment,
-monitoring services might use the information to tie the two network locations. DHCP clients should ensure that
+monitoring services might use the information to tie the two network locations. DHCP clients SHOULD ensure that
 the field is cleared when they know that the network attachment has changed, and in particular if the link layer 
 address is reset by the device's administrator.
 </t>
@@ -511,7 +515,7 @@ the client MAY issue a DHCPREQUEST to try reclaim the current address.
 </t>
 
 </section>
-<section title="Client hardware address field">
+<section title="Client hardware address field" anchor="clientAddressField" >
 <t>
 Sixteen bytes in the header of the DHCP messages carry the "Client hardware address" (chaddr) as defined 
 in <xref target="RFC2131"/>. The presence of this address is necessary for the proper operation of the
@@ -519,10 +523,7 @@ DHCP service.
 </t>
 <t>
 Hardware addresses, called "link layer address" in many RFCs, can be used to uniquely identify a device, especially
-if they follow the IEEE 802 recommendations. These unique identifiers can be used by monitoring services to
-track the location of the device and its user. The only plausible defense is to somehow reset the hardware
-address to a random value when visiting an untrusted location,
-before transmitting anything at that location with the hardware address. 
+if they follow the IEEE 802 recommendations. 
 If the hardware address is reset to a new value, 
 or randomized, the DHCP client SHOULD use the new randomized value in the 
 DHCP messages.
@@ -557,8 +558,7 @@ link layer address that will be used in the underlying
 connection. This will ensure that the DHCP client identifier does not
 leak any information that is not already available to entities
 monitoring the network connection. It will also ensure that a strategy
-of randomizing the link layer address will not be nullified by DHCP
-options.
+of randomizing the link layer address will not be nullified by the Client Identifier Option.
 </t>
 <t>
 There are usages of DHCP where the underlying connection is a point to point link, in which case there is no
@@ -620,7 +620,7 @@ host name instead of a fully qualified domain name, and MUST obfuscate the
 host name value.
 </t>
 <t>
-There are many ways to obfuscate a host name. The construction rules SOULD guarantee that a different host name is generated each time the link-layer address changes and
+There are many ways to obfuscate a host name. The construction rules SHOULD guarantee that a different host name is generated each time the link-layer address changes and
 that the obfuscated host name will not reveal the underlying link layer address. The construction
 SHOULD generate names that are unique enough to minimize collisions in the local link. Clients MAY use the following algorithm: compute a secure hash of a local secret and of the link layer address that will be 
 used in the underlying connection, and then use the hexadecimal representation of the 
@@ -671,9 +671,9 @@ is typically controlled from the user interface during the boot process.
 Common sense seems to dictate that getting a new operating system from an
 unauthenticated server at an untrusted location is a really bad idea, and
 that even if the option was available users would not activate it. In any
-case, the option is only used in the "pre boot" environment, and is there is
-no reason to use it once the system is up and running. If only for privacy 
-reasons, nodes visiting untrusted networks MUST NOT send or use the PXE options.
+case, the option is only used in the "pre boot" environment, and there is
+no reason to use it once the system is up and running. 
+Nodes visiting untrusted networks MUST NOT send or use the PXE options.
 </t>
 </section>
 
@@ -687,7 +687,7 @@ as these options potentially reveal identifying information.
 </t>
 </section>
 </section>
-<section title="Anonymity profile for DHCPv6">
+<section title="Anonymity profile for DHCPv6" anchor="anonymityV6">
 <t> 
 DHCPv6 is typically used by clients in one of two scenarios: stateful and stateless configuration. In the
 stateful scenario, clients use a combination of SOLICIT, REQUEST, CONFIRM, RENEW, REBIND and
@@ -706,7 +706,8 @@ message.
 The choice between the stateful and stateless scenarios depends on flag and prefix options published 
 by the "Router Advertisement" messages of local routers, as specified in <xref target="RFC4861"/>. 
 When these options enable stateless address configuration hosts using the anonymity profile 
-SHOULD choose it over stateful address configuration, because stateless configuration requires
+SHOULD use stateless address configuration instead of stateful address configuration, because 
+stateless configuration requires
 fewer information disclosures than stateful configuration.
 </t>
 <t>
@@ -730,11 +731,11 @@ specific version, or from revealing whether the client is using the anonymity
 profile.
 </t>
 <t>
-The client willing to protect its privacy SHOULD limit the subset of options
+The client intending to protect its privacy SHOULD limit the subset of options
 sent in messages to the subset listed in the following sections.
 </t>
 <t>
-The client willing to protect its privacy SHOULD randomize options
+The client intending to protect its privacy SHOULD randomize options
 order before sending any DHCPv6 message. If this random
 ordering cannot be implemented, the client MAY
 arrange options by increasing order of option codes.
@@ -812,7 +813,7 @@ are listed in <xref target="RFC4086" />.
 
       <section title="Anonymous Information-Request">
 	<t>According to <xref target="RFC3315" />, a DHCPv6 client
-	typically includes its client identifier in most of the
+	includes its client identifier in most of the
 	messages it sends. There is one exception, however. Client is
 	allowed to omit its client identifier when sending
 	Information-Request.</t>
@@ -839,7 +840,7 @@ old values discloses information that can be used to identify the client.
 <t>
 When using the anonymity profile, DHCPv6 clients might have to use SOLICIT or REQUEST messages to obtain IPv6 addresses 
 through the DHCP server. In DHCPv6, the collection of addresses assigned to
-a client is indemtified by an Identity Association (IA).Clients interested in privacy SHOULD request addresses using the 
+a client is identified by an Identity Association (IA).Clients interested in privacy SHOULD request addresses using the 
 Identity Association for Non-temporary Addresses Option (IA_NA, code 3).
 </t>
 <t>
@@ -1002,9 +1003,9 @@ link layer address and a suffix advertised by the local DHCP server.
   link-layer address randomization.</t>
 </section>
 
-<section title="Security Considerations">
+<section title="Security Considerations" anchor="secucons">
 <t> 
-The use of the anonymity profile does not change the security considerations of the DHCPv4 or DHCPv6 protocols. 
+The use of the anonymity profile does not change the security considerations of the DHCPv4 or DHCPv6 protocols.
 </t>
 </section>
 
@@ -1201,6 +1202,39 @@ In <xref target="operations" />, noticed servers that might mandate link layer a
 </list>
 </t>
 
+<t>
+Changes from draft-07 to draft-08 address comments received during IESG review
+</t>
+<t>
+<list style="numbers" >
+<t>
+Corrected a number of typos and applied several minor editing suggestions.
+</t>
+<t>
+Added reference to IEEE study group and other IETF experiments in <xref target="appdomain" />.
+</t>
+<t>
+Added reference to journal paper on Guy Fawkes mask in <xref target="desire" />.
+</t>
+<t>
+Removed "if servers do not object" from appliction scope in <xref target="profileUse" />.
+</t>
+<t>
+Removed redondant text from <xref target="clientAddressField" />.
+</t>
+<t>
+In <xref target="dhcpv4ClientId"/>, say "will not be nullified by the Client Identifier Option"
+instead of "will not be nullified by DHCP options."
+</t>
+<t>
+In <xref target="PXEOption" />, remove the qualification "if only for privacy reasons."
+</t>
+<t>
+Clarified the preference for stateless address configuration in <xref target="anonymityV6" />.
+</t>
+</list>
+</t>
+
 </section>
 </middle>
 
@@ -1306,7 +1340,44 @@ digital modulation scheme
         </front>
     </reference>
 
+<reference anchor="IEEE802PRSG" target="http://www.ieee802.org/PrivRecsg/">
+<front>
+<title>
+IEEE 802 EC Privacy Recommendation Study Group
+</title>
+<author>
+<organization>IEEE 802 EC PRSG</organization>
+</author>
+<date month="Dec" year="2015" /> 
+</front>
+</reference>
+
+
+    <reference anchor="IETFTrialsAndMore" target="http://www.it.uc3m.es/cjbc/papers/pdf/2015_bernardos_cscn_privacy.pdf">
+        <front>
+            <title>Wi-Fi Internet connectivity and privacy: hiding your tracks on the wireless Internet</title>
+            <author initials="CJ" surname="Bernardos" fullname="Carlos J. Bernardos" />
+            <author initials="JC" surname="Zuniga" fullname="Juan Carlos Zuniga" />
+            <author initials="P" surname="O'Hanlon" fullname="Piers O'Hanlon" />
+            <date month="October" year="2015" />
+        </front>
+    </reference>
+
+    <reference anchor="GuyFawkesMask" target="http://theweek.com/articles/463151/brief-history-guy-fawkes-mask">
+        <front>
+            <title>A brief history of the Guy Fawkes mask</title>
+            <author initials="M" surname="Nickelsburg" fullname="Monica Nickelsburg">
+               <organization>The Week</organization>
+            </author>
+            <date day="3" month="July" year="2013" />
+        </front>
+</reference>
+
+
+
 </references>  
 
 </back>
 </rfc>
+
+
