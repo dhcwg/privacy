@@ -7,7 +7,7 @@
 <?rfc iprnotified="no"?>
 <?rfc strict="yes"?>
 <?rfc compact="yes"?>
-<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-04"
+<rfc category="info" docName="draft-ietf-dhc-dhcpv6-privacy-05"
      ipr="trust200902">
   <front>
     <title abbrev="DHCPv6 Privacy considerations">Privacy considerations for
@@ -118,13 +118,6 @@
     </section>
 
     <section title="Terminology">
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in <xref
-      target="RFC2119"></xref>. When these words are not in ALL CAPS (such as
-      "should" or "Should"), they have their usual English meanings, and are
-      not to be interpreted as <xref target="RFC2119"></xref> key words.</t>
-
       <t>Naming convention from <xref target="RFC3315"></xref> and related is
       used throughout this document. In addition the following terminology is
       used: <list hangIndent="8" style="hanging">
@@ -140,7 +133,7 @@
         </list></t>
     </section>
 
-    <section title="Identifiers in DHCPv6 options and fields">
+    <section anchor="identifiers" title="Identifiers in DHCPv6 options and fields">
       <t>In DHCPv6, there are many options that include identification
       information or that can be used to extract identification
       information about the client. This section enumerates various
@@ -243,7 +236,7 @@
         <t>A client can use this option to convey all or part of its domain
         name to a DHCPv6 server for the IPv6-address-to-FQDN mapping. In most
         case a client sends its hostname as a hint for the server. The DHCPv6
-        server MAY be configured to modify the supplied name or to substitute
+        server may be configured to modify the supplied name or to substitute
         a different name. The server should send its notion of the complete
         FQDN for the client in the Domain Name field.</t>
       </section>
@@ -591,16 +584,32 @@
 
       <section title="Pervasive monitoring">
         <t>Pervasive Monitoring (PM) is widespread (and often covert)
-        surveillance through intrusive gathering of protocol artefacts,
-        including application content, or protocol metadata such as headers.
-        Active or passive wiretaps and traffic analysis, (e.g., correlation,
-        timing or measuring packet sizes), or subverting the cryptographic
-        keys used to secure protocols can also be used as part of pervasive
-        monitoring. PM is distinguished by being indiscriminate and very large
-        scale, rather than by introducing new types of technical
-        compromise.</t>
+        surveillance through intrusive gathering of protocol
+        artefacts, including application content, or protocol metadata
+        such as headers.  Active or passive wiretaps and traffic
+        analysis, (e.g., correlation, timing or measuring packet
+        sizes), or subverting the cryptographic keys used to secure
+        protocols can also be used as part of pervasive monitoring. PM
+        is distinguished by being indiscriminate and very large scale,
+        rather than by introducing new types of technical
+        compromise. See <xref target="RFC7258"></xref> for a
+        discussion about PM.</t>
 
-        <t>See <xref target="RFC7258"></xref> for a discussion about PM.</t>
+        <t>In the DHCPv6 context, PM approach can be used to collect
+        any identifiers discussed in <xref
+        target="identifiers"/>. DHCPv4 and DHCPv6 are especially
+        susceptible as the initial message sent (SOLICIT in case of
+        DHCPv6) is one of the very first packets sent when visiting a
+        network. Furthermore, in certain cases this packet can be
+        logged even on networks that do not support IPv6 (some
+        implementations initiate DHCPv6 even without receiving RA with
+        M or O bits set). This may be an easily overlooked attack
+        vector when IPv6-capable device connects to an IPv4 only
+        network, gains only IPv4 connectivity, but still leaks its
+        stable identifiers over DHCPv6.</t>
+
+        <t>Using PM approach, attacks discussed in Sections 5.1, 5.2,
+        5.3, 5.4, 5.5, 5.7, 5.8 and possibly 5.9 apply.</t>
       </section>
 
       <section title="Finding client's IP address or hostname">
@@ -690,8 +699,8 @@
       <t>The authors would like to thank Stephen Farrell, Ted Lemon,
       Ines Robles, Russ White, Christian Schaefer, Jinmei Tatuya,
       Bernie Volz, Marcin Siodelski, Christian Huitema, Brian
-      Haberman, Robert Sparks, Peter Yee and other members of DHC WG
-      for their valuable comments.</t>
+      Haberman, Robert Sparks, Peter Yee, Ben Campbell and other
+      members of DHC WG for their valuable comments.</t>
 
       <t>This document was produced using the xml2rfc tool <xref
       target="RFC7749"></xref>.</t>
@@ -700,8 +709,6 @@
 
   <back>
     <references title="Normative References">
-      <?rfc include='reference.RFC.2119'?>
-
       <?rfc include='reference.RFC.3315'?>
 
       <?rfc include='reference.RFC.6973'?>
